@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:08:22 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/05 14:12:01 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/10 17:00:41 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,14 @@ int	check_invalid_pipes(t_data *data)
 		if ((tmp->cmd_segment[i] == '>' && tmp->cmd_segment[i + 1] == '|')
 			|| (tmp->cmd_segment[i] == '<' && tmp->cmd_segment[i + 1] == '|'))
 		{
-			printf("check pipes for error\n");
+			printf("minishell: parse error near `|'\n");
 			i++;
 			return (0);
 		}
 		if ((tmp->cmd_segment[i] == '|' && tmp->cmd_segment[i + 1] == '<')
 			|| (tmp->cmd_segment[i] == '|' && tmp->cmd_segment[i + 1] == '>'))
 		{
-			printf("this file does not exist\n");
+			printf("minishell: no such file or directory\n");
 			i++;
 			return (0);
 		}
@@ -62,7 +62,7 @@ int	check_invalid_tokens2(t_data *data)
 			if (tmp == NULL || tmp->token == PIPE \
 			|| tmp->cmd_segment[0] == '\0')
 			{
-				printf("syntax error 3\n");
+				printf("syntax error near unexpected token\n");
 				return (0);
 			}
 		}
@@ -70,7 +70,7 @@ int	check_invalid_tokens2(t_data *data)
 	}
 	if (!check_invalid_tokens(data))
 	{
-		printf("syntax error 4\n");
+		printf("syntax error near unexpected token\n");
 		return (0);
 	}
 	tmp = data->lexer_list;
