@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 14:17:31 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/09 17:27:38 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/10 14:31:19 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <readline/history.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <signal.h>
 # include <fcntl.h>
 # include <sys/wait.h>
 # include "../lib/includes/lib.h"
@@ -80,6 +81,7 @@ typedef struct s_data {
 	char	**args;
 }	t_data;
 
+extern unsigned int g_global;
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ PARSER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
@@ -139,27 +141,26 @@ char **convert_list_to_array(t_lexer *head);
 int 	count_lexer_list(t_lexer *head);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXECUTOR ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
-// Main
+
 char    *get_path_from_env(char *name, char *envp[]);
 char    *get_cmd_path(char *cmd, char *envp[]);
 void    exec(char *cmd[], char *envp[]);
-
 char	**ft_split(char const *s, char c);
-
-// Utils 1
 int	ft_strncmp(const char *first, const char *second, size_t length);
 int	ft_strlen(const char *str);
 char	*ft_strjoin(char const *s1, char const *s2);
 size_t	ft_strlcpy(char *dst, const char *src, size_t size);
 size_t	ft_strlcat(char *dst, const char *src, size_t size);
-
-// Utils 2
 void free_array(char **array);
-
-// Error
 void exit_with_error(const char *message, int exit_code);
 void free_tab_and_exit(char **ptr);
 void *malloc_check(void *ptr);
-
 void get_input(int argc, char **argv, char *envp[]);
+
+/*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ SIGNAL ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
+
+void	handle_ctrl_c(int sig);
+void	handle_signal(void);
+void	handle_ctrl_backslash(int sig);
+
 #	endif

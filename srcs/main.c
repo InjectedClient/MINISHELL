@@ -1,5 +1,7 @@
 #include "../include/minishell.h"
 
+unsigned int g_global = 0;
+
 int main(int argc, char **argv, char *envp[]) //TODO Ajout env
 {
 	if (argc != 1)

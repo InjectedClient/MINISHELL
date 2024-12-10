@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:08:27 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/05 14:23:01 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/10 15:01:03 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,8 @@ int	check_slash(char *str, char c)
 			return (0);
 		if ((str[0] == c && str[1] == '.'))
 			return (0);
+		if ((str[0] == '.' && str[1] == c))
+			return (0);
 		i++;
 	}
 	return (1);
@@ -115,6 +117,7 @@ int	is_a_directory(t_data *data)
 {
 	if (!check_directory(data->input_cmd))
 	{
+		g_global = 126;
 		return (0);
 	}
 	return (1);
