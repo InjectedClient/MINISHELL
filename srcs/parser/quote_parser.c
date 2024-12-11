@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   quote_parser.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jle-neze <jle-neze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:08:25 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/05 14:09:41 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/11 16:40:57 by jle-neze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "parser.h"
+#include "types.h"
 
 /*
 	Cherche si il y a une erreur de syntaxe due à des guillemets non fermés.

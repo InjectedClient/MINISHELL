@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   operator_handler.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jle-neze <jle-neze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:36:13 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/05 16:00:38 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/11 16:35:25 by jle-neze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../include/lexer.h"
+#include "../../include/types.h"
 
 /**
  * Vérifie si le caractère est un opérateur.

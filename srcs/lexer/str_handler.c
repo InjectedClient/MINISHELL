@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   str_handler.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jle-neze <jle-neze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:36:16 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/09 17:35:30 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/11 17:04:22 by jle-neze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "lexer.h"
+#include "utils.h"
 
 /**
  * Ajoute des espaces autour des opérateurs dans la commande donnée.

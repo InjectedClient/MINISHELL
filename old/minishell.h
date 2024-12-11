@@ -1,30 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_is_space.c                                      :+:      :+:    :+:   */
+/*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/29 12:08:08 by nlambert          #+#    #+#             */
-/*   Updated: 2024/11/29 12:19:34 by nlambert         ###   ########.fr       */
+/*   Created: 2024/11/22 14:17:31 by nlambert          #+#    #+#             */
+/*   Updated: 2024/12/09 17:27:38 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/lib.h"
+#	ifndef MINISHELL_H
+#define MINISHELL_H
 
-int	ft_is_space(char *str, char c)
-{
-	int	i;
 
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == c)
-		{
-			ft_printf("found space");
-			return (1);
-		}
-		i++;
-	}
-	return (0);
-}
+/*━━━━━━━━━━━━━━━━━━━━━━━━━━━ LIB ━━━━━━━━━━━━━━━━━━━━━━━━━━*/
+
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <fcntl.h>
+# include <sys/wait.h>
+# include "../lib/includes/lib.h"
+
+# define SHIFT_OUT 14 // SO (Shift Out)
+
+#	endif

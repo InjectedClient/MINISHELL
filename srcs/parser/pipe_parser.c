@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_parser.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jle-neze <jle-neze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:08:22 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/05 14:12:01 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/11 16:40:52 by jle-neze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "parser.h"
+#include "types.h"
 
 /*
 	Parcourt la liste des tokens et vérifie la syntaxe autour des pipes,

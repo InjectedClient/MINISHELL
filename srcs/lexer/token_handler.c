@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   token_handler.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jle-neze <jle-neze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:45:59 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/09 17:35:45 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/11 16:36:08 by jle-neze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../include/lexer.h"
+#include "../../include/types.h"
 
 /**
  * Vérifie si le token précédent est une redirection.

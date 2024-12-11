@@ -1,4 +1,4 @@
-#include "../../include/minishell.h"
+#include "errors.h"
 
 void exit_with_error(const char *message, int exit_code)
 {
@@ -23,4 +23,16 @@ void *malloc_check(void *ptr)
         exit(EXIT_FAILURE);
     }
     return (ptr);
+}
+
+int fork_error()
+{
+    perror("fork");
+    return (1);    
+}
+
+int execve_error()
+{
+    perror("execve");
+    return (126);
 }

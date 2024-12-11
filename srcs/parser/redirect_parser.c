@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   redirect_parser.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jle-neze <jle-neze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:08:26 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/05 14:16:11 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/11 16:41:09 by jle-neze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "parser.h"
+#include "types.h"
 
 /*
 	Vérifie qu'il n'y ait pas plus de deux chevrons à la suite.

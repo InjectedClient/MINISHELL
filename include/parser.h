@@ -1,6 +1,10 @@
 #ifndef PARSER_H
 # define PARSER_H
 
+#include <stdlib.h>
+#include <stdio.h>
+#include "types.h"
+
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ PARSER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
 void init_data(t_data *data, int argc, char **argv);

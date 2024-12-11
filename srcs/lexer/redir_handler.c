@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   redir_handler.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jle-neze <jle-neze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:46:16 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/05 15:52:20 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/11 16:35:59 by jle-neze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../include/lexer.h"
+#include "../../include/types.h"
 
 /**
  * Vérifie le nombre de caractères de redirection dans la commande.

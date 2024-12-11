@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   launch_handler.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jle-neze <jle-neze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:36:08 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/09 17:17:39 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/11 17:11:55 by jle-neze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../include/lexer.h"
+#include "../../include/types.h"
+#include "parser.h"
 
 /**
  * Lance le lexer et vérifie si le résultat est un répertoire ou si le parser est valide.
@@ -40,7 +42,7 @@ void print_lexer_content(t_data *data)
  * Traite la commande temporaire, ajoute des espaces autour des opérateurs,
  * lance le lexer et vérifie si le résultat est un répertoire ou si le parser est valide.
  */
-void looping(char *tmp, t_data *data, char *envp[])
+char **looping(char *tmp, t_data *data)
 {
 	t_lexer *tmp_lex;
 	char *processed_cmd;
@@ -52,10 +54,12 @@ void looping(char *tmp, t_data *data, char *envp[])
 		data->input_cmd = processed_cmd;
 		lexer_launch(data);
 		if (!is_a_directory(data) || !ft_check_parser(data))
-			return;
+			return (NULL);
 		tmp_lex = data->lexer_list;
 		cmd_tab = convert_list_to_array(tmp_lex);
+		return (cmd_tab);
 	}
+	return (NULL);
 }
 
 /**

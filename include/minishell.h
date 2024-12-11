@@ -1,27 +1,21 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/22 14:17:31 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/09 17:27:38 by nlambert         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
-#	ifndef MINISHELL_H
-#define MINISHELL_H
-
-
-/*━━━━━━━━━━━━━━━━━━━━━━━━━━━ LIB ━━━━━━━━━━━━━━━━━━━━━━━━━━*/
+// Standard librairies
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
 
 # include <readline/readline.h>
 # include <readline/history.h>
-# include <fcntl.h>
-# include <sys/wait.h>
-# include "../lib/includes/lib.h"
+// Shared librairies
 
-# define SHIFT_OUT 14 // SO (Shift Out)
+// Headers
+# include "types.h"
+# include "parser.h"
+# include "lexer.h"
+# include "executor.h"
+# include "utils.h"
+// # include "signals.h"
 
-#	endif
+#endif

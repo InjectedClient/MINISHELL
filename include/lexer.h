@@ -1,10 +1,13 @@
 #ifndef LEXER_H
 # define LEXER_H
 
+#include <stdlib.h>
+#include "types.h"
+
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ LEXER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
 void	lexer_launch(t_data *data);
-void	looping(char *tmp, t_data *data, char *envp[]);
+char **looping(char *tmp, t_data *data); //change
 int		count_words_in_input(char *str);
 void	test_cmd(t_data*data);
 void	process_input_string(t_data *data, t_lexer *tmp, t_lexer *current, int i);

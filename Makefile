@@ -3,21 +3,16 @@ NAME = minishell
 
 # Compilateur et options
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -I includes
+CFLAGS = -Wall -Wextra -Werror -I include
 
 # Répertoires
 SRC_DIR = srcs
 OBJ_DIR = objs
-INC_DIR = includes
+INC_DIR = include
 
 # Recherche des fichiers sources dans les sous-dossiers
 SRCS = $(shell find $(SRC_DIR) -name "*.c")
 OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
-
-# Librairies externes (exemple avec libft)
-LIBFT_DIR = libft
-LIBFT = $(LIBFT_DIR)/libft.a
-LIBFT_INC = -I $(LIBFT_DIR)/includes
 
 # Commandes
 RM = rm -rf
@@ -28,7 +23,7 @@ all: $(NAME)
 # Création de l'exécutable
 $(NAME): $(OBJS)
 	@echo "Compiling $(NAME)..."
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) -lreadline
 
 # Compilation des fichiers .c en .o
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
