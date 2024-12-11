@@ -55,7 +55,6 @@ void looping(char *tmp, t_data *data, char *envp[])
 			return;
 		tmp_lex = data->lexer_list;
 		cmd_tab = convert_list_to_array(tmp_lex);
-		exec(cmd_tab, envp);
 	}
 }
 

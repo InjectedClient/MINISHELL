@@ -14,7 +14,6 @@ char    *get_path_from_env(char *name, char *envp[])
             return (envp[i] + len + 1);
         }
     }
-    exit_with_error("Erreur : PATH introuvable", EXIT_FAILURE);
     return (NULL);
 }
 
@@ -52,13 +51,42 @@ void    exec(char *cmd[], char *envp[])
 {
     char    *path;
 
-    if (!(path = get_cmd_path(cmd[0], envp)))
-        exit_with_error("Erreur : commande non trouvée", 127);
-    if (execve(path, cmd, envp) == -1)
+    if ((path = get_cmd_path(cmd[0], envp)))
+        exec_cmd(cmd, path, envp);
+    if (is_builtin(cmd))
+        exec_builtins(cmd);
+}
+
+void    exec_cmd(char *cmd[], char *path, char *envp[])
+{
+    int status;
+    pid_t   pid;
+
+    pid = fork();
+    if (pid < 0)
     {
-        free(path);
-        exit_with_error("Path non trouve dans les executables", 126);
+        fork_error();
+        return (-1);
     }
+    if (pid == 0)
+    {
+        if (execve(path, cmd, envp) == -1)
+            execve_error();
+        exit(0);
+    }
+    else 
+    {
+        // Processus parent
+        wait(&status); // Récupérer l'état de l'enfant
+        if (WIFEXITED(status)) {
+            return (WEXITSTATUS(status)); // Retourner le code de retour de la commande
+        } else if (WIFSIGNALED(status)) {
+            return (128 + WTERMSIG(status)); // Indiquer que l'enfant a été tué par un signal
+        }
+    }
+    return (0);
+
+
 }
 
 // int main(int argc, char *argv[], char *envp[])
