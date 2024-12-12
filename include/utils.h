@@ -10,5 +10,6 @@ size_t	ft_strlcat(char *dst, const char *src, size_t size);
 // Utils 2
 void free_array(char **array);
 int	ft_white_space(char c);
+char	*ft_strdup(const char *source);
 
 char	**ft_split(char const *s, char c);
