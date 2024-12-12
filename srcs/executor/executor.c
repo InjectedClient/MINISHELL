@@ -44,15 +44,20 @@ int exec_builtin(char **args, char *envp[])
     //         return (builtins[i].function(args));
     //     i++;
     // }
-
-    if (ft_strncmp(args[0], "env", ft_strlen(args[0])) == 0)
-        return (builtin_env(envp));
+    if (ft_strncmp(args[0], "echo", ft_strlen(args[0])) == 0)
+        return (builtin_echo(args));
     else if (ft_strncmp(args[0], "cd", ft_strlen(args[0])) == 0)
         return (builtin_cd(args));
     // else if (ft_strncmp(args[0], "pwd", ft_strlen(args[0])) == 0)
-    //     return (builtin_pwd(envp));
-    else if (ft_strncmp(args[0], "echo", ft_strlen(args[0])) == 0)
-        return (builtin_echo(args));
+    //     return (builtin_pwd());
+    // else if (ft_strncmp(args[0], "export", ft_strlen(args[0])) == 0)
+    //     return (builtin_export());
+    // else if (ft_strncmp(args[0], "unset", ft_strlen(args[0])) == 0)
+    //     return (builtin_unset(args));
+    else if (ft_strncmp(args[0], "env", ft_strlen(args[0])) == 0)
+        return (builtin_env(envp));
+    // else if (ft_strncmp(args[0], "exit", ft_strlen(args[0])) == 0)
+    //     return (builtin_exit(args));
     else
         return (-1); // Retourne -1 si ce n'est pas un builtin
 }
