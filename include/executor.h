@@ -27,7 +27,7 @@ typedef struct {
     int (*function)(char **args);     // Pointeur vers la fonction du builtin
 } builtin_t;
 
-int exec_builtin(char **args);
+int exec_builtin(char **args, char *envp[]);
 int is_builtin(char *cmd);
 
 int builtin_cd(char **args);

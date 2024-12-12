@@ -12,7 +12,7 @@ int    exec(char *cmd[], char *envp[])
     char    *path;
 
     if (is_builtin(cmd[0]))
-        return(exec_builtin(cmd));
+        return(exec_builtin(cmd, envp));
     if ((path = get_cmd_path(cmd[0])))
         return(exec_cmd(cmd, path, envp));
     else
@@ -33,19 +33,28 @@ int is_builtin(char *cmd)
     return (0); // Retourne 0 si ce n'est pas un builtin
 }
 
-int exec_builtin(char **args) 
+int exec_builtin(char **args, char *envp[]) 
 {
-    int i;
+    // int i;
 
-    i = 0;
-    while (builtins[i].name) 
-    {
-        if (ft_strncmp(args[0], builtins[i].name, ft_strlen(args[0])) == 0)
-            return (builtins[i].function(args));
-        i++;
-    }
+    // i = 0;
+    // while (builtins[i].name) 
+    // {
+    //     if (ft_strncmp(args[0], builtins[i].name, ft_strlen(args[0])) == 0)
+    //         return (builtins[i].function(args));
+    //     i++;
+    // }
 
-    return (-1); // Retourne -1 si ce n'est pas un builtin
+    if (ft_strncmp(args[0], "env", ft_strlen(args[0])) == 0)
+        return (builtin_env(envp));
+    else if (ft_strncmp(args[0], "cd", ft_strlen(args[0])) == 0)
+        return (builtin_cd(args));
+    // else if (ft_strncmp(args[0], "pwd", ft_strlen(args[0])) == 0)
+    //     return (builtin_pwd(envp));
+    else if (ft_strncmp(args[0], "echo", ft_strlen(args[0])) == 0)
+        return (builtin_echo(args));
+    else
+        return (-1); // Retourne -1 si ce n'est pas un builtin
 }
 
 int    exec_cmd(char *cmd[], char *path, char *envp[])
