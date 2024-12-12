@@ -2,11 +2,12 @@
 
 char    *expander(char *str)
 {
-    int i;
-    int len;
-    char    *result;
+    char    *value;
 
-    len = ft_strlen(str);
-    result = malloc(sizeof(char) * (len + 1));
-    
+    if (!str)
+        return (ft_strdup(""))
+    value = getenv(str)
+    if (value)
+        return (ft_strdup(value));
+    return (ft_strdup(""));
 }
