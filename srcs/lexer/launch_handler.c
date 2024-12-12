@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:36:08 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/12 15:33:59 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/12 16:30:40 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,14 +69,14 @@ char **looping(char *tmp, t_data *data)
 void lexer_launch(t_data *data)
 {
 	int i;
-	t_lexer *now;
+	t_lexer *current;
 	t_lexer *tmp;
 
 	tmp = NULL;
-	now = NULL;
+	current = NULL;
 	data->lexer_list = NULL;
 	data->w_count = count_words_in_input(data->input_cmd);
 	i = 0;
-	process_input_string(data, tmp, now, i);
+	process_input_string(data, tmp, current, i);
 	print_lexer_content(data);
 }

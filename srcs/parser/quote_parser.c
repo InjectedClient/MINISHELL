@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:08:25 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/12 15:34:51 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/12 15:53:48 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	check_quotes(char *str, t_data *data)
 	}
 	if (data->is_sing_quot == data->is_doub_quot)
 	{
-		printf("quote not closed\n");
+		printf("minishell: syntax error quote not closed\n");
 		return (0);
 	}
 	return (1);

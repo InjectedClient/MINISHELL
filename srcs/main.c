@@ -20,7 +20,6 @@ int main(int argc, char **argv, char *envp[])
 		input = looping(tmp, &data);
 		// TODO les fonctions en dessous avec un return du status pq pas
 		g_global = exec(input, envp);
-		//printf("La varaible globale est \t%d\n", g_global);
 	}
 }
 
