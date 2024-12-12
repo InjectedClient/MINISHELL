@@ -6,11 +6,12 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:36:15 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/05 15:57:06 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/12 15:34:15 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
 
 /**
  * Met à jour l'état des guillemets en fonction du caractère actuel.

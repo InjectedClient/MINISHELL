@@ -6,11 +6,12 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:46:16 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/05 15:52:20 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/12 15:34:23 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
 
 /**
  * Vérifie le nombre de caractères de redirection dans la commande.

@@ -1,16 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser2.c                                          :+:      :+:    :+:   */
+/*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:08:29 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/05 14:18:25 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/12 15:34:41 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
 
 int	ft_check_parser(t_data *data)
 {
@@ -32,6 +33,9 @@ int	ft_check_parser(t_data *data)
 	else if (!check_pipe_bracket(data->input_cmd))
 		count = 0;
 	if (count == 0)
+	{
+		g_global = 2;
 		return (0);
+	}
 	return (1);
 }

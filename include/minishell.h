@@ -1,31 +1,16 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/22 14:17:31 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/09 17:27:38 by nlambert         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
-#	ifndef MINISHELL_H
-#define MINISHELL_H
-
-
-/*━━━━━━━━━━━━━━━━━━━━━━━━━━━ LIB ━━━━━━━━━━━━━━━━━━━━━━━━━━*/
+/* ━━━━━━━━━━━━━━━━━━━━━ BIBLIO ━━━━━━━━━━━━━━━━━━━━━━━━*/
 
 # include <stdio.h>
-# include <readline/readline.h>
-# include <readline/history.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <signal.h>
 # include <fcntl.h>
-# include <sys/wait.h>
-# include "../lib/includes/lib.h"
-
-# define SHIFT_OUT 14 // SO (Shift Out)
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <sys/wait.h>  // wait, WIFEXITED, WEXITSTATUS, WIFSIGNALED, WTERMSIG
 
 /* ━━━━━━━━━━━━━━━━━━━━━ STRUCTURES ━━━━━━━━━━━━━━━━━━━━━━━━*/
 
@@ -80,6 +65,8 @@ typedef struct s_data {
 	char	**args;
 }	t_data;
 
+extern unsigned int g_global;
+# define SHIFT_OUT 14
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ PARSER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
@@ -99,14 +86,27 @@ int	check_pipe_bracket(char *str);
 int	ft_check_parser(t_data *data);
 int	is_a_directory(t_data *data);
 
-//char	*rm_single_quotes(t_data *data, char *tmp);
-//char	*rm_double_quotes(t_data *data, char *tmp);
-//char	*rm_bracket(t_data *data, char *tmp);
+/*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ SIGNAL ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
+
+void	handle_ctrl_c(int sig);
+void	handle_signal(void);
+void	handle_ctrl_backslash(int sig);
+
+/*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ UTILS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
+
+int	ft_strncmp(const char *first, const char *second, size_t length);
+int	ft_strlen(const char *str);
+char	*ft_strjoin(char const *s1, char const *s2);
+size_t	ft_strlcpy(char *dst, const char *src, size_t size);
+size_t	ft_strlcat(char *dst, const char *src, size_t size);
+void free_array(char **array);
+int	ft_white_space(char c);
+char	**ft_split(char const *s, char c);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ LEXER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
 void	lexer_launch(t_data *data);
-void	looping(char *tmp, t_data *data, char *envp[]);
+char **looping(char *tmp, t_data *data); //change
 int		count_words_in_input(char *str);
 void	test_cmd(t_data*data);
 void	process_input_string(t_data *data, t_lexer *tmp, t_lexer *current, int i);
@@ -140,26 +140,21 @@ int 	count_lexer_list(t_lexer *head);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXECUTOR ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 // Main
+int     exec(char *cmd[], char *envp[]);
+int     exec_cmd(char *cmd[], char *path, char *envp[]);
+
+//Path
 char    *get_path_from_env(char *name, char *envp[]);
 char    *get_cmd_path(char *cmd, char *envp[]);
-void    exec(char *cmd[], char *envp[]);
 
-char	**ft_split(char const *s, char c);
-
-// Utils 1
-int	ft_strncmp(const char *first, const char *second, size_t length);
-int	ft_strlen(const char *str);
-char	*ft_strjoin(char const *s1, char const *s2);
-size_t	ft_strlcpy(char *dst, const char *src, size_t size);
-size_t	ft_strlcat(char *dst, const char *src, size_t size);
-
-// Utils 2
-void free_array(char **array);
-
+/*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ERRORS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 // Error
 void exit_with_error(const char *message, int exit_code);
 void free_tab_and_exit(char **ptr);
 void *malloc_check(void *ptr);
 
-void get_input(int argc, char **argv, char *envp[]);
-#	endif
+int execve_error();
+int fork_error();
+
+
+#endif

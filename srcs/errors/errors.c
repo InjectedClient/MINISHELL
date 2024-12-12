@@ -24,3 +24,15 @@ void *malloc_check(void *ptr)
     }
     return (ptr);
 }
+
+int fork_error()
+{
+    perror("fork");
+    return (1);
+}
+
+int execve_error()
+{
+    perror("execve");
+    return (126);
+}

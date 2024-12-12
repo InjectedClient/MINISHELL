@@ -1,5 +1,7 @@
 #include "../../include/minishell.h"
 
+# define SHIFT_OUT 14 // SO (Shift Out)
+
 void free_array(char **array)
 {
     int i;
@@ -13,4 +15,9 @@ void free_array(char **array)
         i++;
     }
     free(array);
+}
+
+int	ft_white_space(char c)
+{
+	return (c == ' ' || (c > '\b' && c < SHIFT_OUT));
 }

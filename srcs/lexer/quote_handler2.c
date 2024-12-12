@@ -6,11 +6,12 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 15:56:30 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/05 15:57:34 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/12 15:34:19 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
 
 /**
  * Vérifie si seul le guillemet simple est activé.
