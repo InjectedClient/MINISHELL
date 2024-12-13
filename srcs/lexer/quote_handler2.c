@@ -6,11 +6,12 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 15:56:30 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/12 16:07:41 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/13 16:56:56 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
 
 int	is_only_single_quote_on(t_quote *state)
 {

@@ -13,6 +13,7 @@ int main(int argc, char **argv, char *envp[])
 	init_data(&data, argc, argv);
 	while (1)
 	{
+		int g_global;
 		tmp = NULL;
 		//call_sig(argc);
 		tmp = readline("minishell$ ");

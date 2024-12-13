@@ -6,11 +6,12 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:08:25 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/12 15:53:48 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/13 16:56:30 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
 
 /*
 	Cherche si il y a une erreur de syntaxe due à des guillemets non fermés.

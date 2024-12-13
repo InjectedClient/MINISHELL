@@ -6,12 +6,11 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 16:30:19 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/12 15:33:56 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/13 16:57:20 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
 
 // Fonction pour compter le nombre d'éléments dans la liste chaînée
 int count_lexer_list(t_lexer *head)

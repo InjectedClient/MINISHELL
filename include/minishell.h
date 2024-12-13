@@ -9,6 +9,7 @@
 
 /* ━━━━━━━━━━━━━━━━━━━━━ BIBLIO ━━━━━━━━━━━━━━━━━━━━━━━━*/
 
+// Standard librairies
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
@@ -17,8 +18,6 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/wait.h>  // wait, WIFEXITED, WEXITSTATUS, WIFSIGNALED, WTERMSIG
-
-/* ━━━━━━━━━━━━━━━━━━━━━ STRUCTURES ━━━━━━━━━━━━━━━━━━━━━━━━*/
 
 /*
 	definit les differents types de tokens que le lexer peut ID.
@@ -155,13 +154,28 @@ char	**convert_list_to_array(t_lexer *head);
 int 	count_lexer_list(t_lexer *head);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXECUTOR ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
-// Main
 int     exec(char *cmd[], char *envp[]);
 int     exec_cmd(char *cmd[], char *path, char *envp[]);
 
 //Path
-char    *get_path_from_env(char *name, char *envp[]);
-char    *get_cmd_path(char *cmd, char *envp[]);
+char    *get_cmd_path(char *cmd);
+
+//Builtins
+typedef struct {
+    char *name;                       // Nom du builtin
+    int (*function)(char **args);     // Pointeur vers la fonction du builtin
+} builtin_t;
+
+int exec_builtin(char **args, char *envp[]);
+int is_builtin(char *cmd);
+
+int builtin_cd(char **args);
+int builtin_env(char **args);
+int builtin_echo(char **args);
+
+/*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXPAND ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
+
+char	*expander(char *str);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ERRORS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 // Error

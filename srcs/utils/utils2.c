@@ -1,7 +1,5 @@
 #include "../../include/minishell.h"
 
-# define SHIFT_OUT 14 // SO (Shift Out)
-
 void free_array(char **array)
 {
     int i;

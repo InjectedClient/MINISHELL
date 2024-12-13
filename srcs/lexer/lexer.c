@@ -6,11 +6,12 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:36:12 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/12 15:34:05 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/13 16:57:09 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
 
 /**
  * Ajoute un nouvel élément lexer à la fin de la liste chaînée lexer_list.
