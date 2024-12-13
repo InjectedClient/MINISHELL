@@ -1,6 +1,12 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+/*SIGNAL*/
+# define IGNORE_SIG_ACTION SIG_IGN
+# define CTRL_C_SIGINT SIGINT
+# define CTRL_BACKSLSH SIGQUIT
+# define SHIFT_OUT 14
+
 /* ━━━━━━━━━━━━━━━━━━━━━ BIBLIO ━━━━━━━━━━━━━━━━━━━━━━━━*/
 
 # include <stdio.h>
@@ -36,7 +42,6 @@ typedef struct s_quote
 	int				singl_quot_status;
 	int				doubl_quot_status;
 	int				singl_quot_start_status;
-	int				var_env_match_confirmed;
 }	t_quote;
 /*
 	contiens la liste chainee de token + le nombre
@@ -50,6 +55,12 @@ typedef struct s_lexer
 	struct s_lexer	*prev;
 }	t_lexer;
 
+typedef struct s_free_memory
+{
+	void					*add;
+	struct s_free_memory	*next;
+}	t_free_memory;
+
 /*
 	contiens les donnees globales / composition d'autre struct
 	(variable d'env, historique des commmandes etc... )
@@ -57,6 +68,7 @@ typedef struct s_lexer
 typedef struct s_data {
 	t_lexer *lexer_list;
 	t_lexer *tokens;
+	t_free_memory	*free_memory;
 	int		w_count;
 	int		is_sing_quot;
 	int		is_doub_quot;
@@ -91,24 +103,28 @@ int	is_a_directory(t_data *data);
 void	handle_ctrl_c(int sig);
 void	handle_signal(void);
 void	handle_ctrl_backslash(int sig);
+void	call_sig(int argc);
+void	ctrl_c_handler(int sig);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ UTILS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
-int	ft_strncmp(const char *first, const char *second, size_t length);
-int	ft_strlen(const char *str);
+int		ft_strncmp(const char *first, const char *second, size_t length);
+int		ft_strlen(const char *str);
 char	*ft_strjoin(char const *s1, char const *s2);
 size_t	ft_strlcpy(char *dst, const char *src, size_t size);
 size_t	ft_strlcat(char *dst, const char *src, size_t size);
-void free_array(char **array);
-int	ft_white_space(char c);
+void	free_array(char **array);
+int		ft_white_space(char c);
 char	**ft_split(char const *s, char c);
+void	exit_all(t_data *data);
+void	ft_free_all(t_data *data);
+int		ft_write_fd(char *str, int fd);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ LEXER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
 void	lexer_launch(t_data *data);
-char **looping(char *tmp, t_data *data); //change
+void 	looping(char *tmp, t_data *data, char **envp);
 int		count_words_in_input(char *str);
-void	test_cmd(t_data*data);
 void	process_input_string(t_data *data, t_lexer *tmp, t_lexer *current, int i);
 int		check_prev(t_lexer *token);
 void	cmd_or_arg(t_lexer *tmp, t_lexer *first);
@@ -135,7 +151,7 @@ int		is_doubl_quote_closed(t_quote *state);
 int		is_only_single_quote_on(t_quote *state);
 void	reset_quoting_state(t_quote *state);
 void	process_lexer_input(char *str, int *i, int *j, t_quote *state);
-char **convert_list_to_array(t_lexer *head);
+char	**convert_list_to_array(t_lexer *head);
 int 	count_lexer_list(t_lexer *head);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXECUTOR ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
@@ -157,4 +173,4 @@ int execve_error();
 int fork_error();
 
 
-#endif
+# endif

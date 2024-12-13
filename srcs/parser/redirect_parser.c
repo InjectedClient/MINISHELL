@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:08:26 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/12 15:35:01 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/13 15:10:24 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	check_redirection_arg(t_data *data)
 			check = check->next;
 			if (check == NULL || check->cmd_segment[0] == '\0')
 			{
-				printf("syntax error\n");
+				printf("syntax error near unexpected token\n");
 				return (0);
 			}
 		}

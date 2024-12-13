@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:08:22 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/12 15:34:45 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/13 15:13:28 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	check_invalid_tokens2(t_data *data)
 			if (tmp == NULL || tmp->token == PIPE \
 			|| tmp->cmd_segment[0] == '\0')
 			{
-				printf("syntax error 3\n");
+				printf("syntax error near unexpected token\n");
 				return (0);
 			}
 		}
@@ -70,7 +70,7 @@ int	check_invalid_tokens2(t_data *data)
 	}
 	if (!check_invalid_tokens(data))
 	{
-		printf("syntax error 4\n");
+		printf("syntax error near unexpected token\n");
 		return (0);
 	}
 	tmp = data->lexer_list;

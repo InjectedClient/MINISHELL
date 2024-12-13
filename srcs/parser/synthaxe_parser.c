@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:08:27 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/12 15:35:07 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/13 15:10:50 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,12 @@ int	check_token_error(t_data *data)
 		i = 0;
 		if (!check_nb_redir(tmp->cmd_segment) || !check_nb_redir (tmp->cmd_segment))
 		{
-			printf("syntax error 1\n");
+			printf("syntax error near unexpected token\n");
 			return (0);
 		}
 		if (tmp->cmd_segment[i] == '|' && tmp->cmd_segment[i + 1] == '|')
 		{
-			printf("syntax error 2\n");
+			printf("syntax error near unexpected token\n");
 			return (0);
 		}
 		if (!check_invalid_pipes(data))
