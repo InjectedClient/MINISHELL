@@ -21,18 +21,17 @@ int     exec_cmd(char *cmd[], char *path, char *envp[]);
 //Path
 char    *get_cmd_path(char *cmd);
 
-//Builtins
-typedef struct {
-    char *name;                       // Nom du builtin
-    int (*function)(char **args);     // Pointeur vers la fonction du builtin
-} builtin_t;
 
 int exec_builtin(char **args, char *envp[]);
 int is_builtin(char *cmd);
 
-int builtin_cd(char **args);
-int builtin_env(char **args);
-int builtin_echo(char **args);
+int     builtin_echo(char **args);
+int     builtin_cd(char **args);
+int     builtin_env(char *envp[]);
+int     builtin_pwd();
+
+
+int     builtin_exit(char **args);
 
 //Pipe
 #endif

@@ -1,3 +1,6 @@
+#ifndef UTILS_H
+# define UTILS_H
+
 #include <stdlib.h> // malloc, free
 
 // Utils 1
@@ -11,5 +14,10 @@ size_t	ft_strlcat(char *dst, const char *src, size_t size);
 void free_array(char **array);
 int	ft_white_space(char c);
 char	*ft_strdup(const char *source);
+int	ft_isdigit(int c);
 
 char	**ft_split(char const *s, char c);
+char	*ft_itoa(int n);
+int     ft_atoi(const char *str);
+
+#endif

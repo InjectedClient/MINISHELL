@@ -1,6 +1,6 @@
 #include "executor.h"
 
-int    builtin_echo(char **args)
+int     builtin_echo(char **args)
 {
     int i;
     int newline;

@@ -17,9 +17,6 @@ int main(int argc, char **argv, char *envp[])
 		add_history(tmp);
 		// TODO fonction is_command pour les cas ou meme pipe
 		input = looping(tmp, &data);
-		int i = -1;
-		while (input[++i])
-			printf("Linput est %s\n", input[i]);
 		// TODO les fonctions en dessous avec un return du status pq pas
 		g_global = exec(input, envp);
 		printf("La varaible globale est \t%d\n", g_global);

@@ -1,12 +1,5 @@
 #include "executor.h"
 
-builtin_t builtins[] = {
-    {"cd", builtin_cd},
-    {"env", builtin_env},
-    {"echo", builtin_echo},
-    {NULL, NULL},
-};
-
 int    exec(char *cmd[], char *envp[])
 {
     char    *path;
@@ -22,11 +15,12 @@ int    exec(char *cmd[], char *envp[])
 int is_builtin(char *cmd)
 {
     int i;
+    char *builtins[] = {"cd", "env", "echo", "exit", NULL};
 
     i = 0;
-    while (builtins[i].name) 
+    while (builtins[i])
     {
-        if (ft_strncmp(cmd, builtins[i].name, ft_strlen(cmd)) == 0)
+        if (ft_strncmp(cmd, builtins[i], ft_strlen(cmd)) == 0)
             return (1);
         i++;
     }
@@ -48,16 +42,16 @@ int exec_builtin(char **args, char *envp[])
         return (builtin_echo(args));
     else if (ft_strncmp(args[0], "cd", ft_strlen(args[0])) == 0)
         return (builtin_cd(args));
-    // else if (ft_strncmp(args[0], "pwd", ft_strlen(args[0])) == 0)
-    //     return (builtin_pwd());
+    else if (ft_strncmp(args[0], "pwd", ft_strlen(args[0])) == 0)
+        return (builtin_pwd());
     // else if (ft_strncmp(args[0], "export", ft_strlen(args[0])) == 0)
     //     return (builtin_export());
     // else if (ft_strncmp(args[0], "unset", ft_strlen(args[0])) == 0)
     //     return (builtin_unset(args));
     else if (ft_strncmp(args[0], "env", ft_strlen(args[0])) == 0)
         return (builtin_env(envp));
-    // else if (ft_strncmp(args[0], "exit", ft_strlen(args[0])) == 0)
-    //     return (builtin_exit(args));
+    else if (ft_strncmp(args[0], "exit", ft_strlen(args[0])) == 0)
+        return (builtin_exit(args));
     else
         return (-1); // Retourne -1 si ce n'est pas un builtin
 }

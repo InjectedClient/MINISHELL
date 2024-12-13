@@ -34,3 +34,8 @@ char	*ft_strdup(const char *source)
 	ft_strlcpy(copy, source, len + 1);
 	return (copy);
 }
+
+int	ft_isdigit(int c)
+{
+	return (c >= '0' && c <= '9');
+}
