@@ -60,6 +60,12 @@ typedef struct s_free_memory
 	struct s_free_memory	*next;
 }	t_free_memory;
 
+//Builtins
+typedef struct {
+    char *name;                       // Nom du builtin
+    int (*function)(char **args);     // Pointeur vers la fonction du builtin
+} builtin_t;
+
 /*
 	contiens les donnees globales / composition d'autre struct
 	(variable d'env, historique des commmandes etc... )
@@ -118,6 +124,7 @@ char	**ft_split(char const *s, char c);
 void	exit_all(t_data *data);
 void	ft_free_all(t_data *data);
 int		ft_write_fd(char *str, int fd);
+char	*ft_strdup(const char *source);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ LEXER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
@@ -159,13 +166,6 @@ int     exec_cmd(char *cmd[], char *path, char *envp[]);
 
 //Path
 char    *get_cmd_path(char *cmd);
-
-//Builtins
-typedef struct {
-    char *name;                       // Nom du builtin
-    int (*function)(char **args);     // Pointeur vers la fonction du builtin
-} builtin_t;
-
 int exec_builtin(char **args, char *envp[]);
 int is_builtin(char *cmd);
 

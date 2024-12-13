@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:36:08 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/13 16:57:13 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/13 17:19:04 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ void 	looping(char *tmp, t_data *data, char **envp)
 			exec(cmd_tab, envp);
 		}
 	}
-	return (NULL);
 }
 
 /**
