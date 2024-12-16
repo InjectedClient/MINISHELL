@@ -21,11 +21,11 @@ int	ft_check_parser(t_data *data)
 		count = 0;
 	else if (!check_cmd_start(data->input_cmd))
 		count = 0;
-	else if (!check_invalid_pipes(data))
+	else if (!check_token_error(data))
 		count = 0;
 	else if (!check_redirection_arg(data))
 		count = 0;
-	else if (!check_token_error(data))
+	else if (!check_invalid_tokens2(data))
 		count = 0;
 	else if (!check_directory(data->input_cmd))
 		count = 0;

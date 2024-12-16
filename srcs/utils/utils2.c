@@ -37,7 +37,7 @@ char	*ft_strdup(const char *source)
 
 void	exit_all(t_data *data)
 {
-	ft_write_fd("exit\n", 1);
+	ft_write_fd("exit\n", STDERR_FILENO);
 	ft_free_all(data);
 	exit(0);
 }

@@ -90,7 +90,7 @@ int	check_redirection_arg(t_data *data)
 */
 int	check_invalid_tokens(t_data *data)
 {
-	t_lexer *tmp;
+	t_lexer	*tmp;
 
 	tmp = data->lexer_list;
 	while (tmp != NULL)

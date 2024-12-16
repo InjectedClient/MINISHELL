@@ -3,7 +3,7 @@
 int    exec(char *cmd[], char *envp[])
 {
     char    *path;
-
+    handle_signal();
     if (is_builtin(cmd[0]))
         return(exec_builtin(cmd, envp));
     if ((path = get_cmd_path(cmd[0])))

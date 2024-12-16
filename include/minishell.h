@@ -6,6 +6,7 @@
 # define CTRL_C_SIGINT SIGINT
 # define CTRL_BACKSLSH SIGQUIT
 # define SHIFT_OUT 14
+#define	STDOUT_FILENO	1
 
 /* ━━━━━━━━━━━━━━━━━━━━━ BIBLIO ━━━━━━━━━━━━━━━━━━━━━━━━*/
 
@@ -79,6 +80,8 @@ typedef struct s_data {
 	int		is_doub_quot;
 	char	*input_cmd;
 	int		command_count;
+	int 	sig1; //(is this an exec in heredoc)
+	int		sig2; // (heredoc ctrl_c uninterrupted)
 	char	**args;
 }	t_data;
 
@@ -108,7 +111,8 @@ int	is_a_directory(t_data *data);
 void	handle_ctrl_c(int sig);
 void	handle_signal(void);
 void	handle_ctrl_backslash(int sig);
-void	call_sig(int argc);
+void	handle_sig(void);
+void	ctrl_c_handler_here_doc(int sig);
 void	ctrl_c_handler(int sig);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ UTILS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
