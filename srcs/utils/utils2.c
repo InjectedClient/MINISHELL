@@ -72,3 +72,8 @@ int	ft_write_fd(char *str, int fd)
 	}
 	return (0);
 }
+
+int	ft_isdigit(int c)
+{
+	return (c >= '0' && c <= '9');
+}

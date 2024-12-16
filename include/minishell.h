@@ -125,6 +125,10 @@ void	exit_all(t_data *data);
 void	ft_free_all(t_data *data);
 int		ft_write_fd(char *str, int fd);
 char	*ft_strdup(const char *source);
+int		ft_atoi(const char *str);
+int		get_num_len(int n);
+char	*ft_itoa(int n);
+int		ft_isdigit(int c);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ LEXER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
@@ -166,12 +170,16 @@ int     exec_cmd(char *cmd[], char *path, char *envp[]);
 
 //Path
 char    *get_cmd_path(char *cmd);
-int exec_builtin(char **args, char *envp[]);
-int is_builtin(char *cmd);
+int 	exec_builtin(char **args, char *envp[]);
+int 	is_builtin(char *cmd);
 
-int builtin_cd(char **args);
-int builtin_env(char **args);
-int builtin_echo(char **args);
+int 	builtin_cd(char **args);
+int   	builtin_env(char *envp[]);
+int 	builtin_echo(char **args);
+int 	is_numeric(const char *str);
+int     builtin_exit(char **args);
+int		builtin_pwd();
+
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXPAND ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
@@ -185,6 +193,5 @@ void *malloc_check(void *ptr);
 
 int execve_error();
 int fork_error();
-
 
 # endif
