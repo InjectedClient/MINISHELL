@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:36:12 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/13 16:57:09 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/18 16:42:59 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ t_lexer *create_new_lexer(char *str)
 	new = malloc(sizeof(t_lexer));
 	if (!new)
 	{
+		free(new);
 		return (NULL);
 	}
 	new->cmd_segment = str;

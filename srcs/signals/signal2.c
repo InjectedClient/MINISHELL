@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 16:49:27 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/16 17:20:26 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/18 15:04:29 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,20 @@ void	ctrl_c_handler_here_doc(int sig)
  * CTRL-C (SIGINT) et CTRL-Backslash (SIGQUIT) en fonction de l'état actuel,
  * particulièrement en ce qui concerne le traitement des 'here documents'.
  */
-void	handle_sig(void)
+void	handle_sig(t_data *data)
 {
+	if (data->sig1)
+	{
+		signal(SIGINT, &ctrl_c_handler_here_doc);
+		if (g_global == 130)
+		{
+			data->sig1 = 0;
+			data->sig2 = 0;
+		}
+	}
+	else
+	{
 		signal(CTRL_C_SIGINT, &ctrl_c_handler);
 		signal(CTRL_BACKSLSH, IGNORE_SIG_ACTION);
+	}
 }

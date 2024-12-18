@@ -6,7 +6,7 @@
 # define CTRL_C_SIGINT SIGINT
 # define CTRL_BACKSLSH SIGQUIT
 # define SHIFT_OUT 14
-#define	STDOUT_FILENO	1
+#define	STDOUT_FILENO 1
 
 /* ━━━━━━━━━━━━━━━━━━━━━ BIBLIO ━━━━━━━━━━━━━━━━━━━━━━━━*/
 
@@ -86,7 +86,6 @@ typedef struct s_data {
 }	t_data;
 
 extern unsigned int g_global;
-# define SHIFT_OUT 14
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ PARSER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
@@ -111,7 +110,7 @@ int	is_a_directory(t_data *data);
 void	handle_ctrl_c(int sig);
 void	handle_signal(void);
 void	handle_ctrl_backslash(int sig);
-void	handle_sig(void);
+void	handle_sig(t_data *data);
 void	ctrl_c_handler_here_doc(int sig);
 void	ctrl_c_handler(int sig);
 
@@ -133,6 +132,8 @@ int		ft_atoi(const char *str);
 int		get_num_len(int n);
 char	*ft_itoa(int n);
 int		ft_isdigit(int c);
+void	add_to_free_memory(t_data *data, void *add);
+void	*malloc_track(t_data *data, size_t size);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ LEXER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
@@ -151,7 +152,7 @@ t_token	which_redir(t_lexer *tmp);
 int		check_redir_error(t_lexer *tmp);
 int		check_redirect(const char *cmd, char c);
 void	get_data_in_node(t_lexer **lexer_list);
-char	*add_space(const char *command);
+char 	*add_space(t_data *data, const char *command);
 size_t	calculate_new_length(const char *command);
 int		is_operator(char c);
 int		is_double_operator(const char *command, size_t pos);

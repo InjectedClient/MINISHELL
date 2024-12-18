@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:36:08 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/13 17:19:04 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/18 16:49:21 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void 	looping(char *tmp, t_data *data, char **envp)
 		exit_all(data);
 	if (tmp && tmp[0])
 	{
-		processed_cmd = add_space(tmp);
+		processed_cmd = add_space(data, tmp);
 		data->input_cmd = processed_cmd;
 		lexer_launch(data);
 		if (!is_a_directory(data) || !ft_check_parser(data))

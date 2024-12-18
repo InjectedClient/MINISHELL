@@ -13,9 +13,8 @@ int main(int argc, char **argv, char *envp[])
 	init_data(&data, argc, argv);
 	while (1)
 	{
-		tmp = NULL;
-		//sigal 2? probleme ctrl d + "\"
-		handle_signal();
+		tmp = NULL;		
+		handle_sig(&data);
 		tmp = readline("minishell$ ");
 		add_history(tmp);
 		looping(tmp, &data, envp);
