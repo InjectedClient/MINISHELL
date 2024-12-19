@@ -2,19 +2,19 @@
 
 # define SHIFT_OUT 14 // SO (Shift Out)
 
-void free_array(char **array)
+void free_tab(char **tab)
 {
     int i;
 
-    if (!array)
+    if (!tab)
         return ;
     i = 0;
-    while (array[i])
+    while (tab[i])
     {
-        free(array[i]);
+        free(tab[i]);
         i++;
     }
-    free(array);
+    free(tab);
 }
 
 int	ft_white_space(char c)

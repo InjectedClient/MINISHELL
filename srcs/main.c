@@ -15,7 +15,6 @@ int main(int argc, char **argv, char *envp[])
 		tmp = readline("minishell$ ");
 		add_history(tmp);
 		// TODO les fonctions en dessous avec un return du status pq pas
-		printf("avantsplitargs\n");
 		looping(tmp, &data);
 		g_global = execute_token(data, envp);
 		// t_lexer *tokens;

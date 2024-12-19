@@ -11,11 +11,12 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size);
 size_t	ft_strlcat(char *dst, const char *src, size_t size);
 
 // Utils 2
-void free_array(char **array);
+void free_tab(char **tab);
 int	ft_white_space(char c);
 char	*ft_strdup(const char *source);
 int	ft_isdigit(int c);
 
+// Others
 char	**ft_split(char const *s, char c);
 char	*ft_itoa(int n);
 int     ft_atoi(const char *str);
