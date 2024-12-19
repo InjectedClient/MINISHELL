@@ -10,8 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/lexer.h"
-#include "../../include/types.h"
+#include "lexer.h"
+#include "types.h"
+
 
 /**
  * Ajoute un nouvel élément lexer à la fin de la liste chaînée lexer_list.

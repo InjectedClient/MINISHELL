@@ -12,6 +12,7 @@
 
 #include "utils.h"
 #include "errors.h"
+#include "types.h"
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXECUTOR ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 // Main
@@ -33,5 +34,7 @@ int     builtin_pwd();
 
 int     builtin_exit(char **args);
 
+
+int execute_token(t_data data, char *envp[]);
 //Pipe
 #endif

@@ -13,6 +13,7 @@
 #include "../../include/lexer.h"
 #include "../../include/types.h"
 #include "parser.h"
+#include <stdio.h>
 
 /**
  * Lance le lexer et vérifie si le résultat est un répertoire ou si le parser est valide.
@@ -52,6 +53,7 @@ char **looping(char *tmp, t_data *data)
 	{
 		processed_cmd = add_space(tmp);
 		data->input_cmd = processed_cmd;
+		printf("Linput command est %s\n", data->input_cmd);
 		lexer_launch(data);
 		if (!is_a_directory(data) || !ft_check_parser(data))
 			return (NULL);
