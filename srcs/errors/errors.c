@@ -1,38 +1,31 @@
 #include "../../include/minishell.h"
 
-void exit_with_error(const char *message, int exit_code)
+int error()
 {
-    perror(message);
-    exit(exit_code);
+    perror("error_general");
+    return (1);    
 }
 
-
-void free_tab_and_exit(char **ptr)
+int malloc_error()
 {
-    free_array(ptr);
-    perror("Malloc error");
-    exit(EXIT_FAILURE);
-}
-
-
-void *malloc_check(void *ptr)
-{
-    if (!ptr)
-    {
-        perror("Malloc error");
-        exit(EXIT_FAILURE);
-    }
-    return (ptr);
+    perror("malloc");
+    return (1);
 }
 
 int fork_error()
 {
     perror("fork");
-    return (1);
+    return(1);
 }
 
-int execve_error()
+int cmd_not_exec()
 {
-    perror("execve");
+    perror("command_not_executable");
     return (126);
+}
+
+int cmd_not_found()
+{
+    perror("command_not_found");
+    return (127);
 }

@@ -6,27 +6,23 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:36:12 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/18 16:42:59 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/20 16:56:13 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-
 /**
  * Ajoute un nouvel élément lexer à la fin de la liste chaînée lexer_list.
  * Si la liste est vide, initialise la liste avec le nouvel élément.
+ * CHECK SI CETTE FONCTION EST UTILISEE
  */
-void add_lexer_to_end(t_data *data, char *str)
+void	add_lexer_to_end(t_data *data, char *str)
 {
-	t_lexer *new;
-	t_lexer *current;
+	t_lexer	*new;
+	t_lexer	*current;
 
 	new = create_new_lexer(str);
-	if (new == NULL)
-	{
-		return;
-	}
 	if (data->lexer_list == NULL)
 	{
 		data->lexer_list = new;
@@ -37,13 +33,12 @@ void add_lexer_to_end(t_data *data, char *str)
 	{
 		current = data->lexer_list;
 		while (current->next)
-		{
 			current = current->next;
-		}
 		current->next = new;
 		new->prev = current;
 		new->next = NULL;
 	}
+	return ;
 }
 
 /**
@@ -52,14 +47,11 @@ void add_lexer_to_end(t_data *data, char *str)
  */
 t_lexer *create_new_lexer(char *str)
 {
-	t_lexer *new;
+	t_lexer	*new;
 
 	new = malloc(sizeof(t_lexer));
 	if (!new)
-	{
-		free(new);
 		return (NULL);
-	}
 	new->cmd_segment = str;
 	new->next = NULL;
 	new->prev = NULL;

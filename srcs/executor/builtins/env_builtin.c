@@ -10,5 +10,5 @@ int    builtin_env(char *envp[])
         printf("%s\n", envp[i]);
         i++;
     }
-    return (1);
+    return (0);
 }

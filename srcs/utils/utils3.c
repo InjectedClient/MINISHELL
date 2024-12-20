@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:47:09 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/18 15:49:59 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/20 16:41:01 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,19 @@ void	*malloc_track(t_data *data, size_t size)
 		return (NULL);
 	add_to_free_memory(data, add);
 	return (add);
+}
+
+void free_tab(char **tab)
+{
+    int i;
+
+    if (!tab)
+        return ;
+    i = 0;
+    while (tab[i])
+    {
+        free(tab[i]);
+        i++;
+    }
+    free(tab);
 }

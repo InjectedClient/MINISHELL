@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 16:46:37 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/16 16:50:47 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/20 18:14:48 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ void	handle_ctrl_backslash(int sig)
 {
 	(void)sig;
 	g_global = 131;
-	write(2, "Quit\n", 5);
+	write(2, "exit\n", 5);
+	exit(131);
 }
 
 /**

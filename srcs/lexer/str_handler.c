@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:36:16 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/18 16:46:43 by nlambert         ###   ########.fr       */
+/*   Updated: 2024/12/20 16:56:42 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,20 @@
 /**
  * Ajoute des espaces autour des opérateurs dans la commande donnée.
  */
-char *add_space(t_data *data, const char *command)
+char *add_space(const char *command)
 {
 	size_t new_len;
 	size_t i;
 	char *new_command;
 	t_quote *state;
 	
-	state = malloc_track(data, sizeof(t_quote));
+	state = malloc(sizeof(t_quote));
 	if (!state)
 		return (0);
 	state->doubl_quot_status = 0;
 	state->singl_quot_status = 0;
 	new_len = calculate_new_length(command);
-	new_command = malloc_track(data, new_len + 1);
+	new_command = malloc(new_len + 1);
 	if (!new_command)
 		return (NULL);
 	i = 0;
@@ -92,7 +92,7 @@ int get_word_in_list(char *str, int i, t_data *data, t_lexer *tmp)
 	int x;
 	t_quote *state;
 
-	state = malloc_track(data, sizeof(t_quote));
+	state = malloc(sizeof(t_quote));
 	if (!state)
 		return (0);
 	word = NULL;
@@ -101,7 +101,7 @@ int get_word_in_list(char *str, int i, t_data *data, t_lexer *tmp)
 	j = 0;
 	reset_quoting_state(state);
 	process_lexer_input(str, &i, &j, state);
-	word = malloc_track(data, sizeof(char) * (j + sizeof('\0')));
+	word = malloc(sizeof(char) * (j + sizeof('\0')));
 	if (!word)
 		return (0);
 	word[j] = '\0';

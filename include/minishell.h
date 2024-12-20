@@ -126,6 +126,7 @@ int		ft_white_space(char c);
 char	**ft_split(char const *s, char c);
 void	exit_all(t_data *data);
 void	ft_free_all(t_data *data);
+void	free_tab(char **tab);
 int		ft_write_fd(char *str, int fd);
 char	*ft_strdup(const char *source);
 int		ft_atoi(const char *str);
@@ -145,14 +146,14 @@ int		check_prev(t_lexer *token);
 void	cmd_or_arg(t_lexer *tmp, t_lexer *first);
 int		get_word_in_list(char *str, int i, t_data *data, t_lexer *tmp);
 void	add_lexer_to_end(t_data *data, char *str);
-t_lexer	*create_new_lexer(char *str);
+t_lexer *create_new_lexer(char *str);
 void	get_token_in_node(t_lexer **lexer_list, t_lexer *tmp);
 void	print_lexer_content(t_data *data);
 t_token	which_redir(t_lexer *tmp);
 int		check_redir_error(t_lexer *tmp);
 int		check_redirect(const char *cmd, char c);
 void	get_data_in_node(t_lexer **lexer_list);
-char 	*add_space(t_data *data, const char *command);
+char *add_space(const char *command);
 size_t	calculate_new_length(const char *command);
 int		is_operator(char c);
 int		is_double_operator(const char *command, size_t pos);
@@ -170,20 +171,28 @@ char	**convert_list_to_array(t_lexer *head);
 int 	count_lexer_list(t_lexer *head);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXECUTOR ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
+int    exec_cmd(char **cmd, char *envp[]);
 int     exec(char *cmd[], char *envp[]);
-int     exec_cmd(char *cmd[], char *path, char *envp[]);
+int     execute_token(t_data data, char *envp[]);
+
+//Args
+int     count_args(t_lexer *arg);
+char    **split_args(t_lexer *cmd);
 
 //Path
-char    *get_cmd_path(char *cmd);
-int 	exec_builtin(char **args, char *envp[]);
-int 	is_builtin(char *cmd);
+char    *get_cmd_path(char *cmd, char *path_var);
 
-int 	builtin_cd(char **args);
-int   	builtin_env(char *envp[]);
-int 	builtin_echo(char **args);
-int 	is_numeric(const char *str);
+//Builtins
+int     is_builtin(char *cmd);
+int     exec_builtins(char **args, char *envp[]);
+
+int     builtin_echo(char **args);
+int     builtin_cd(char **args);
+int     builtin_env(char *envp[]);
+int     builtin_pwd();
+
+
 int     builtin_exit(char **args);
-int		builtin_pwd();
 
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXPAND ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
@@ -192,11 +201,10 @@ char	*expander(char *str);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ERRORS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 // Error
-void exit_with_error(const char *message, int exit_code);
-void free_tab_and_exit(char **ptr);
-void *malloc_check(void *ptr);
-
-int execve_error();
+int error();
+int malloc_error();
+int cmd_not_exec();
+int cmd_not_found();
 int fork_error();
 
 # endif

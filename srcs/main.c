@@ -14,10 +14,11 @@ int main(int argc, char **argv, char *envp[])
 	while (1)
 	{
 		tmp = NULL;		
-		handle_sig(&data);
+		//handle_sig(&data);
+		handle_signal();
 		tmp = readline("minishell$ ");
 		add_history(tmp);
 		looping(tmp, &data, envp);
+		printf("%d\n", g_global);
 	}
 }
-
