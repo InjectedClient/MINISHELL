@@ -67,6 +67,14 @@ typedef struct {
     int (*function)(char **args);     // Pointeur vers la fonction du builtin
 } builtin_t;
 
+// Liste pour variables denvironnement
+typedef struct s_env
+{
+    char *name;
+    char *value;
+    struct s_env *next;
+} t_env;
+
 /*
 	contiens les donnees globales / composition d'autre struct
 	(variable d'env, historique des commmandes etc... )
@@ -135,11 +143,16 @@ char	*ft_itoa(int n);
 int		ft_isdigit(int c);
 void	add_to_free_memory(t_data *data, void *add);
 void	*malloc_track(t_data *data, size_t size);
+char	*ft_strndup(const char *source, size_t size);
+char	*ft_strchr(const char *str, int searchedChar);
+int		ft_isalpha(int c);
+int		ft_isalnum(int c);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ LEXER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
 void	lexer_launch(t_data *data);
-void 	looping(char *tmp, t_data *data, char **envp);
+void 	looping(char *tmp, t_data *data, t_env *env_list, char **envp);
 int		count_words_in_input(char *str);
 void	process_input_string(t_data *data, t_lexer *tmp, t_lexer *current, int i);
 int		check_prev(t_lexer *token);
@@ -172,8 +185,8 @@ int 	count_lexer_list(t_lexer *head);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXECUTOR ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 int    exec_cmd(char **cmd, char *envp[]);
-int     exec(char *cmd[], char *envp[]);
-int     execute_token(t_data data, char *envp[]);
+int    exec(char *cmd[], t_env *env_list, char **envp);
+int execute_token(t_data data, t_env *env_list, char **envp);
 
 //Args
 int     count_args(t_lexer *arg);
@@ -184,14 +197,14 @@ char    *get_cmd_path(char *cmd, char *path_var);
 
 //Builtins
 int     is_builtin(char *cmd);
-int     exec_builtins(char **args, char *envp[]);
+int 	exec_builtins(char **args, t_env *env_list);
 
 int     builtin_echo(char **args);
 int     builtin_cd(char **args);
-int     builtin_env(char *envp[]);
 int     builtin_pwd();
-
-
+int 	builtin_export(char **args, t_env *env_list);
+int		builtin_unset(char **args, t_env *env_list);
+int		builtin_env(t_env *env_list);
 int     builtin_exit(char **args);
 
 
@@ -206,5 +219,8 @@ int malloc_error();
 int cmd_not_exec();
 int cmd_not_found();
 int fork_error();
+
+
+t_env *init_env_list(char **envp);
 
 # endif

@@ -30,7 +30,7 @@ void print_lexer_content(t_data *data)
  * Traite la commande temporaire, ajoute des espaces autour des opérateurs,
  * lance le lexer et vérifie si le résultat est un répertoire ou si le parser est valide.
  */
-void 	looping(char *tmp, t_data *data, char **envp)
+void 	looping(char *tmp, t_data *data, t_env *env_list, char **envp)
 {
 	t_lexer *tmp_lex;
 	char *processed_cmd;
@@ -46,7 +46,7 @@ void 	looping(char *tmp, t_data *data, char **envp)
 			return ;
 		tmp_lex = data->lexer_list;
 		if (tmp_lex && tmp_lex->cmd_segment)
-			execute_token(*data, envp);
+			execute_token(*data, env_list, envp);
 	}
 }
 

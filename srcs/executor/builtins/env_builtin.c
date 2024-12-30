@@ -1,14 +1,15 @@
 #include "../../../include/minishell.h"
 
-int    builtin_env(char *envp[])
+int    builtin_env(t_env *env_list)
 {
-    int i;
+    t_env *current;
 
-    i = 0;
-    while (envp[i])
+    current = env_list;
+    while (current)
     {
-        printf("%s\n", envp[i]);
-        i++;
+        if (current->value)
+            printf("%s=%s\n", current->name, current->value);
+        current = current->next;
     }
     return (0);
 }

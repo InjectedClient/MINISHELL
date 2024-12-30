@@ -1,4 +1,38 @@
-// #include "../../../include/minishell.h"
+#include "../../../include/minishell.h"
+
+void remove_env_variable(t_env *env_list, char *var)
+{
+    t_env *current = env_list, *prev = NULL;
+
+    while (current)
+    {
+        if (ft_strncmp(current->name, var, ft_strlen(current->name)) == 0)
+        {
+            if (prev)
+                prev->next = current->next;
+            else
+                env_list = current->next;
+            free(current->name);
+            free(current->value);
+            free(current);
+            return;
+        }
+        prev = current;
+        current = current->next;
+    }
+}
+
+int builtin_unset(char **args, t_env *env_list)
+{
+    int i = 1;
+
+    while (args[i])
+    {
+        remove_env_variable(env_list, args[i]);
+        i++;
+    }
+    return (0);
+}
 
 // int builtin_unset(char **args)
 // {

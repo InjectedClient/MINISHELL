@@ -3,7 +3,7 @@
 int is_builtin(char *cmd)
 {
     int i;
-    char *builtins[] = {"cd", "env", "echo", "exit", "pwd", NULL};
+    char *builtins[] = {"cd", "env", "echo", "exit", "pwd", "export", "unset", NULL};
 
     i = 0;
     while (builtins[i])
@@ -15,7 +15,7 @@ int is_builtin(char *cmd)
     return (0); // Retourne 0 si ce n'est pas un builtin
 }
 
-int exec_builtins(char **args, char *envp[]) 
+int exec_builtins(char **args, t_env *env_list) 
 {
     if (ft_strncmp(args[0], "echo", ft_strlen(args[0])) == 0)
         return (builtin_echo(args));
@@ -23,12 +23,12 @@ int exec_builtins(char **args, char *envp[])
         return (builtin_cd(args));
     else if (ft_strncmp(args[0], "pwd", ft_strlen(args[0])) == 0)
         return (builtin_pwd());
-    // else if (ft_strncmp(args[0], "export", ft_strlen(args[0])) == 0)
-    //     return (builtin_export());
-    // else if (ft_strncmp(args[0], "unset", ft_strlen(args[0])) == 0)
-    //     return (builtin_unset(args));
+    else if (ft_strncmp(args[0], "export", ft_strlen(args[0])) == 0)
+        return (builtin_export(args, env_list));
+    else if (ft_strncmp(args[0], "unset", ft_strlen(args[0])) == 0)
+        return (builtin_unset(args, env_list));
     else if (ft_strncmp(args[0], "env", ft_strlen(args[0])) == 0)
-        return (builtin_env(envp));
+        return (builtin_env(env_list));
     else if (ft_strncmp(args[0], "exit", ft_strlen(args[0])) == 0)
         return (builtin_exit(args));
     else
@@ -67,10 +67,10 @@ int    exec_cmd(char **cmd, char *envp[])
     return (1);
 }
 
-int    exec(char *cmd[], char *envp[])
+int    exec(char *cmd[], t_env *env_list, char **envp)
 {
     if (is_builtin(cmd[0]))
-        g_global = exec_builtins(cmd, envp);
+        g_global = exec_builtins(cmd, env_list);
     else
         g_global = exec_cmd(cmd, envp);
     
@@ -134,7 +134,7 @@ char    **split_args(t_lexer *cmd)
     return (args);
 }
 
-int execute_token(t_data data, char *envp[])
+int execute_token(t_data data, t_env *env_list, char **envp)
 {
     t_lexer *current;
     int fd_in;
@@ -187,7 +187,7 @@ int execute_token(t_data data, char *envp[])
     // Une fois les redirections configurées, exécuter la commande
     if (args)
     {
-        if (exec(args, envp) == -1) {
+        if (exec(args, env_list, envp) == -1) {
             perror("exec error");
             return (1);
         }
