@@ -1,6 +1,6 @@
 #include "../../../include/minishell.h"
 
-void print_sorted_env(t_env *env_list)
+void	print_sorted_env(t_env *env_list)
 {
     t_env *current = env_list;
 
@@ -21,115 +21,125 @@ void print_sorted_env(t_env *env_list)
 }
 
 
-int is_valid_env_format(char *arg)
+void	add_env_variable(t_env **env_list, char *name, char *value, int equal)
 {
-    int i;
+	t_env *new_node;
+	t_env *current;
 
-    if (!ft_isalpha(arg[0]) && arg[0] != '_')
-        return (0);
-    i = 1;
-    while (arg[i] && arg[i] != '=')
-    {
-        if (!ft_isalnum(arg[i]) && arg[i] != '_')
-            return (0);
-        i++;
-    }
-    return (1);
-}
-
-void add_env_variable(t_env **env_list, char *name, char *value)
-{
-    t_env *new_node = malloc(sizeof(t_env));
-    t_env *current = *env_list;
-
-    new_node->name = ft_strdup(name);
-    if (!new_node->name)
-    {
-        free(new_node);
-        return; // Gérer l'erreur de strdup
-    }
-
-    new_node->value = ft_strdup(value);
-    if (!new_node->value)
-    {
-        free(new_node->name);
-        free(new_node);
-        return; // Gérer l'erreur de strdup
-    }
-    new_node->next = NULL;
-
-    if (!current)
-        *env_list = new_node;
-    else
-    {
-        while (current->next)
-            current = current->next;
-        current->next = new_node;
-    }
+	current = *env_list;
+	if (!(new_node = malloc(sizeof(t_env))))
+	{
+		free_2(name, value);
+		return ;
+	}
+	new_node->name = ft_strdup(name);
+	if (value)
+		new_node->value = ft_strdup(value);
+	else
+		new_node->value = NULL;
+	new_node->equal_sign = equal;
+	if (!new_node->name || (value && !new_node->value))
+	{
+		free_2(name, value);
+		free_env_node(new_node);
+		return ;
+	}
+	new_node->next = NULL;
+	if (!current)
+		*env_list = new_node;
+	else
+	{
+		while (current->next)
+		    current = current->next;
+		current->next = new_node;
+	}
 }
 
 void update_or_add_env(t_env **env_list, char *arg)
 {
-    char *equal_sign = ft_strchr(arg, '=');
-    char *name = NULL;
-    char *value = NULL;
+	int		equal;
+	char	*equal_sign;
+	char 	*name;
+	char 	*value;
+	t_env *current;
 
-    if (equal_sign)
-    {
-        name = ft_substr(arg, 0, equal_sign - arg);
-        value = ft_strdup(equal_sign + 1);
-    }
-    else
-    {
-        name = ft_strdup(arg);
-        value = NULL; // Valeur vide si pas de '='
-    }
-
-    if (!name)
-        return; // Pas besoin de libérer car `value` est NULL ou géré par ft_strdup
-
-    t_env *current = *env_list;
-    while (current)
-    {
-        if (ft_strncmp(current->name, name, ft_strlen(current->name)) == 0)
-        {
-            free(current->value);
-            current->value = value;
-            free(name);
-            return;
-        }
-        current = current->next;
-    }
-    add_env_variable(env_list, name, value); // Passe directement env_list
+	equal = 0;
+	current = *env_list;
+	value = NULL;
+	equal_sign = ft_strchr(arg, '=');
+	if (equal_sign)
+	{
+		equal = 1;
+		name = ft_substr(arg, 0, equal_sign - arg);
+		if (*(equal_sign + 1) != '\0')
+			value = ft_strdup(equal_sign + 1);
+	}
+	else
+		name = ft_strdup(arg);
+	if (!name || (*(equal_sign + 1) && !value))
+	{
+		free_2(name, value);
+		return ;
+	}
+	while (current)
+	{
+		if (ft_strcmp(current->name, name) == 0)
+		{
+			free(current->value);
+			current->value = value;
+			free_2(name, value);
+			return;
+		}
+		current = current->next;
+	}
+	add_env_variable(env_list, name, value, equal);
 }
 
 
-
-
-int builtin_export(char **args, t_env *env_list)
+int is_valid_env_format(char *arg)
 {
-    int i;
+	int		i;
 
-    if (!args[1])
-    {
-        print_sorted_env(env_list); 
-        return (0);
-    }
-    i = 1;
-    while (args[i])
-    {
-        if (is_valid_env_format(args[i]))
-            update_or_add_env(&env_list, args[i]);
-        else
-        {
-            write(2, "export: `", 9); // Message d'erreur standard
-            write(2, args[i], ft_strlen(args[i])); // Nom de l'argument
-            write(2, "`: not a valid identifier\n", 25); // Suite du message
-        }
-        i++;
-    }
-    return (0);
+	if (!ft_isalpha(arg[0]) && arg[0] != '_')
+		return (0);
+	i = 1;
+	while (arg[i] && arg[i] != '=')
+	{
+		if (!ft_isalnum(arg[i]) && arg[i] != '_')
+			return (0);
+		i++;
+	}
+	return (1);
 }
+
+int	builtin_export(char **args, t_env **env_list)
+{
+	int		i;
+
+	if (!env_list || !*env_list)
+		return (1);
+	if (!args[1])
+	{
+		//print_sorted_env(*env_list);
+		return (0);
+	}
+	i = 1;
+	while (args[i])
+	{
+		if (is_valid_env_format(args[i]))
+			update_or_add_env(env_list, args[i]);
+		else
+		{
+			write(2, "minishell: ", 11);
+			write(2, "export: `", 9);
+			write(2, args[i], ft_strlen(args[i]));
+			write(2, "`: not a valid identifier\n", 26);
+		}
+		i++;
+	}
+	return (0);
+}
+
 
 // int builtin_export(char **args, char ***envp)
 // {

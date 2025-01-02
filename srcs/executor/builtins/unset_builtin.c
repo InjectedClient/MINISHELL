@@ -1,17 +1,22 @@
 #include "../../../include/minishell.h"
 
-void remove_env_variable(t_env *env_list, char *var)
+void remove_env_variable(t_env **env_list, char *name)
 {
-    t_env *current = env_list, *prev = NULL;
+    if (!env_list || !*env_list || !name)
+        return;
+
+    t_env *current = *env_list;
+    t_env *prev = NULL;
 
     while (current)
     {
-        if (ft_strncmp(current->name, var, ft_strlen(current->name)) == 0)
+        if (ft_strncmp(current->name, name, ft_strlen(current->name)) == 0)
         {
             if (prev)
                 prev->next = current->next;
             else
-                env_list = current->next;
+                *env_list = current->next; // Mise à jour de la tête de liste
+
             free(current->name);
             free(current->value);
             free(current);
@@ -22,7 +27,9 @@ void remove_env_variable(t_env *env_list, char *var)
     }
 }
 
-int builtin_unset(char **args, t_env *env_list)
+
+
+int builtin_unset(char **args, t_env **env_list)
 {
     int i = 1;
 
@@ -33,6 +40,7 @@ int builtin_unset(char **args, t_env *env_list)
     }
     return (0);
 }
+
 
 // int builtin_unset(char **args)
 // {

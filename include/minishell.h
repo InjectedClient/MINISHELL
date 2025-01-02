@@ -72,6 +72,7 @@ typedef struct s_env
 {
     char *name;
     char *value;
+	int		equal_sign;
     struct s_env *next;
 } t_env;
 
@@ -148,6 +149,12 @@ char	*ft_strchr(const char *str, int searchedChar);
 int		ft_isalpha(int c);
 int		ft_isalnum(int c);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
+int 	ft_strcmp(const char *s1, const char *s2);
+
+void    free_2(char *var1, char *var2);
+void    free_3(char *var1, char *var2, char *var3);
+void    free_4(char *var1, char *var2, char *var3, char *var4);
+void	free_env_node(t_env *node);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ LEXER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
@@ -202,8 +209,8 @@ int 	exec_builtins(char **args, t_env *env_list);
 int     builtin_echo(char **args);
 int     builtin_cd(char **args);
 int     builtin_pwd();
-int 	builtin_export(char **args, t_env *env_list);
-int		builtin_unset(char **args, t_env *env_list);
+int 	builtin_export(char **args, t_env **env_list);
+int		builtin_unset(char **args, t_env **env_list);
 int		builtin_env(t_env *env_list);
 int     builtin_exit(char **args);
 
