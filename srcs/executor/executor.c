@@ -244,8 +244,8 @@ int execute_token(t_data *data, t_env *env_list, char **envp)
                 else if (prev_fd != -1)
                 {
                     dup2(prev_fd, STDIN_FILENO);
+                    close(prev_fd);
                 }
-
                 // Redirection de la sortie
                 if (fd_out != -1)
                 {
@@ -255,11 +255,11 @@ int execute_token(t_data *data, t_env *env_list, char **envp)
                 else if (pipe_fd[1] != -1)
                 { // Pipe suivant
                     dup2(pipe_fd[1], STDOUT_FILENO);
+                    close(pipe_fd[1]);
                 }
 
                 // Fermer tous les descripteurs inutiles
                 close(pipe_fd[0]);
-                close(pipe_fd[1]);
 
                 // Exécuter la commande
                 exec(args, env_list, envp, 0);
@@ -269,14 +269,16 @@ int execute_token(t_data *data, t_env *env_list, char **envp)
             else
             { // Processus parent
                 // Fermer les extrémités inutiles
-                 int status;
+                int status;
                 wait(&status);
-                if (fd_in != -1) close(fd_in);
-                if (fd_out != -1) close(fd_out);
-                if (prev_fd != -1) close(prev_fd);
-                if (pipe_fd[1] != -1) close(pipe_fd[1]);
-                dup2(stdin_save, STDIN_FILENO);
-                dup2(stdout_save, STDOUT_FILENO);
+                if (fd_in != -1)
+                    close(fd_in);
+                if (fd_out != -1)
+                    close(fd_out);
+                if (prev_fd != -1)
+                    close(prev_fd);
+                if (pipe_fd[1] != -1)
+                    close(pipe_fd[1]);
 
                 // Met à jour prev_fd pour la prochaine commande
                 prev_fd = pipe_fd[0];
@@ -300,6 +302,9 @@ int execute_token(t_data *data, t_env *env_list, char **envp)
     dup2(stdout_save, STDOUT_FILENO);
     close(stdin_save);
     close(stdout_save);
+    if (fd_in != -1) close(fd_in);
+    if (fd_out != -1) close(fd_out);
+    if (prev_fd != -1) close(prev_fd);
     while (wait(NULL) > 0);
 
     return (0);
