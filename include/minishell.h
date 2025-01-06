@@ -61,12 +61,6 @@ typedef struct s_free_memory
 	struct s_free_memory	*next;
 }	t_free_memory;
 
-//Builtins
-typedef struct {
-    char *name;                       // Nom du builtin
-    int (*function)(char **args);     // Pointeur vers la fonction du builtin
-} builtin_t;
-
 // Liste pour variables denvironnement
 typedef struct s_env
 {
@@ -192,8 +186,8 @@ int 	count_lexer_list(t_lexer *head);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXECUTOR ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 int    exec_cmd(char **cmd, char *envp[]);
-int    exec(char *cmd[], t_env *env_list, char **envp);
-int execute_token(t_data data, t_env *env_list, char **envp);
+int    exec(char *cmd[], t_env *env_list, char **envp, int fork);
+int		execute_token(t_data *data, t_env *env_list, char **envp);
 
 //Args
 int     count_args(t_lexer *arg);
@@ -207,9 +201,10 @@ int     is_builtin(char *cmd);
 int 	exec_builtins(char **args, t_env *env_list);
 
 int     builtin_echo(char **args);
-int     builtin_cd(char **args);
+int 	builtin_cd(char **args, t_env **env_list);
 int     builtin_pwd();
 int 	builtin_export(char **args, t_env **env_list);
+void	update_or_add_env(t_env **env_list, char *arg);
 int		builtin_unset(char **args, t_env **env_list);
 int		builtin_env(t_env *env_list);
 int     builtin_exit(char **args);

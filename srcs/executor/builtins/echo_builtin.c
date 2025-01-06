@@ -1,25 +1,45 @@
 #include "../../../include/minishell.h"
 
-int     builtin_echo(char **args)
-{
-    int i;
-    int newline;
+#include <unistd.h>
+#include <string.h>
 
-    newline = 1;
-    i = 1;
-    if (args[i] && ft_strncmp(args[i], "-n", 2) == 0)
+// Fonction utilitaire pour vérifier si une chaîne est uniquement composée de "-n"
+int is_only_n_option(const char *arg)
+{
+    if (!arg || arg[0] != '-')
+        return (0);
+    for (int i = 1; arg[i]; i++)
+    {
+        if (arg[i] != 'n')
+            return (0);
+    }
+    return (1);
+}
+
+int builtin_echo(char **args)
+{
+    int i = 1;
+    int newline = 1;
+
+    // Vérifie les options `-n` valides
+    while (args[i] && is_only_n_option(args[i]))
     {
         newline = 0;
         i++;
     }
+
+    // Affiche les arguments restants
     while (args[i])
     {
-        printf("%s", args[i]);
-        if (args[i + 1])
-            printf(" ");
+        write(1, args[i], ft_strlen(args[i]));
+        if (args[i + 1]) // Ajouter un espace sauf après le dernier argument
+            write(1, " ", 1);
         i++;
     }
+
+    // Ajoute une nouvelle ligne si `-n` n'est pas spécifié
     if (newline)
-        printf("\n");
+        write(1, "\n", 1);
+
     return (0);
 }

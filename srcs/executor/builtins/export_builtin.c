@@ -86,7 +86,7 @@ void update_or_add_env(t_env **env_list, char *arg)
 		if (ft_strcmp(current->name, name) == 0)
 		{
 			free(current->value);
-			current->value = value;
+			current->value = ft_strdup(value);
 			free_2(name, value);
 			return;
 		}

@@ -46,7 +46,7 @@ void 	looping(char *tmp, t_data *data, t_env *env_list, char **envp)
 			return ;
 		tmp_lex = data->lexer_list;
 		if (tmp_lex && tmp_lex->cmd_segment)
-			execute_token(*data, env_list, envp);
+			execute_token(data, env_list, envp);
 	}
 }
 
