@@ -6,34 +6,36 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 16:46:37 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/20 18:14:48 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/07 15:44:23 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	handle_ctrl_c(int sig)
+void	new_line(int sig)
 {
-	(void)sig;
-	g_global = 130;
+	g_global = 128 + sig;
+	rl_on_new_line();
+	putchar('\n');
 }
 
-void	handle_ctrl_backslash(int sig)
+void	reset_prompt(int sig)
 {
-	(void)sig;
-	g_global = 131;
-	write(2, "exit\n", 5);
-	exit(131);
+	g_global = 128 + sig;
+	putchar('\n');
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
 }
 
-/**
- * Configure les gestionnaires de signaux pour le processus en cours. Cette
- * fonction est essentielle dans des applications interactives comme les shells
- * ou  les éditeurs de texte pour personnaliser la réponse aux interruptions et
- * terminaisons.
- */
-void	handle_signal(void)
+void	signals_wait_cmd(void)
 {
-	signal(SIGINT, &handle_ctrl_c);
-	signal(SIGQUIT, &handle_ctrl_backslash);
+	signal(SIGINT, reset_prompt);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+void	signals_run_cmd(void)
+{
+	signal(SIGINT, new_line);
+	signal(SIGQUIT, new_line);
 }

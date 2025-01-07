@@ -16,9 +16,9 @@ int main(int argc, char **argv, char *envp[])
 	while (1)
 	{
 		tmp = NULL;		
-		//handle_sig(&data);
-		handle_signal();
+		signals_wait_cmd();
 		tmp = readline("minishell$ ");
+		signals_run_cmd();
 		add_history(tmp);
 		looping(tmp, &data, env_list, envp);
 		printf("%d\n", g_global);
