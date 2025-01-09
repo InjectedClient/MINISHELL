@@ -312,18 +312,12 @@ int execute_token(t_data *data, t_env *env_list, char **envp)
         if (fds[0] == -1 && prev_fd != -1)
             dup2(prev_fd, STDIN_FILENO);
         exec(args, env_list, envp, 1);
-        free_tab(args);
     }
     dup2(stdin_save, STDIN_FILENO);
     dup2(stdout_save, STDOUT_FILENO);
     close(stdin_save);
     close(stdout_save);
-    if (fds[0] != -1)
-        close(fds[0]);
-    if (fds[1] != -1)
-        close(fds[1]);
-    if (prev_fd != -1)
-        close(prev_fd);
+    cleanup(fds, prev_fd, pipe_fd, args);
     while (wait(NULL) > 0);
     return (0);
 }
