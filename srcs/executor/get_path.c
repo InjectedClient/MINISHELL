@@ -1,5 +1,15 @@
 #include "../../include/minishell.h"
 
+char *get_path()
+{
+    char *path_var;
+
+    path_var = getenv("PATH");
+    if (!path_var)
+        return (cmd_not_found());
+}
+
+
 char    *get_cmd_path(char *cmd, char *path_var)
 {
     int i;
