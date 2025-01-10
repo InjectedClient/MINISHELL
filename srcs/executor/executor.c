@@ -83,7 +83,7 @@ int    exec_cmd_2(char **cmd, char *envp[], t_env *env_list)
         if (!path)
             return (cmd_not_found());
         if (execve(path, cmd, envp) == -1)
-                exit(cmd_not_exec());
+                return (cmd_not_exec());
     }
     return (0);
 }
@@ -99,7 +99,7 @@ int    exec(char *cmd[], t_env *env_list, char **envp, int fork)
         else
             g_global = exec_cmd_2(cmd, envp, env_list);
     }
-    return (0);
+    return (g_global);
 }
 
 
