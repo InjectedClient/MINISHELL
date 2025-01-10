@@ -1,4 +1,4 @@
-// #include "../../include/minishell.h"
+#include "../../include/minishell.h"
 // int is_single_quote(const char *cmd_segment)
 // {
 //     size_t len;
@@ -21,21 +21,19 @@
 //     return (len >= 2 && cmd_segment[0] == '"' && cmd_segment[len - 1] == '"');
 // }
 
-// int starts_with_tilde(const char *cmd_segment)
-// {
-//     if (!cmd_segment)
-//         return 0; // Pas de tilde si la chaîne est NULL.
+int starts_with_tilde(const char *cmd_segment)
+{
+    if (!cmd_segment)
+        return 0;
+    return (cmd_segment[0] == '~');
+}
 
-//     return (cmd_segment[0] == '~');
-// }
-
-// int starts_with_dollar(const char *cmd_segment)
-// {
-//     if (!cmd_segment)
-//         return 0; // Pas de dollar si la chaîne est NULL.
-
-//     return (cmd_segment[0] == '$');
-// }
+int starts_with_dollar(const char *cmd_segment)
+{
+    if (!cmd_segment)
+        return 0;
+    return (cmd_segment[0] == '$');
+}
 
 
 // char *handle_single_quote(const char *input)
@@ -52,66 +50,73 @@
 //     return expanded;
 // }
 
-// char *expand_variable(const char *input, t_env *env_list)
-// {
-//     if (input[0] != '$')
-//         return strdup(input); // Pas une variable.
+char *expand_variable(const char *input, t_env *env_list)
+{
+	const char *start;
+	size_t	len;
+	char	*var_name;
+	char	*value;
 
-//     const char *start = input + 1; // Saute le `$`.
-//     size_t len = 0;
+	if (input[0] != '$')
+		return (ft_strdup(input));
 
-//     while (start[len] && (ft_isalnum(start[len]) || start[len] == '_'))
-//         len++;
+	start = input + 1;
+	len = 0;
+	while (start[len] && (ft_isalnum(start[len]) || start[len] == '_'))
+		len++;
 
-//     char *var_name = ft_substr(start, 0, len); // Extrait le nom de la variable.
-//     char *value = ft_getenv(var_name, env_list); // Récupère sa valeur.
-//     free(var_name);
+	var_name = ft_substr(start, 0, len); // Extrait le nom de la variable.
+	value = ft_getenv(var_name, env_list); // Récupère sa valeur.
+	free(var_name);
 
-//     return value ? strdup(value) : strdup(""); // Si non définie, retourne une chaîne vide.
-// }
-
-
-// char *expand_tilde(const char *input, t_env *env_list)
-// {
-//     if (input[0] != '~')
-//         return strdup(input); // Pas une tilde.
-
-//     char *home = ft_getenv("HOME", env_list); // Récupère $HOME.
-//     if (!home)
-//         return strdup(input); // Si pas de HOME, retourne le chemin inchangé.
-
-//     return ft_strjoin(home, input + 1); // Concatène $HOME avec le reste du chemin.
-// }
+	if (value)
+		return (ft_strdup(value));
+	return (ft_strdup(""));
+	//return value ? strdup(value) : strdup(""); // Si non définie, retourne une chaîne vide.
+}
 
 
-// char *expand_token(t_lexer *token, t_env *env_list)
-// {
-//     if (is_single_quote(token->cmd_segment))
-//         return handle_single_quote(token->cmd_segment); // Pas d'expansion pour les guillemets simples.
-//     if (is_double_quote(token->cmd_segment))
-//         return handle_double_quote(token->cmd_segment, env_list); // Expansion des variables dans les doubles quotes.
-//     if (starts_with_tilde(token->cmd_segment))
-//         return expand_tilde(token->cmd_segment, env_list); // Expansion de ~ en $HOME.
-//     if (starts_with_dollar(token->cmd_segment))
-//         return expand_variable(token->cmd_segment, env_list); // Expansion des variables d'environnement.
+char *expand_tilde(const char *input, t_env *env_list)
+{
+	char	*home;
+	if (input[0] != '~')
+		return ft_strdup(input);
 
-//     return strdup(token->cmd_segment); // Si rien à faire, retourne tel quel.
-// }
+	home = ft_getenv("HOME", env_list); // Récupère $HOME.
+	if (!home)
+		return ft_strdup(input); // Si pas de HOME, retourne le chemin inchangé.
+	return ft_strjoin(home, input + 1); // Concatène $HOME avec le reste du chemin.
+}
 
-// void expand_command(t_data *data, t_env *env_list)
-// {
-//     t_lexer *current = data->lexer_list;
 
-//     while (current)
-//     {
-//         char *expanded = expand_token(current, env_list); // Expansion du token.
-//         if (!expanded)
-//         {
-//             perror("minishell: expansion failed");
-//             exit(1); // Gère proprement l'erreur.
-//         }
-//         free(current->cmd_segment); // Libère l'ancien segment.
-//         current->cmd_segment = expanded; // Remplace par le segment expansé.
-//         current = current->next;
-//     }
-// }
+char *expand_token(t_lexer *token, t_env *env_list)
+{
+    if (is_single_quote(token->cmd_segment))
+        return handle_single_quote(token->cmd_segment); // Pas d'expansion pour les guillemets simples.
+    if (is_double_quote(token->cmd_segment))
+        return handle_double_quote(token->cmd_segment, env_list); // Expansion des variables dans les doubles quotes.
+    if (starts_with_tilde(token->cmd_segment))
+        return expand_tilde(token->cmd_segment, env_list); // Expansion de ~ en $HOME.
+    if (starts_with_dollar(token->cmd_segment))
+        return expand_variable(token->cmd_segment, env_list); // Expansion des variables d'environnement.
+
+    return strdup(token->cmd_segment); // Si rien à faire, retourne tel quel.
+}
+
+void expand_command(t_data *data, t_env *env_list)
+{
+    t_lexer *current = data->lexer_list;
+
+    while (current)
+    {
+        char *expanded = expand_token(current, env_list); // Expansion du token.
+        if (!expanded)
+        {
+            perror("minishell: expansion failed");
+            exit(1); // Gère proprement l'erreur.
+        }
+        free(current->cmd_segment); // Libère l'ancien segment.
+        current->cmd_segment = expanded; // Remplace par le segment expansé.
+        current = current->next;
+    }
+}

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_path.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jle-neze <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/10 14:58:39 by jle-neze          #+#    #+#             */
+/*   Updated: 2025/01/10 15:23:19 by jle-neze         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 
 char    *ft_getenv_dup(char *path, t_env *env_list)
@@ -43,19 +55,19 @@ char    *get_cmd_path(char *cmd, t_env *env_list)
     path_var = ft_getenv("PATH", env_list);
     if (!path_var)
         return (NULL);
-    path = ft_split(path_var, ':'); // Les paths sont separe par des : ex: PATH=/truc/truc:home/bin/:/blabla on les separ
+    path = ft_split(path_var, ':');
     if (!path)
         return (NULL);
     i = -1;
     while (path[++i])
     {
         path_part = ft_strjoin(path[i], "/");
-        if (!path_part) // On ajoute un / derriere le path part ex : /truc/truc --> /truc/truc/
+        if (!path_part)
         {
             free_tab(path);
             return (NULL);
         }
-        exec = ft_strjoin(path_part, cmd); // On ajoute la commande derriere ex: /truc/truc/ --> /truc/truc/cat
+        exec = ft_strjoin(path_part, cmd);
         free(path_part);
         if (!exec)
         {
@@ -67,8 +79,8 @@ char    *get_cmd_path(char *cmd, t_env *env_list)
             free_tab(path);
             return (exec);
         }
-        free(exec);
-    }
-    free_tab(path);
-    return(NULL);
+		free(exec);
+	}
+	free_tab(path);
+	return(NULL);
 }

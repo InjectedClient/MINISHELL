@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd_builtin.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jle-neze <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/10 13:32:25 by jle-neze          #+#    #+#             */
+/*   Updated: 2025/01/10 13:36:50 by jle-neze         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../../include/minishell.h"
 
 int	error_cd(void)
@@ -42,11 +54,11 @@ int	builtin_cd(char **args, t_env **env_list)
 		printf("%s\n", path);
 	}
 	else
-    {
-        path = ft_strdup(args[1]); // Duplication manuelle pour args[1]
-        if (!path)
-            return (cd_errors("malloc"));
-    }
+	{
+		path = ft_strdup(args[1]);
+		if (!path)
+			return (cd_errors("malloc"));
+	}
 	if (!getcwd(cwd, sizeof(cwd)))
 	{
 		free(path);
