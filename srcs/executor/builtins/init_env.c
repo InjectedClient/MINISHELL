@@ -1,24 +1,56 @@
 #include "../../../include/minishell.h"
 
+void free_env_node(t_env *node)
+{
+    if (!node)
+        return;
+    if (node->name)
+        free(node->name);
+    if (node->value)
+        free(node->value);
+    free(node);
+}
+
+void free_env_list(t_env *head)
+{
+    t_env *tmp;
+
+    while (head)
+    {
+        tmp = head->next;   // Sauvegarde le nœud suivant
+        free(head->name);   // Libère le nom
+        free(head->value);  // Libère la valeur
+        free(head);         // Libère le nœud lui-même
+        head = tmp;         // Passe au nœud suivant
+    }
+}
+
+
 t_env *create_env_node(char *env_var)
 {
     t_env *new_node;
-    char    *equal_sign;
+    char *equal_sign;
+
+    equal_sign = ft_strchr(env_var, '=');
+    if (!equal_sign)
+        return (NULL); // Pas de '=' dans la variable d'environnement
 
     new_node = malloc(sizeof(t_env));
-    equal_sign = ft_strchr(env_var, '=');
-    if (!new_node || !equal_sign)
-    {
-        free(new_node);
-        return (NULL);
-    }
+    if (!new_node)
+        return (NULL); // Erreur d'allocation
+
     new_node->name = ft_strndup(env_var, equal_sign - env_var);
     new_node->value = ft_strdup(equal_sign + 1);
     new_node->next = NULL;
+
     if (!new_node->name || !new_node->value)
-        free_env_node(new_node);
+    {
+        free_env_node(new_node); // Libère tout en cas d'échec
+        return (NULL);
+    }
     return (new_node);
 }
+
 
 t_env *init_env_list(char **envp)
 {
