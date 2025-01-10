@@ -38,8 +38,7 @@ char	*ft_strdup(const char *source)
 void	exit_all(t_data *data)
 {
 	(void)data;
-	ft_write_fd("exit\n", STDERR_FILENO);
-	//ft_free_all(data);
+	//ft_write_fd("exit\n", STDERR_FILENO);
 	exit(0);
 }
 

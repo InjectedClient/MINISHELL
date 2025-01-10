@@ -184,7 +184,7 @@ char	**convert_list_to_array(t_lexer *head);
 int 	count_lexer_list(t_lexer *head);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXECUTOR ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
-int    exec_cmd(char **cmd, char *envp[]);
+int    exec_cmd(char **cmd, char *envp[], t_env *env_list);
 int    exec(char *cmd[], t_env *env_list, char **envp, int fork);
 int		execute_token(t_data *data, t_env *env_list, char **envp);
 
@@ -193,7 +193,9 @@ int     count_args(t_lexer *arg);
 char    **split_args(t_lexer *cmd);
 
 //Path
-char    *get_cmd_path(char *cmd, char *path_var);
+char    *get_cmd_path(char *cmd, t_env *env_list);
+char    *ft_getenv(char *path, t_env *env_list);
+char    *ft_getenv_dup(char *path, t_env *env_list);
 
 //Builtins
 int     is_builtin(char *cmd);
@@ -208,10 +210,11 @@ int		builtin_unset(char **args, t_env **env_list);
 int		builtin_env(t_env *env_list);
 int     builtin_exit(char **args);
 
-
+//Heredoc
+int handle_here_doc(const char *delimiter);
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXPAND ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
-char	*expander(char *str);
+void expand_command(t_data *data, t_env *env_list);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ERRORS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 // Error

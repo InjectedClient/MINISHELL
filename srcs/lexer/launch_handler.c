@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:36:08 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/20 17:10:42 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/10 16:08:26 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void 	looping(char *tmp, t_data *data, t_env *env_list, char **envp)
 		if (!is_a_directory(data) || !ft_check_parser(data))
 			return ;
 		tmp_lex = data->lexer_list;
+		expand_command(data, env_list);
 		if (tmp_lex && tmp_lex->cmd_segment)
 			execute_token(data, env_list, envp);
 	}

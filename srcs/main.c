@@ -21,6 +21,6 @@ int main(int argc, char **argv, char *envp[])
 		signals_run_cmd();
 		add_history(tmp);
 		looping(tmp, &data, env_list, envp);
-		printf("%d\n", g_global);
+		//printf("%d\n", g_global);
 	}
 }

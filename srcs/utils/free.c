@@ -30,13 +30,4 @@ void free_4(char *var1, char *var2, char *var3, char *var4)
         free(var4);
 }
 
-void free_env_node(t_env *node)
-{
-    if (node)
-    {
-        free(node->name);
-        free(node->value);
-        free(node);
-    }
-}
 

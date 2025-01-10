@@ -36,51 +36,55 @@ int exec_builtins(char **args, t_env *env_list)
         return (-1); // Retourne -1 si ce n'est pas un builtin
 }
 
-int    exec_cmd(char **cmd, char *envp[])
+int    exec_cmd(char **cmd, char *envp[], t_env *env_list)
 {
     int status;
-    char    *path_var;
     char    *path;
     pid_t   pid;
 
-    path_var = getenv("PATH");
-    if (!path_var)
-        return (cmd_not_found());
-    path = get_cmd_path(cmd[0], path_var);
-    if (!path)
-        return (cmd_not_found());
-    pid = fork();
-    if (pid < 0)
-        return (fork_error());
-    if (pid == 0)
+    if (access(cmd[0], X_OK) != -1)
     {
-        if (execve(path, cmd, envp) == -1)
-            exit(cmd_not_exec());
+        path = ft_strdup(cmd[0]);
+        if (!path)
+            return (1);
     }
-    else 
+    else
     {
-        wait(&status); // Récupérer l'état de l'enfant
-        if (WIFEXITED(status)) 
-            return (WEXITSTATUS(status)); // Retourner le code de retour de la commande
-        else if (WIFSIGNALED(status))
-            return (128 + WTERMSIG(status)); // Indiquer que l'enfant a été tué par un signal
+        path = get_cmd_path(cmd[0], env_list);
+        if (!path)
+            return (cmd_not_found());
     }
+        pid = fork();
+        if (pid < 0)
+            return (fork_error());
+        if (pid == 0)
+        {
+            if (execve(path, cmd, envp) == -1)
+                exit(cmd_not_exec());
+        }
+        else 
+        {
+            wait(&status); // Récupérer l'état de l'enfant
+            if (WIFEXITED(status)) 
+                return (WEXITSTATUS(status)); // Retourner le code de retour de la commande
+            else if (WIFSIGNALED(status))
+                return (128 + WTERMSIG(status)); // Indiquer que l'enfant a été tué par un signal
+        }
     return (1);
 }
 
-int    exec_cmd_2(char **cmd, char *envp[])
+int    exec_cmd_2(char **cmd, char *envp[], t_env *env_list)
 {
-    char    *path_var;
     char    *path;
 
-    path_var = getenv("PATH");
-    if (!path_var)
-        return (cmd_not_found());
-    path = get_cmd_path(cmd[0], path_var);
-    if (!path)
-        return (cmd_not_found());
-    if (execve(path, cmd, envp) == -1)
-            exit(cmd_not_exec());
+    if (execve(cmd[0], cmd, envp) == -1)
+    {
+        path = get_cmd_path(cmd[0], env_list);
+        if (!path)
+            return (cmd_not_found());
+        if (execve(path, cmd, envp) == -1)
+                return (cmd_not_exec());
+    }
     return (0);
 }
 
@@ -91,141 +95,151 @@ int    exec(char *cmd[], t_env *env_list, char **envp, int fork)
     else
     {
         if (fork)
-            g_global = exec_cmd(cmd, envp);
+            g_global = exec_cmd(cmd, envp, env_list);
         else
-            g_global = exec_cmd_2(cmd, envp);
+            g_global = exec_cmd_2(cmd, envp, env_list);
+    }
+    return (g_global);
+}
+
+
+int handle_redirections(t_lexer *current, int fds[2])
+{
+    if (current->token == REDIRECT_OUT)
+    {
+        fds[1] = open(current->next->cmd_segment, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        if (fds[1] == -1)
+        {
+            perror("minishell");
+            if (fds[0] != -1) // Nettoie les descripteurs précédents
+                close(fds[0]);
+            return (-1);
+        }
+        dup2(fds[1], STDOUT_FILENO);
+        close(fds[1]);
+    }
+    else if (current->token == APPEND_OUT)
+    {
+        fds[1] = open(current->next->cmd_segment, O_WRONLY | O_CREAT | O_APPEND, 0644);
+        if (fds[1] == -1)
+        {
+            perror("minishell");
+            if (fds[0] != -1)
+                close(fds[0]);
+            return (-1);
+        }
+        dup2(fds[1], STDOUT_FILENO);
+        close(fds[1]);
+    }
+    else if (current->token == REDIRECT_IN)
+    {
+        fds[0] = open(current->next->cmd_segment, O_RDONLY);
+        if (fds[0] == -1)
+        {
+            perror("minishell");
+            return (-1);
+        }
+        dup2(fds[0], STDIN_FILENO);
+        close(fds[0]);
+    }
+    else if (current->token == HERE_DOC)
+    {
+        fds[0] = handle_here_doc(current->next->cmd_segment);
+        if (fds[0] == -1)
+        {
+            perror("minishell");
+            return (-1);
+        }
+        dup2(fds[0], STDIN_FILENO);
+        close(fds[0]);
     }
     return (0);
 }
 
-int count_args(t_lexer *arg)
+
+void cleanup(int fds[2], int prev_fd, int pipe_fd[2], char **args)
 {
-    int count;
-
-    count = 0;
-    while (arg && arg->token == ARG)
-    {
-        count++;
-        arg = arg->next;
-    }
-    return (count);
-}
-
-char    **split_args(t_lexer *cmd)
-{
-    char    **args;
-    int num_args;
-    int i;
-
-    num_args = 0;
-    if (cmd->next && cmd->next->token == ARG)
-        num_args = count_args(cmd->next);
-    args = malloc(sizeof(char *) * (num_args + 2)); //Pour caracter null plus la cmd
-    if (!args)
-    {
-        perror("malloc");
-        return (NULL);
-    }
-    if (cmd->token == CMD)
-        args[0] = ft_strdup(cmd->cmd_segment);
-    if (!args[0])
-    {
-        perror("malloc");
+    if (fds[0] != -1)
+        close(fds[0]);
+    if (fds[1] != -1)
+        close(fds[1]);
+    if (prev_fd != -1)
+        close(prev_fd);
+    if (pipe_fd[0] != -1)
+        close(pipe_fd[0]);
+    if (pipe_fd[1] != -1)
+        close(pipe_fd[1]);
+    if (args)
         free_tab(args);
-        return (NULL);
-    }
-    i = 1;
-    if (!num_args)
-        args[i] = NULL;
-    else
-    {
-        cmd = cmd->next;
-        while (cmd && cmd->token == ARG)
-        {
-            args[i] = ft_strdup(cmd->cmd_segment);
-            if (!args[i]) // Si une allocation échoue
-            {
-                free_tab(args);
-                return (NULL);
-            }
-            cmd = cmd->next;
-            i++;
-        }
-        args[i] = NULL;
-    }
-    return (args);
 }
 
+void execute_child(int fds[2], int pipe_fd[2], int prev_fd, char **args, t_env *env_list, char **envp)
+{
+    if (fds[0] != -1)
+    {
+        dup2(fds[0], STDIN_FILENO);
+        close(fds[0]);
+    }
+    else if (prev_fd != -1)
+    {
+        dup2(prev_fd, STDIN_FILENO);
+        close(prev_fd);
+    }
+    if (fds[1] != -1)
+    {
+        dup2(fds[1], STDOUT_FILENO);
+        close(fds[1]);
+    }
+    else if (pipe_fd[1] != -1)
+    {
+        dup2(pipe_fd[1], STDOUT_FILENO);
+        close(pipe_fd[1]);
+    }
+    exec(args, env_list, envp, 0);
+    perror("minishell");
+    exit(1);
+}
 
 int execute_token(t_data *data, t_env *env_list, char **envp)
 {
     t_lexer *current;
-    int fd_in;
-    int fd_out;
+    int fds[2]; // LE 0 est in et le 1 est out 
     int prev_fd;
     pid_t   pid;
     int pipe_fd[2] ={-1, -1};
     int stdin_save = dup(STDIN_FILENO);
     int stdout_save = dup(STDOUT_FILENO); 
-    char **args;
+    char **args = NULL;
 
     prev_fd = -1;
     current = data->lexer_list;
     while (current)
     {
-        fd_in = -1;
-        fd_out = -1;
-
+        fds[0] = -1;
+        fds[1] = -1;
         if (current->token == CMD)
         {
             args = split_args(current);
             if (!args)
                 return (1);
         }
-        if (current->token == REDIRECT_OUT) 
+        if (current->token == REDIRECT_OUT || current->token == APPEND_OUT || current->token == REDIRECT_IN || current->token == HERE_DOC)
         {
-            if (current->next && current->next->cmd_segment) 
-                fd_out = open(current->next->cmd_segment, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-            if (fd_out == -1) 
+            if (handle_redirections(current, fds) == -1)
             {
-                perror("Erreur d'ouverture du fichier (>)");
-                return -1;
+                cleanup(fds, prev_fd, pipe_fd, args);
+                return (1);
             }
-            dup2(fd_out, STDOUT_FILENO);
-            close(fd_out);
-        }
-        if (current->token == REDIRECT_IN) 
-        {
-            if (current->next && current->next->cmd_segment)
-            {
-                fd_in = open(current->next->cmd_segment, O_RDONLY);
-            if (fd_in == -1)
-            {
-                perror("Erreur d'ouverture du fichier (<)");
-                return -1;
-            }
-            dup2(fd_in, STDIN_FILENO);
-            }
-        }
-        if (current->token == APPEND_OUT) 
-        {
-            if (current->next && current->next->cmd_segment) 
-                fd_out = open(current->next->cmd_segment, O_WRONLY | O_CREAT | O_APPEND, 0644);
-            if (fd_out == -1) 
-            {
-                perror("Erreur d'ouverture du fichier (>)");
-                return -1;
-            }
-            dup2(fd_out, STDOUT_FILENO);
         }
         if (current->token == PIPE)
         {
             // Créer un pipe pour la commande suivante
             if (pipe(pipe_fd) == -1)
             {
-                perror("Erreur de création du pipe");
+                perror("minishell");
                 return (1);
             }
+            printf("\n\nLa valeur de fsd[0] est %d, La valeur de fsd[1] est %d, La valeur de pipe_fd[0] est %d, La valeur de pipe_fd[1] est %d la valeur de prev_fd est %d\n\n", fds[0], fds[1], pipe_fd[0], pipe_fd[1], prev_fd);
             // Fork pour exécuter la commande
             pid = fork();
             if (pid == -1)
@@ -234,47 +248,16 @@ int execute_token(t_data *data, t_env *env_list, char **envp)
                 return (1);
             }
             if (pid == 0)
-            { // Processus enfant
-                // Redirection de l'entrée
-                if (fd_in != -1)
-                {
-                    dup2(fd_in, STDIN_FILENO);
-                    close(fd_in);
-                }
-                else if (prev_fd != -1)
-                {
-                    dup2(prev_fd, STDIN_FILENO);
-                    close(prev_fd);
-                }
-                // Redirection de la sortie
-                if (fd_out != -1)
-                {
-                    dup2(fd_out, STDOUT_FILENO);
-                    close(fd_out);
-                } 
-                else if (pipe_fd[1] != -1)
-                { // Pipe suivant
-                    dup2(pipe_fd[1], STDOUT_FILENO);
-                    close(pipe_fd[1]);
-                }
-
-                // Fermer tous les descripteurs inutiles
-                close(pipe_fd[0]);
-
-                // Exécuter la commande
-                exec(args, env_list, envp, 0);
-                perror("Erreur d'exécution");
-                exit(1);
-            }
+                execute_child(fds, pipe_fd, prev_fd, args, env_list, envp);
             else
             { // Processus parent
                 // Fermer les extrémités inutiles
                 int status;
                 wait(&status);
-                if (fd_in != -1)
-                    close(fd_in);
-                if (fd_out != -1)
-                    close(fd_out);
+                if (fds[0] != -1)
+                    close(fds[0]);
+                if (fds[1] != -1)
+                    close(fds[1]);
                 if (prev_fd != -1)
                     close(prev_fd);
                 if (pipe_fd[1] != -1)
@@ -287,62 +270,19 @@ int execute_token(t_data *data, t_env *env_list, char **envp)
         
         current = current->next;
     }
-    //if (!current && args) //cas ou il y apas de pipe
-    // init_fd(fd_in, fd_out, prev_fd, pipe_fd);
     if (args)
     {
-        if (fd_in == -1 && prev_fd != -1)
+        if (fds[0] != -1)
+            dup2(fds[0], STDIN_FILENO);
+        else if (fds[0] == -1 && prev_fd != -1)
             dup2(prev_fd, STDIN_FILENO);
-        // if (fd_out == -1)
-        //     dup2(stdout_save, STDOUT_FILENO);
         exec(args, env_list, envp, 1);
-        free_tab(args);
     }
     dup2(stdin_save, STDIN_FILENO);
     dup2(stdout_save, STDOUT_FILENO);
     close(stdin_save);
     close(stdout_save);
-    if (fd_in != -1) close(fd_in);
-    if (fd_out != -1) close(fd_out);
-    if (prev_fd != -1) close(prev_fd);
+    cleanup(fds, prev_fd, pipe_fd, args);
     while (wait(NULL) > 0);
-
     return (0);
-
-    // if (current && current->token == PIPE)
-    // {
-    //     if (pipe(pipe_fd) == -1)
-    //     {
-    //         perror("minishell: pipe");
-    //         return (1);
-    //     }
-    //     pid = fork();
-    //     if (pid == -1)
-    //     {
-    //         perror("fork");
-    //         return (1);
-    //     }
-    //     if (pid == 0)
-    //     {
-    //         init_fd(fd_in, fd_out, prev_fd, pipe_fd);
-    //         exec(args, env_list, envp, 0);
-    //         perror("exec error");
-    //         exit(1);
-    //     }
-    // }
-    // // Parent : Fermer les descripteurs inutiles
-    // close_fd(fd_in, fd_out, prev_fd, pipe_fd);
-    // // Met à jour prev_fd pour le prochain segment
-    // prev_fd = pipe_fd[0];
 }
-
-    // Attend tous les processus enfants
-    // while (wait(NULL) > 0);
-
-    // Une fois les redirections configurées, exécuter la commande
-
-    // Restaurer les descripteurs d'origine
-    // dup2(stdin_save, STDIN_FILENO);
-    // dup2(stdout_save, STDOUT_FILENO);
-    // close(stdin_save);
-    // close(stdout_save);
