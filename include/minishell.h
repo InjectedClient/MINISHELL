@@ -215,7 +215,7 @@ int     builtin_exit(char **args);
 int handle_here_doc(const char *delimiter);
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXPAND ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
-char	*expander(char *str);
+void expand_command(t_data *data, t_env *env_list);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ERRORS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 // Error

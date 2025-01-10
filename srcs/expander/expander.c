@@ -61,6 +61,11 @@ char *expand_variable(const char *input, t_env *env_list)
 		return (ft_strdup(input));
 
 	start = input + 1;
+    if (*start == '?')
+    {
+        char *ret = ft_itoa(g_global);
+        return (ret);
+    }
 	len = 0;
 	while (start[len] && (ft_isalnum(start[len]) || start[len] == '_'))
 		len++;
@@ -91,10 +96,10 @@ char *expand_tilde(const char *input, t_env *env_list)
 
 char *expand_token(t_lexer *token, t_env *env_list)
 {
-    if (is_single_quote(token->cmd_segment))
-        return handle_single_quote(token->cmd_segment); // Pas d'expansion pour les guillemets simples.
-    if (is_double_quote(token->cmd_segment))
-        return handle_double_quote(token->cmd_segment, env_list); // Expansion des variables dans les doubles quotes.
+    // if (is_single_quote(token->cmd_segment))
+    //     return handle_single_quote(token->cmd_segment); // Pas d'expansion pour les guillemets simples.
+    // if (is_double_quote(token->cmd_segment))
+    //     return handle_double_quote(token->cmd_segment, env_list); // Expansion des variables dans les doubles quotes.
     if (starts_with_tilde(token->cmd_segment))
         return expand_tilde(token->cmd_segment, env_list); // Expansion de ~ en $HOME.
     if (starts_with_dollar(token->cmd_segment))
