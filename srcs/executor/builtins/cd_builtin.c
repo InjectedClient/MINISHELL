@@ -19,54 +19,45 @@ int	cd_errors(char *type)
 	return (1);
 }
 
-char	*oldpwd_path(t_env *current)
-{
-	char	*path;
-
-	while (current)
-	{
-		if (ft_strcmp(current->name, "OLDPWD") == 0)
-			path = ft_strdup(current->value);
-		if (!path)
-			return (NULL);
-		current = current->next;
-	}
-	return (path);
-}
-
 int	builtin_cd(char **args, t_env **env_list)
 {
 	char	*path;
 	char	*pwd;
 	char	cwd[1024];
 
+	path = NULL;
 	if (args[2])
 		return (cd_errors("arg"));
 	if (!args[1])
 	{
-		if (!(path = getenv("HOME")))
-			return (cd_errors("home"));
-		path = ft_strdup(path);
+		path = ft_getenv_dup("HOME", *env_list);
 		if (!path)
-			return (cd_errors("malloc"));
+			return (cd_errors("home"));
 	}
 	else if (ft_strcmp(args[1], "-") == 0)
 	{
-		path = oldpwd_path(*env_list);
+		path = ft_getenv_dup("OLDPWD", *env_list);
 		if (!path)
 			return (cd_errors("oldpwd"));
 		printf("%s\n", path);
 	}
 	else
-	{
-		path = ft_strdup(args[1]);
-		if (!path)
-			return (cd_errors("malloc"));
-	}
+    {
+        path = ft_strdup(args[1]); // Duplication manuelle pour args[1]
+        if (!path)
+            return (cd_errors("malloc"));
+    }
 	if (!getcwd(cwd, sizeof(cwd)))
+	{
+		free(path);
 		return (error_cd());
-	if (!(pwd = ft_strjoin("OLDPWD=", cwd)))
+	}
+	pwd = ft_strjoin("OLDPWD=", cwd);
+	if (!pwd)
+	{
+		free(path);
 		return (cd_errors("malloc"));
+	}
 	update_or_add_env(env_list, pwd);
 	free(pwd);
 	if (chdir(path) != 0)
@@ -77,7 +68,8 @@ int	builtin_cd(char **args, t_env **env_list)
 	free(path);
 	if (!getcwd(cwd, sizeof(cwd)))
 		return (error_cd());
-	if (!(pwd = ft_strjoin("PWD=", cwd)))
+	pwd = ft_strjoin("PWD=", cwd);
+	if (!pwd)
 		return (cd_errors("malloc"));
 	update_or_add_env(env_list, pwd);
 	free(pwd);
