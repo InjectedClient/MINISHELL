@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:36:08 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/10 16:08:26 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/10 17:27:13 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void 	looping(char *tmp, t_data *data, t_env *env_list, char **envp)
 
 	if (!tmp)
 		exit_all(data);
+		
 	if (tmp && tmp[0])
 	{
 		processed_cmd = add_space(tmp);

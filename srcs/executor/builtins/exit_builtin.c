@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 14:38:30 by jle-neze          #+#    #+#             */
-/*   Updated: 2025/01/10 16:16:26 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/10 17:09:33 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int	builtin_exit(char **args)
 {
 	long	exit_code;
 
+    printf("exit\n");
 	if (!args[1])
 		exit(0);
 	if (is_numeric(args[1]))
