@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_builtin.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jle-neze <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 14:18:51 by jle-neze          #+#    #+#             */
-/*   Updated: 2025/01/10 14:34:53 by jle-neze         ###   ########.fr       */
+/*   Updated: 2025/01/10 17:19:58 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,11 +88,11 @@ void	update_or_add_env(t_env **env_list, char *arg)
 	}
 	else
 		name = ft_strdup(arg);
-	if (!name || (*(equal_sign + 1) && !value))
-	{
-		free_2(name, value);
-		return ;
-	}
+	// if (!name || (*(equal_sign + 1) && !value))
+	// {
+	// 	free_2(name, value);
+	// 	return ;
+	// }
 	while (current)
 	{
 		if (ft_strcmp(current->name, name) == 0)
@@ -145,6 +145,7 @@ int	builtin_export(char **args, t_env **env_list)
 			write(2, "export: `", 9);
 			write(2, args[i], ft_strlen(args[i]));
 			write(2, "`: not a valid identifier\n", 26);
+			return (1);
 		}
 		i++;
 	}
