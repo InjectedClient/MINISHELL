@@ -110,12 +110,11 @@ int	is_a_directory(t_data *data);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ SIGNAL ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
-void	handle_ctrl_c(int sig);
-void	handle_signal(void);
-void	handle_ctrl_backslash(int sig);
-void	handle_sig(t_data *data);
-void	ctrl_c_handler_here_doc(int sig);
-void	ctrl_c_handler(int sig);
+void	new_line(int sig);
+void	reset_prompt(int sig);
+void	signals_wait_cmd(void);
+void	signals_run_cmd(void);
+
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ UTILS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
