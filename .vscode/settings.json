@@ -2,5 +2,7 @@
     "files.associations": {
         "minishell.h": "c",
         "type_traits": "c"
-    }
+    },
+    "editor.detectIndentation": true,
+    "editor.definitionLinkOpensInPeek": true
 }

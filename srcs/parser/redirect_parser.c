@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:08:26 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/13 16:56:28 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/14 17:04:22 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*
 	Vérifie qu'il n'y ait pas plus de deux chevrons à la suite.
 */
-int	check_nb_redir(char *str)
+int	nb_redir(char *str)
 {
 	int	i;
 	int	j;
@@ -36,7 +36,8 @@ int	check_nb_redir(char *str)
 }
 
 /*
-	Vérifie si les caractères après un symbole de redirection forment une
+	Vérifie si les caractères après un symbole 
+	de redirection forment une
 	combinaison valide.
 */
 int	check_redirections(char *str)
@@ -58,7 +59,8 @@ int	check_redirections(char *str)
 }
 
 /*
-	Utilise une liste chainee pour verif que les tokens de redirection sont suivis par des éléments valides.
+	Utilise une liste chainee pour verif que les
+	 tokens de redirection sont suivis par des éléments valides.
 */
 int	check_redirection_arg(t_data *data)
 {

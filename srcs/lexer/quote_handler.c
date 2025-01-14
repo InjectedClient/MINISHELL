@@ -6,17 +6,16 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:36:15 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/10 16:36:44 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/14 16:54:55 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-
 /**
  * Met à jour l'état des guillemets en fonction du caractère actuel.
  */
-void update_quoting_state(char c, t_quote *state)
+void	update_quoting_state(char c, t_quote *state)
 {
 	if (c == '\'')
 	{
@@ -42,7 +41,7 @@ void update_quoting_state(char c, t_quote *state)
 /**
  * Vérifie si le guillemet simple est ouvert.
  */
-int is_single_quote_open(t_quote *state)
+int	is_single_quote_open(t_quote *state)
 {
 	return (state->singl_quot_status == 1);
 }
@@ -50,7 +49,7 @@ int is_single_quote_open(t_quote *state)
 /**
  * Vérifie si le guillemet simple est fermé.
  */
-int is_single_quote_closed(t_quote *state)
+int	is_single_quote_closed(t_quote *state)
 {
 	return (state->singl_quot_status == 0);
 }
@@ -58,7 +57,7 @@ int is_single_quote_closed(t_quote *state)
 /**
  * Vérifie si le guillemet double est ouvert.
  */
-int is_doubl_quote_open(t_quote *state)
+int	is_doubl_quote_open(t_quote *state)
 {
 	return (state->doubl_quot_status == 1);
 }
@@ -66,7 +65,7 @@ int is_doubl_quote_open(t_quote *state)
 /**
  * Vérifie si le guillemet double est fermé.
  */
-int is_doubl_quote_closed(t_quote *state)
+int	is_doubl_quote_closed(t_quote *state)
 {
 	return (state->doubl_quot_status == 0);
 }

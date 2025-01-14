@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:45:59 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/13 16:56:45 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/14 16:58:50 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /**
  * Vérifie si le token précédent est une redirection.
  */
-int check_prev(t_lexer *token)
+int	check_prev(t_lexer *token)
 {
 	return (token->prev->token == APPEND_OUT \
 		|| token->prev->token == REDIRECT_IN \
@@ -26,7 +26,7 @@ int check_prev(t_lexer *token)
 /**
  * Attribue le token CMD ou ARG en fonction du premier token.
  */
-void cmd_or_arg(t_lexer *tmp, t_lexer *first)
+void	cmd_or_arg(t_lexer *tmp, t_lexer *first)
 {
 	if (first->token != CMD)
 		tmp->token = CMD;
@@ -34,9 +34,9 @@ void cmd_or_arg(t_lexer *tmp, t_lexer *first)
 		tmp->token = ARG;
 }
 
-void get_token_in_node(t_lexer **lexer_list, t_lexer *tmp)
+void	get_token_in_node(t_lexer **lexer_list, t_lexer *tmp)
 {
-	t_lexer *first;
+	t_lexer	*first;
 
 	tmp = *lexer_list;
 	while (tmp)

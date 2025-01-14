@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:36:12 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/20 16:56:13 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/14 16:52:36 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	add_lexer_to_end(t_data *data, char *str)
  * Crée un nouvel élément lexer avec le segment de commande donné.
  * Initialise les pointeurs next et prev à NULL.
  */
-t_lexer *create_new_lexer(char *str)
+t_lexer	*create_new_lexer(char *str)
 {
 	t_lexer	*new;
 
@@ -62,10 +62,10 @@ t_lexer *create_new_lexer(char *str)
  * Met à jour les positions des segments dans la liste lexer_list.
  * La position est réinitialisée à 0 après chaque opérateur de pipe '|'.
  */
-void get_data_in_node(t_lexer **lexer_list)
+void	get_data_in_node(t_lexer **lexer_list)
 {
-	t_lexer *tmp;
-	int i;
+	t_lexer	*tmp;
+	int		i;
 
 	i = 1;
 	tmp = *lexer_list;

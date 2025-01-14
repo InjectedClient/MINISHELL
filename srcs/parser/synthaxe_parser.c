@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:08:27 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/13 16:56:24 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/14 17:04:22 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ int	check_cmd_start(char *str)
 */
 int	check_token_error(t_data *data)
 {
-	int i;
-	t_lexer *tmp;
+	int		i;
+	t_lexer	*tmp;
 
 	i = 0;
 	tmp = NULL;
@@ -58,7 +58,7 @@ int	check_token_error(t_data *data)
 	while (tmp)
 	{
 		i = 0;
-		if (!check_nb_redir(tmp->cmd_segment) || !check_nb_redir (tmp->cmd_segment))
+		if (!nb_redir(tmp->cmd_segment) || !nb_redir (tmp->cmd_segment))
 		{
 			printf("syntax error near unexpected token\n");
 			return (0);

@@ -6,26 +6,25 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:36:13 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/13 16:57:04 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/14 16:54:27 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-
-
 /**
  * Vérifie si le caractère est un opérateur.
  */
-int is_operator(char c)
+int	is_operator(char c)
 {
 	return (c == '|' || c == '<' || c == '>' || c == '&');
 }
 
 /**
- * Vérifie si les caractères à la position donnée forment un opérateur specifique.
+ * Vérifie si les caractères à la position donnée \
+ 	forment un opérateur specifique.
  */
-int is_double_operator(const char *command, size_t pos)
+int	is_double_operator(const char *command, size_t pos)
 {
 	return ((command[pos] == '<' && command[pos + 1] == '<') || \
 			(command[pos] == '<' && command[pos + 1] == '>') || \
@@ -34,12 +33,13 @@ int is_double_operator(const char *command, size_t pos)
 }
 
 /*
- * Calcule la nouvelle longueur de la commande après ajout des espaces autour des opérateurs.
+ * Calcule la nouvelle longueur de 
+ la commande après ajout des espaces autour des opérateurs.
 */
-size_t calculate_new_length(const char *command)
+size_t	calculate_new_length(const char *command)
 {
-	size_t new_len;
-	size_t i;
+	size_t	new_len;
+	size_t	i;
 
 	i = 0;
 	new_len = 0;
@@ -62,22 +62,25 @@ size_t calculate_new_length(const char *command)
 /**
  * Remplit la nouvelle commande avec des espaces autour des opérateurs.
  */
-void fill_command_with_spaces(const char *command, char *new_command, t_quote *state, size_t i)
+void	fill_command_with_spaces(const char *command, char *new_command, \
+		t_quote *state, size_t i)
 {
-	size_t j;
+	size_t	j;
 
 	j = 0;
 	while (command[i])
 	{
 		update_quoting_state(command[i], state);
-		if (is_double_operator(command, i) && (!state->doubl_quot_status && !state->singl_quot_status))
+		if (is_double_operator(command, i) && (!state->doubl_quot_status \
+		&& !state->singl_quot_status))
 		{
 			new_command[j++] = ' ';
 			new_command[j++] = command[i++];
 			new_command[j++] = command[i++];
 			new_command[j++] = ' ';
 		}
-		else if (is_operator(command[i]) && (!state->doubl_quot_status && !state->singl_quot_status))
+		else if (is_operator(command[i]) && (!state->doubl_quot_status && \
+		!state->singl_quot_status))
 		{
 			new_command[j++] = ' ';
 			new_command[j++] = command[i++];

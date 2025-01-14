@@ -6,12 +6,11 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:08:25 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/13 16:56:30 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/14 17:02:54 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
 
 /*
 	Cherche si il y a une erreur de syntaxe due à des guillemets non fermés.
@@ -43,4 +42,3 @@ int	check_quotes(char *str, t_data *data)
 	}
 	return (1);
 }
-

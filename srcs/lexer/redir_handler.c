@@ -6,20 +6,19 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:46:16 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/13 16:56:52 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/14 16:55:35 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-
 /**
  * Vérifie le nombre de caractères de redirection dans la commande.
  */
-int check_redirect(const char *cmd, char c)
+int	check_redirect(const char *cmd, char c)
 {
-	int i;
-	int count;
+	int	i;
+	int	count;
 
 	i = 0;
 	count = 0;
@@ -37,9 +36,9 @@ int check_redirect(const char *cmd, char c)
 /**
  * Vérifie les erreurs de redirection dans le segment de commande.
  */
-int check_redir_error(t_lexer *tmp)
+int	check_redir_error(t_lexer *tmp)
 {
-	int count;
+	int	count;
 
 	if (!tmp || !tmp->cmd_segment)
 		return (-1);
@@ -61,7 +60,7 @@ int check_redir_error(t_lexer *tmp)
 /**
  * Détermine le type de redirection en fonction du segment de commande.
  */
-t_token which_redir(t_lexer *tmp)
+t_token	which_redir(t_lexer *tmp)
 {
 	if (!check_redir_error(tmp))
 	{

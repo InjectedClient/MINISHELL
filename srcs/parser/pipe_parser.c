@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:08:22 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/13 16:56:33 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/14 17:02:40 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	check_invalid_pipes(t_data *data)
 */
 int	check_invalid_tokens2(t_data *data)
 {
-	t_lexer *tmp;
+	t_lexer	*tmp;
 
 	tmp = data->lexer_list;
 	while (tmp != NULL)
