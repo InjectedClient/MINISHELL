@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:36 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/15 11:15:09 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/15 13:55:46 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,13 @@ int	count_args(t_lexer *arg)
 char	**split_args(t_lexer *cmd)
 {
 	char	**args;
-	int	num_args;
-	int	i;
+	int		num_args;
+	int		i;
 
 	num_args = 0;
 	if (cmd->next && cmd->next->token == ARG)
-		num_args = count_args(cmd->next);
-	args = malloc(sizeof(char *) * (num_args + 2)); //Pour caracter null plus la cmd
+			num_args = count_args(cmd->next);
+	args = malloc(sizeof(char *) * (num_args + 2));
 	if (!args)
 	{
 		perror("malloc");
@@ -57,7 +57,7 @@ char	**split_args(t_lexer *cmd)
 		while (cmd && cmd->token == ARG)
 		{
 			args[i] = ft_strdup(cmd->cmd_segment);
-			if (!args[i]) // Si une allocation échoue
+			if (!args[i])
 			{
 				free_tab(args);
 				return (NULL);

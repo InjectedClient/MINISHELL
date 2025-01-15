@@ -6,13 +6,13 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 14:58:39 by jle-neze          #+#    #+#             */
-/*   Updated: 2025/01/15 11:14:30 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/15 13:54:59 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char    *ft_getenv_dup(char *path, t_env *env_list)
+char	*ft_getenv_dup(char *path, t_env *env_list)
 {
 	if (!path)
 	{
@@ -27,7 +27,7 @@ char    *ft_getenv_dup(char *path, t_env *env_list)
 	return (NULL);
 }
 
-char    *ft_getenv(char *path, t_env *env_list)
+char	*ft_getenv(char *path, t_env *env_list)
 {
 	if (!path)
 	{
@@ -42,13 +42,13 @@ char    *ft_getenv(char *path, t_env *env_list)
 	return (NULL);
 }
 
-char    *get_cmd_path(char *cmd, t_env *env_list)
+char	*get_cmd_path(char *cmd, t_env *env_list)
 {
-	int i;
-	char    *exec;
-	char    *path_part;
-	char    **path;
-	char    *path_var;
+	int		i;
+	char	*exec;
+	char	*path_part;
+	char	**path;
+	char	*path_var;
 
 	if (!cmd)
 		return (NULL);
@@ -82,5 +82,5 @@ char    *get_cmd_path(char *cmd, t_env *env_list)
 		free(exec);
 	}
 	free_tab(path);
-	return(NULL);
+	return (NULL);
 }

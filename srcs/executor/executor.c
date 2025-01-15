@@ -6,16 +6,25 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:27 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/15 12:11:23 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/15 14:04:19 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	 is_builtin(char *cmd)
+int	is_builtin(char *cmd)
 {
 	int		i;
-	char	*builtins[] = {"cd", "env", "echo", "exit", "pwd", "export", "unset", NULL};
+	char	*builtins[8];
+
+	builtins[0] = "cd";
+	builtins[1] = "env";
+	builtins[2] = "echo";
+	builtins[3] = "exit";
+	builtins[4] = "pwd";
+	builtins[5] = "export";
+	builtins[6] = "unset";
+	builtins[7] = NULL;
 	i = 0;
 	while (builtins[i])
 	{
@@ -23,7 +32,7 @@ int	 is_builtin(char *cmd)
 			return (1);
 		i++;
 	}
-	return (0); // Retourne 0 si ce n'est pas un builtin
+	return (0);
 }
 
 int	exec_builtins(char **args, t_env *env_list)
@@ -43,7 +52,7 @@ int	exec_builtins(char **args, t_env *env_list)
 	else if (ft_strncmp(args[0], "exit", ft_strlen(args[0])) == 0)
 		return (builtin_exit(args));
 	else
-		return (-1); // Retourne -1 si ce n'est pas un builtin
+		return (-1);
 }
 
 int	exec_cmd(char **cmd, char *envp[], t_env *env_list)
@@ -64,22 +73,22 @@ int	exec_cmd(char **cmd, char *envp[], t_env *env_list)
 		if (!path)
 			return (cmd_not_found());
 	}
-		pid = fork();
-		if (pid < 0)
-			return (fork_error());
-		if (pid == 0)
-		{
-			if (execve(path, cmd, envp) == -1)
-				exit(cmd_not_exec());
-		}
-		else
-		{
-			wait(&status); // Récupérer l'état de l'enfant
-			if (WIFEXITED(status))
-				return (WEXITSTATUS(status)); // Retourner le code de retour de la commande
-			else if (WIFSIGNALED(status))
-				return (128 + WTERMSIG(status)); // Indiquer que l'enfant a été tué par un signal
-		}
+	pid = fork();
+	if (pid < 0)
+		return (fork_error());
+	if (pid == 0)
+	{
+		if (execve(path, cmd, envp) == -1)
+			exit(cmd_not_exec());
+	}
+	else
+	{
+		wait(&status);
+		if (WIFEXITED(status))
+			return (WEXITSTATUS(status));
+		else if (WIFSIGNALED(status))
+			return (128 + WTERMSIG(status));
+	}
 	return (1);
 }
 
@@ -93,7 +102,7 @@ int	exec_cmd_2(char **cmd, char *envp[], t_env *env_list)
 		if (!path)
 			return (cmd_not_found());
 		if (execve(path, cmd, envp) == -1)
-				return (cmd_not_exec());
+			return (cmd_not_exec());
 	}
 	return (0);
 }
@@ -112,16 +121,16 @@ int	exec(char *cmd[], t_env *env_list, char **envp, int fork)
 	return (g_global);
 }
 
-
 int	handle_redirections(t_lexer *current, int fds[2])
 {
 	if (current->token == REDIRECT_OUT)
 	{
-		fds[1] = open(current->next->cmd_segment, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		fds[1] = open(current->next->cmd_segment, \
+		O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fds[1] == -1)
 		{
 			perror("minishell");
-			if (fds[0] != -1) // Nettoie les descripteurs précédents
+			if (fds[0] != -1)
 				close(fds[0]);
 			return (-1);
 		}
@@ -130,7 +139,8 @@ int	handle_redirections(t_lexer *current, int fds[2])
 	}
 	else if (current->token == APPEND_OUT)
 	{
-		fds[1] = open(current->next->cmd_segment, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		fds[1] = open(current->next->cmd_segment, \
+		O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (fds[1] == -1)
 		{
 			perror("minishell");
@@ -165,7 +175,6 @@ int	handle_redirections(t_lexer *current, int fds[2])
 	}
 	return (0);
 }
-
 
 void	cleanup(int fds[2], int prev_fd, int pipe_fd[2], char **args)
 {
@@ -213,7 +222,7 @@ void	execute_child(int fds[2], int pipe_fd[2], int prev_fd, char **args, t_env *
 int	execute_token(t_data *data, t_env *env_list, char **envp)
 {
 	t_lexer	*current;
-	int		fds[2]; // LE 0 est in et le 1 est out
+	int		fds[2];
 	int		prev_fd;
 	pid_t	pid;
 	int		pipe_fd[2] ={-1, -1};
@@ -243,14 +252,12 @@ int	execute_token(t_data *data, t_env *env_list, char **envp)
 		}
 		if (current->token == PIPE)
 		{
-			// Créer un pipe pour la commande suivante
 			if (pipe(pipe_fd) == -1)
 			{
 				perror("minishell");
 				return (1);
 			}
 			printf("\n\nLa valeur de fsd[0] est %d, La valeur de fsd[1] est %d, La valeur de pipe_fd[0] est %d, La valeur de pipe_fd[1] est %d la valeur de prev_fd est %d\n\n", fds[0], fds[1], pipe_fd[0], pipe_fd[1], prev_fd);
-			// Fork pour exécuter la commande
 			pid = fork();
 			if (pid == -1)
 			{
@@ -261,7 +268,6 @@ int	execute_token(t_data *data, t_env *env_list, char **envp)
 				execute_child(fds, pipe_fd, prev_fd, args, env_list, envp);
 			else
 			{ // Processus parent
-				// Fermer les extrémités inutiles
 				int status;
 				wait(&status);
 				if (fds[0] != -1)
@@ -272,12 +278,9 @@ int	execute_token(t_data *data, t_env *env_list, char **envp)
 					close(prev_fd);
 				if (pipe_fd[1] != -1)
 					close(pipe_fd[1]);
-
-				// Met à jour prev_fd pour la prochaine commande
 				prev_fd = pipe_fd[0];
 			}
 		}
-
 		current = current->next;
 	}
 	if (args)

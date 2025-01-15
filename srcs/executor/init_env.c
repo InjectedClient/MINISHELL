@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 15:28:51 by jle-neze          #+#    #+#             */
-/*   Updated: 2025/01/15 11:16:04 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/15 14:03:20 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	free_env_node(t_env *node)
 {
 	if (!node)
-		return;
+		return ;
 	if (node->name)
 		free(node->name);
 	if (node->value)
@@ -29,47 +29,42 @@ void	free_env_list(t_env *head)
 
 	while (head)
 	{
-		tmp = head->next;   // Sauvegarde le nœud suivant
-		free(head->name);   // Libère le nom
-		free(head->value);  // Libère la valeur
-		free(head);         // Libère le nœud lui-même
-		head = tmp;         // Passe au nœud suivant
+		tmp = head->next;
+		free(head->name);
+		free(head->value);
+		free(head);
+		head = tmp;
 	}
 }
 
-
 t_env	*create_env_node(char *env_var)
 {
-	t_env *new_node;
-	char *equal_sign;
+	t_env	*new_node;
+	char	*equal_sign;
 
 	equal_sign = ft_strchr(env_var, '=');
 	if (!equal_sign)
-		return (NULL); // Pas de '=' dans la variable d'environnement
-
+		return (NULL);
 	new_node = malloc(sizeof(t_env));
 	if (!new_node)
-		return (NULL); // Erreur d'allocation
-
+		return (NULL);
 	new_node->name = ft_strndup(env_var, equal_sign - env_var);
 	new_node->value = ft_strdup(equal_sign + 1);
 	new_node->next = NULL;
-
 	if (!new_node->name || !new_node->value)
 	{
-		free_env_node(new_node); // Libère tout en cas d'échec
+		free_env_node(new_node);
 		return (NULL);
 	}
 	return (new_node);
 }
 
-
 t_env	*init_env_list(char **envp)
 {
-	int i;
-	t_env   *head;
-	t_env   *current;
-	t_env   *new_node;
+	int		i;
+	t_env	*head;
+	t_env	*current;
+	t_env	*new_node;
 
 	head = NULL;
 	new_node = NULL;
@@ -89,4 +84,3 @@ t_env	*init_env_list(char **envp)
 	}
 	return (head);
 }
-

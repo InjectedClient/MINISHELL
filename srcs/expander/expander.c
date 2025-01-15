@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:54 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/15 11:13:26 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/15 13:13:28 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,14 @@
 //     return (len >= 2 && cmd_segment[0] == '"' && cmd_segment[len - 1] == '"');
 // }
 
-int starts_with_tilde(const char *cmd_segment)
+int	starts_with_tilde(const char *cmd_segment)
 {
 	if (!cmd_segment)
 		return 0;
 	return (cmd_segment[0] == '~');
 }
 
-int starts_with_dollar(const char *cmd_segment)
+int	starts_with_dollar(const char *cmd_segment)
 {
 	if (!cmd_segment)
 		return 0;
@@ -62,12 +62,12 @@ int starts_with_dollar(const char *cmd_segment)
 //     return expanded;
 // }
 
-char *expand_variable(const char *input, t_env *env_list)
+char	*expand_variable(const char *input, t_env *env_list)
 {
-	const char *start;
-	size_t	len;
-	char	*var_name;
-	char	*value;
+	const char	*start;
+	size_t		len;
+	char		*var_name;
+	char		*value;
 
 	if (input[0] != '$')
 		return (ft_strdup(input));
@@ -93,7 +93,7 @@ char *expand_variable(const char *input, t_env *env_list)
 }
 
 
-char *expand_tilde(const char *input, t_env *env_list)
+char	*expand_tilde(const char *input, t_env *env_list)
 {
 	char	*home;
 	if (input[0] != '~')
@@ -106,7 +106,7 @@ char *expand_tilde(const char *input, t_env *env_list)
 }
 
 
-char *expand_token(t_lexer *token, t_env *env_list)
+char	*expand_token(t_lexer *token, t_env *env_list)
 {
 	// if (is_single_quote(token->cmd_segment))
 	//     return handle_single_quote(token->cmd_segment); // Pas d'expansion pour les guillemets simples.
@@ -120,7 +120,7 @@ char *expand_token(t_lexer *token, t_env *env_list)
 	return strdup(token->cmd_segment); // Si rien à faire, retourne tel quel.
 }
 
-void expand_command(t_data *data, t_env *env_list)
+void	expand_command(t_data *data, t_env *env_list)
 {
 	t_lexer *current = data->lexer_list;
 
