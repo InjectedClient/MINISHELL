@@ -264,12 +264,16 @@ int execute_token(t_data *data, t_env *env_list, char **envp)
                     close(pipe_fd[1]);
 
                 // Met à jour prev_fd pour la prochaine commande
-                prev_fd = pipe_fd[0];
+                if (fds[1] != -1)
+                    prev_fd = fds[1];
+                else
+                    prev_fd = pipe_fd[0];
             }
         }
         
         current = current->next;
     }
+    while (wait(NULL) > 0);
     if (args)
     {
         if (fds[0] != -1)
@@ -283,6 +287,126 @@ int execute_token(t_data *data, t_env *env_list, char **envp)
     close(stdin_save);
     close(stdout_save);
     cleanup(fds, prev_fd, pipe_fd, args);
-    while (wait(NULL) > 0);
     return (0);
+}
+
+int	count_commands(t_lexer *lexer_list)
+{
+	int	count;
+	t_lexer	*current;
+
+	count = 1;
+	current = lexer_list;
+	while (current)
+	{
+		if (current->token == PIPE)
+			count++;
+		current = current->next;
+	}
+	return (count);
+}	
+
+t_lexer	**split_by_pipe(t_lexer *lexer_list, int *command_count)
+{
+	int	index;
+	t_lexer	**commands;
+	t_lexer	*current;
+	t_lexer	*start;
+
+	*command_count = count_command(lexer_list);
+	commands = malloc(sizeof(t_lexer *) * (*command_count));
+	if (!commands)
+	{
+		perror("Allocation echouee");
+		return (NULL);
+	}
+	index = 0;
+	start = lexer_list;
+	current = lexer_list;
+	while (current)
+	{
+		if (current->token == PIPE)
+		{
+			current->prev->next = NULL;
+			current->prev = NULL;
+			commands[index++] = start;
+			start = current->next;
+		}
+		current = current->next;
+	}
+	commands[index] = start;
+	return (commands);
+
+}
+
+void	child(int i, int pipes[][2], int num_commands)
+{
+
+	
+
+}
+
+
+int execute_token2()
+{
+	int	i;
+	int	num_commands;
+	int	pipes[MAX_COMMANDS - 1][2];
+	char	**args;
+	pid_t	pid;
+	t_lexer	**commands;
+
+	args = NULL;
+	num_commands = count_commands(lexer_list);
+	commands = split_by_pipe(lexer_list, num_commands);
+	if (!commands)
+	{
+		perror("malloc error");
+		return (1);
+	}
+	i = 0;
+	while (i < num_commands - 1)
+	{
+		if (pipe(pipes[i]) == -1)
+		{
+			perror("pipe");
+			return (1);
+		}
+	}
+	i = 0;
+	while (i < num_commands)
+	{
+		pid = fork();
+		if (pid == -1)
+		{
+			perror("fork");
+			return (1);
+		}
+		if (pid == 0) // Child
+		{
+			int	j;
+
+			if (i > 0) // Si ce n'est pas la premiere commande
+			{
+				dup2(pipes[i - 1][0], STDIN_FILENO);
+			}
+			if (i < num_commands - 1) // Si ce n'est pas le derniere commande
+			{
+				dup2(pipes[i][1], STDOUT_FILENO);
+			}
+			j = 0;
+			while (j < num_commands - 1)
+			{
+				close(pipes[j][0]);
+				close(pipes[j][1]);
+				j++;
+			}
+			args = split_args(commands[i]);
+		}
+		i++;
+
+	}
+
+
+
 }

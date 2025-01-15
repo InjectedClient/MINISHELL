@@ -37,8 +37,8 @@ char    **split_args(t_lexer *cmd)
         return (NULL);
     }
     i = 1;
-    if (!num_args)
-        args[i] = NULL;
+    if (num_args == 0)
+        args[1] = NULL;
     else
     {
         cmd = cmd->next;
