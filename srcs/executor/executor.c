@@ -6,13 +6,13 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:27 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/14 16:43:44 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/15 11:58:31 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	is_builtin(char *cmd)
+int is_builtin(char *cmd)
 {
 	int		i;
 	char	*builtins[] = {"cd", "env", "echo", "exit", "pwd", "export", "unset", NULL};
