@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 15:47:09 by nlambert          #+#    #+#             */
-/*   Updated: 2024/12/20 16:41:01 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/15 11:09:33 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,24 +44,24 @@ void	*malloc_track(t_data *data, size_t size)
 	return (add);
 }
 
-void free_tab(char **tab)
+void	free_tab(char **tab)
 {
-    int i;
+	int	i;
 
-    if (!tab)
-        return ;
-    i = 0;
-    while (tab[i])
-    {
-        free(tab[i]);
-        i++;
-    }
-    free(tab);
+	if (!tab)
+		return ;
+	i = 0;
+	while (tab[i])
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
 }
 
-char *ft_strndup(const char *source, size_t size)
+char	*ft_strndup(const char *source, size_t size)
 {
-	char *copy;
+	char	*copy;
 
 	if (source == NULL)
 		return (NULL);
@@ -71,7 +71,6 @@ char *ft_strndup(const char *source, size_t size)
 	ft_strlcpy(copy, source, size + 1);
 	return (copy);
 }
-
 
 char	*ft_strchr(const char *str, int searchedChar)
 {

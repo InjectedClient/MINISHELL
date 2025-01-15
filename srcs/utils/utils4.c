@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:39:34 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/14 14:39:35 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/15 11:10:15 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,28 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	return (substr);
 }
 
-int ft_strcmp(const char *s1, const char *s2)
+int	ft_strcmp(const char *s1, const char *s2)
 {
-    while (*s1 && *s2 && *s1 == *s2) {
-        s1++;
-        s2++;
-    }
-    return (unsigned char)*s1 - (unsigned char)*s2;
+	while (*s1 && *s2 && *s1 == *s2)
+	{
+		s1++;
+		s2++;
+	}
+	return ((unsigned char)*s1 - (unsigned char)*s2);
+}
+
+int	ft_write_fd(char *str, int fd)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	if (write (fd, str, i) == -1)
+	{
+		printf("write error: no space left on device\n");
+		g_global = 1;
+		return (1);
+	}
+	return (0);
 }

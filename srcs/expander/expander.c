@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:54 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/14 14:38:55 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/15 11:13:26 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,16 @@
 
 int starts_with_tilde(const char *cmd_segment)
 {
-    if (!cmd_segment)
-        return 0;
-    return (cmd_segment[0] == '~');
+	if (!cmd_segment)
+		return 0;
+	return (cmd_segment[0] == '~');
 }
 
 int starts_with_dollar(const char *cmd_segment)
 {
-    if (!cmd_segment)
-        return 0;
-    return (cmd_segment[0] == '$');
+	if (!cmd_segment)
+		return 0;
+	return (cmd_segment[0] == '$');
 }
 
 
@@ -73,11 +73,11 @@ char *expand_variable(const char *input, t_env *env_list)
 		return (ft_strdup(input));
 
 	start = input + 1;
-    if (*start == '?')
-    {
-        char *ret = ft_itoa(g_global);
-        return (ret);
-    }
+	if (*start == '?')
+	{
+		char *ret = ft_itoa(g_global);
+		return (ret);
+	}
 	len = 0;
 	while (start[len] && (ft_isalnum(start[len]) || start[len] == '_'))
 		len++;
@@ -108,32 +108,32 @@ char *expand_tilde(const char *input, t_env *env_list)
 
 char *expand_token(t_lexer *token, t_env *env_list)
 {
-    // if (is_single_quote(token->cmd_segment))
-    //     return handle_single_quote(token->cmd_segment); // Pas d'expansion pour les guillemets simples.
-    // if (is_double_quote(token->cmd_segment))
-    //     return handle_double_quote(token->cmd_segment, env_list); // Expansion des variables dans les doubles quotes.
-    if (starts_with_tilde(token->cmd_segment))
-        return expand_tilde(token->cmd_segment, env_list); // Expansion de ~ en $HOME.
-    if (starts_with_dollar(token->cmd_segment))
-        return expand_variable(token->cmd_segment, env_list); // Expansion des variables d'environnement.
+	// if (is_single_quote(token->cmd_segment))
+	//     return handle_single_quote(token->cmd_segment); // Pas d'expansion pour les guillemets simples.
+	// if (is_double_quote(token->cmd_segment))
+	//     return handle_double_quote(token->cmd_segment, env_list); // Expansion des variables dans les doubles quotes.
+	if (starts_with_tilde(token->cmd_segment))
+		return expand_tilde(token->cmd_segment, env_list); // Expansion de ~ en $HOME.
+	if (starts_with_dollar(token->cmd_segment))
+		return expand_variable(token->cmd_segment, env_list); // Expansion des variables d'environnement.
 
-    return strdup(token->cmd_segment); // Si rien à faire, retourne tel quel.
+	return strdup(token->cmd_segment); // Si rien à faire, retourne tel quel.
 }
 
 void expand_command(t_data *data, t_env *env_list)
 {
-    t_lexer *current = data->lexer_list;
+	t_lexer *current = data->lexer_list;
 
-    while (current)
-    {
-        char *expanded = expand_token(current, env_list); // Expansion du token.
-        if (!expanded)
-        {
-            perror("minishell: expansion failed");
-            exit(1); // Gère proprement l'erreur.
-        }
-        free(current->cmd_segment); // Libère l'ancien segment.
-        current->cmd_segment = expanded; // Remplace par le segment expansé.
-        current = current->next;
-    }
+	while (current)
+	{
+		char *expanded = expand_token(current, env_list); // Expansion du token.
+		if (!expanded)
+		{
+			perror("minishell: expansion failed");
+			exit(1); // Gère proprement l'erreur.
+		}
+		free(current->cmd_segment); // Libère l'ancien segment.
+		current->cmd_segment = expanded; // Remplace par le segment expansé.
+		current = current->next;
+	}
 }

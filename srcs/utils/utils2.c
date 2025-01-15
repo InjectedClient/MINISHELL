@@ -6,27 +6,25 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:39:28 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/14 14:39:29 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/15 11:07:41 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-# define SHIFT_OUT 14 // SO (Shift Out)
-
-void free_array(char **array)
+void	free_array(char **array)
 {
-    int i;
+	int	i;
 
-    if (!array)
-        return ;
-    i = 0;
-    while (array[i])
-    {
-        free(array[i]);
-        i++;
-    }
-    free(array);
+	if (!array)
+		return ;
+	i = 0;
+	while (array[i])
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
 }
 
 int	ft_white_space(char c)
@@ -68,24 +66,4 @@ void	ft_free_all(t_data *data)
 		free(tmp);
 		tmp = next;
 	}
-}
-int	ft_write_fd(char *str, int fd)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-		i++;
-	if (write (fd, str, i) == -1)
-	{
-		printf("write error: no space left on device\n");
-		g_global = 1;
-		return (1);
-	}
-	return (0);
-}
-
-int	ft_isdigit(int c)
-{
-	return (c >= '0' && c <= '9');
 }

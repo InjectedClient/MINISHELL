@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:39:23 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/14 14:39:24 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/15 11:06:49 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	ft_strncmp(const char *first, const char *second, size_t length)
 
 int	ft_strlen(const char *str)
 {
-	const char *ptr = str;
+	const char	*ptr = str;
 
 	if (!str)
 		return (0);

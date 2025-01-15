@@ -5,14 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/14 14:39:12 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/14 14:39:13 by nlambert         ###   ########.fr       */
+/*   Created: 2025/01/15 11:03:18 by nlambert          #+#    #+#             */
+/*   Updated: 2025/01/15 11:03:42 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int ft_atoi(const char *str)
+int	ft_atoi(const char *str)
 {
 	int	result;
 	int	sign;
