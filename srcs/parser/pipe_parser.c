@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:08:22 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/14 17:02:40 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/15 16:19:21 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	check_invalid_tokens2(t_data *data)
 	}
 	if (!check_invalid_tokens(data))
 	{
-		printf("syntax error near unexpected token\n");
+		printf("syntax error near unexpected token `>'\n");
 		return (0);
 	}
 	tmp = data->lexer_list;
@@ -94,7 +94,7 @@ int	check_pipe_bracket(char *str)
 		{
 			if (str[i - 1] == '>' && str[i + 1] == '<')
 			{
-				printf("minishell: parse error near `|'\n");
+				printf("minishell: parse syntax near `|'\n");
 				return (0);
 			}
 		}

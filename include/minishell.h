@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:00 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/14 17:04:22 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/15 15:38:15 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,7 +224,7 @@ int		malloc_error(void);
 int		cmd_not_exec(void);
 int		cmd_not_found(void);
 int		fork_error(void);
-
+int		perm_denied(void);
 t_env	*init_env_list(char **envp);
 
 #	endif
