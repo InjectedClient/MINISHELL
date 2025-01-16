@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:00 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/15 15:38:15 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/15 16:52:05 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,8 +181,6 @@ int		is_doubl_quote_closed(t_quote *state);
 int		is_only_single_quote_on(t_quote *state);
 void	reset_quoting_state(t_quote *state);
 void	process_lexer_input(char *str, int *i, int *j, t_quote *state);
-char	**convert_list_to_array(t_lexer *head);
-int		count_lexer_list(t_lexer *head);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXECUTOR ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 int		exec_cmd(char **cmd, char *envp[], t_env *env_list);
@@ -224,7 +222,6 @@ int		malloc_error(void);
 int		cmd_not_exec(void);
 int		cmd_not_found(void);
 int		fork_error(void);
-int		perm_denied(void);
 t_env	*init_env_list(char **envp);
 
 #	endif
