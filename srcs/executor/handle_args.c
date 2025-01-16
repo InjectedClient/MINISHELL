@@ -20,6 +20,8 @@ char    **split_args(t_lexer *cmd)
     int i;
 
     num_args = 0;
+    while (cmd->token != CMD)
+        cmd = cmd->next;
     if (cmd->next && cmd->next->token == ARG)
         num_args = count_args(cmd->next);
     args = malloc(sizeof(char *) * (num_args + 2)); //Pour caracter null plus la cmd
