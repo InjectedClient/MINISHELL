@@ -242,61 +242,51 @@ int execute_token(t_data *data, t_env *env_list, char **envp, int num_commands)
 	i = 0;
 	while (i < num_commands)
 	{
-		args = split_args(commands[i]);
-		if (!args)
-		{
-			perror("split_args error");
-			return 1;
-		}
-
+        args = split_args(commands[i]);
 		if (is_builtin(args[0]) && num_commands == 1 && commands[i]->token != PIPE)
 		{
-			if (handle_redirections(commands[i], &infile, &outfile))
-			{
-				free_tab(args);
-				return 1;
-			}
+			// Exécuter directement si pas de pipe
 			g_global = exec_builtins_with_redirections(args, env_list, infile, outfile);
 			free_tab(args);
-			continue;
+			return g_global; // Ne pas quitter le parent
 		}
-
-		pid = fork();
-		if (pid == -1)
+		else
 		{
-			perror("fork");
-			free_tab(args);
-			return 1;
-		}
-
-		if (pid == 0) // Enfant
-		{
-			if (handle_redirections(commands[i], &infile, &outfile))
+			pid = fork();
+			if (pid == -1)
 			{
-				free_tab(args);
-				exit(1);
+				perror("fork");
+				return (1);
 			}
-			if (i > 0)
-				dup2(pipes[i - 1][0], STDIN_FILENO);
-			if (i < num_commands - 1)
-				dup2(pipes[i][1], STDOUT_FILENO);
-
-			for (int j = 0; j < num_commands - 1; j++)
+			if (pid == 0) // Child
 			{
-				close(pipes[j][0]);
-				close(pipes[j][1]);
+				if (handle_redirections(commands[i], &infile, &outfile))
+					exit(1);
+				if (i > 0 && infile == -1)
+				{
+					dup2(pipes[i - 1][0], STDIN_FILENO);
+				}
+				if (i < num_commands - 1 && outfile == -1)
+				{
+					dup2(pipes[i][1], STDOUT_FILENO);
+				}
+				for (int j = 0; j < num_commands - 1; j++)
+				{
+					close(pipes[j][0]);
+					close(pipes[j][1]);
+				}
+				if (is_builtin(args[0]))
+				{
+					g_global = exec_builtins(args, env_list);
+					exit(g_global); // Quitter avec le code de sortie du builtin
+				}
+				exec(args, env_list, envp);
+				perror("exec");
+				exit(127);
 			}
-
-			exec(args, env_list, envp);
-			free_tab(args);
-			perror("exec");
-			exit(127);
 		}
-
-		free_tab(args);
 		i++;
 	}
-
     // Parent : Fermer tous les pipes
     for (int i = 0; i < num_commands - 1; i++)
     {
