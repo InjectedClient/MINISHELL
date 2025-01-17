@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../include/minishell.h"
+
 char	*ft_getenv_dup(char *path, t_env *env_list)
 {
 	if (!path)
