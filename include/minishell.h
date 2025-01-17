@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:00 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/15 16:52:05 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/17 14:16:23 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,7 @@ char	*add_space(const char *command);
 size_t	calculate_new_length(const char *command);
 int		is_operator(char c);
 int		is_double_operator(const char *command, size_t pos);
-void	fill_command_with_spaces(const char *command, char *new_command, \
+void	fill_command_with_spaces(const char *command, char *new_command,
 		t_quote *state, size_t i);
 void	update_quoting_state(char c, t_quote *state);
 int		is_single_quote_open(t_quote *state);
@@ -184,7 +184,7 @@ void	process_lexer_input(char *str, int *i, int *j, t_quote *state);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXECUTOR ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 int		exec_cmd(char **cmd, char *envp[], t_env *env_list);
-void		exec(char *cmd[], t_env *env_list, char **envp);
+void	exec(char *cmd[], t_env *env_list, char **envp);
 int		execute_token(t_data *data, t_env *env_list, char **envp, int num_commands);
 
 int	count_commands(t_lexer *lexer_list);

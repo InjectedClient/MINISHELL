@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:27 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/15 15:53:13 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/17 14:13:24 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,10 @@ int	exec_cmd_2(char **cmd, char *envp[], t_env *env_list)
 
 void    exec(char *cmd[], t_env *env_list, char **envp)
 {
-    if (is_builtin(cmd[0]))
-        g_global = exec_builtins(cmd, env_list);
-    else
-        g_global = exec_cmd_2(cmd, envp, env_list);
+	if (is_builtin(cmd[0]))
+		g_global = exec_builtins(cmd, env_list);
+	else
+		g_global = exec_cmd_2(cmd, envp, env_list);
 }
 
 int	count_commands(t_lexer *lexer_list)
@@ -132,75 +132,75 @@ t_lexer	**split_by_pipe(t_lexer *lexer_list, int command_count)
 
 int handle_redirections(t_lexer *command, int *infile, int *outfile)
 {
-    t_lexer *current;
-    int error = 0;
+	t_lexer *current;
+	int error = 0;
 
-    *infile = -1;
-    *outfile = -1;
+	*infile = -1;
+	*outfile = -1;
 
-    current = command;
-    while (current)
-    {
-        if (current->token == REDIRECT_IN)
-        {
-            *infile = open(current->next->cmd_segment, O_RDONLY);
-            if (*infile == -1)
-            {
-                perror(current->next->cmd_segment);
-                error = 1;
-                break;
-            }
-            dup2(*infile, STDIN_FILENO);
-            close(*infile);
-        }
-        else if (current->token == REDIRECT_OUT)
-        {
-            *outfile = open(current->next->cmd_segment, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-            if (*outfile == -1)
-            {
-                perror(current->next->cmd_segment);
-                error = 1;
-                break;
-            }
-            dup2(*outfile, STDOUT_FILENO);
-            close(*outfile);
-        }
-        else if (current->token == APPEND_OUT)
-        {
-            *outfile = open(current->next->cmd_segment, O_WRONLY | O_CREAT | O_APPEND, 0644);
-            if (*outfile == -1)
-            {
-                perror(current->next->cmd_segment);
-                error = 1;
-                break;
-            }
-            dup2(*outfile, STDOUT_FILENO);
-            close(*outfile);
-        }
-        current = current->next;
-    }
+	current = command;
+	while (current)
+	{
+		if (current->token == REDIRECT_IN)
+		{
+			*infile = open(current->next->cmd_segment, O_RDONLY);
+			if (*infile == -1)
+			{
+				perror(current->next->cmd_segment);
+				error = 1;
+				break;
+			}
+			dup2(*infile, STDIN_FILENO);
+			close(*infile);
+		}
+		else if (current->token == REDIRECT_OUT)
+		{
+			*outfile = open(current->next->cmd_segment, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			if (*outfile == -1)
+			{
+				perror(current->next->cmd_segment);
+				error = 1;
+				break;
+			}
+			dup2(*outfile, STDOUT_FILENO);
+			close(*outfile);
+		}
+		else if (current->token == APPEND_OUT)
+		{
+			*outfile = open(current->next->cmd_segment, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			if (*outfile == -1)
+			{
+				perror(current->next->cmd_segment);
+				error = 1;
+				break;
+			}
+			dup2(*outfile, STDOUT_FILENO);
+			close(*outfile);
+		}
+		current = current->next;
+	}
 
-    return error; // Retourne 1 si une erreur survient, sinon 0
+	return error; // Retourne 1 si une erreur survient, sinon 0
 }
 
 int exec_builtins_with_redirections(char **args, t_env *env_list, int infile, int outfile)
 {
-    int saved_stdin = dup(STDIN_FILENO);
-    int saved_stdout = dup(STDOUT_FILENO);
+	int saved_stdin = dup(STDIN_FILENO);
+	int saved_stdout = dup(STDOUT_FILENO);
 
-    if (infile != -1)
-        dup2(infile, STDIN_FILENO);
-    if (outfile != -1)
-        dup2(outfile, STDOUT_FILENO);
+	if (infile != -1)
+		dup2(infile, STDIN_FILENO);
+	if (outfile != -1)
+		dup2(outfile, STDOUT_FILENO);
 
-    int status = exec_builtins(args, env_list);
+	int status = exec_builtins(args, env_list);
 
-    dup2(saved_stdin, STDIN_FILENO);
-    dup2(saved_stdout, STDOUT_FILENO);
-    close(saved_stdin);
-    close(saved_stdout);
+	dup2(saved_stdin, STDIN_FILENO);
+	dup2(saved_stdout, STDOUT_FILENO);
+	close(saved_stdin);
+	close(saved_stdout);
 
-    return status;
+	return status;
 }
 
 
@@ -211,11 +211,11 @@ int execute_token(t_data *data, t_env *env_list, char **envp, int num_commands)
 	char	**args;
 	pid_t	pid;
 	t_lexer	**commands;
-    t_lexer *lexer_list;
-    int infile;
-    int outfile;
+	t_lexer *lexer_list;
+	int infile;
+	int outfile;
 
-    lexer_list = data->lexer_list;
+	lexer_list = data->lexer_list;
 	commands = split_by_pipe(lexer_list, num_commands);
 	if (!commands)
 	{
@@ -225,16 +225,16 @@ int execute_token(t_data *data, t_env *env_list, char **envp, int num_commands)
 	i = 0;
 	for (i = 0; i < num_commands - 1; i++)
 	{	
-    if (pipe(pipes[i]) == -1)
-    {
-        perror("pipe");
-        for (int j = 0; j < i; j++) // Fermer les pipes déjà créés
-        {
-            close(pipes[j][0]);
-            close(pipes[j][1]);
-        }
-        return (1);
-    }
+	if (pipe(pipes[i]) == -1)
+	{
+		perror("pipe");
+		for (int j = 0; j < i; j++) // Fermer les pipes déjà créés
+		{
+			close(pipes[j][0]);
+			close(pipes[j][1]);
+		}
+		return (1);
+	}
 	}
 
 
@@ -242,7 +242,7 @@ int execute_token(t_data *data, t_env *env_list, char **envp, int num_commands)
 	i = 0;
 	while (i < num_commands)
 	{
-        args = split_args(commands[i]);
+		args = split_args(commands[i]);
 		if (is_builtin(args[0]) && num_commands == 1 && commands[i]->token != PIPE)
 		{
 			// Exécuter directement si pas de pipe
@@ -287,12 +287,12 @@ int execute_token(t_data *data, t_env *env_list, char **envp, int num_commands)
 		}
 		i++;
 	}
-    // Parent : Fermer tous les pipes
-    for (int i = 0; i < num_commands - 1; i++)
-    {
-        close(pipes[i][0]);
-        close(pipes[i][1]);
-    }
+	// Parent : Fermer tous les pipes
+	for (int i = 0; i < num_commands - 1; i++)
+	{
+		close(pipes[i][0]);
+		close(pipes[i][1]);
+	}
 	for (int i = 0; i < num_commands; i++)
 	{
 		int status;
@@ -308,13 +308,13 @@ int execute_token(t_data *data, t_env *env_list, char **envp, int num_commands)
 			g_global = 128 + WTERMSIG(status);
 		}
 	}
-    for (int i = 0; i < num_commands; i++)
-    {
-    free(commands[i]);
-    }
-    free(commands);
+	for (int i = 0; i < num_commands; i++)
+	{
+	free(commands[i]);
+	}
+	free(commands);
 
-    return (0);
+	return (0);
 }
 
 // int handle_redirections(t_lexer *current, int fds[2])
@@ -484,7 +484,7 @@ int execute_token(t_data *data, t_env *env_list, char **envp, int num_commands)
 //                     prev_fd = pipe_fd[0];
 //             }
 //         }
-        
+		
 //         current = current->next;
 //     }
 //     while (wait(NULL) > 0);

@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 14:38:30 by jle-neze          #+#    #+#             */
-/*   Updated: 2025/01/15 16:04:05 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/17 14:13:02 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	builtin_exit(char **args)
 		write(2, "minishell: exit: ", 17);
 		write(2, args[1], ft_strlen(args[1]));
 		write(2, ": numeric argument required\n", 28);
-		exit(100);
+		exit(0);
 	}
 	return (0);
 }
