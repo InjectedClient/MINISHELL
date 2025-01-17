@@ -104,20 +104,36 @@ char *expand_variable(const char *input, t_env *env_list, int in_single_quote)
     const char *start = input + 1; // Ignore le $
     size_t len = 0;
 
-    if (*start == '?')
-        return ft_itoa(g_global); // Code de retour global
+    if (*start == 34 || *start == '\0') // Cas où c'est uniquement "$"
+        return ft_strdup("$");
+
+    if (*start == '?') // Cas de "$?"
+    {
+        char *ret = ft_itoa(g_global);
+        char *remaining = ft_strdup(start + 1); // Copie le reste après "?"
+        char *result = ft_strjoin(ret, remaining); // Concatène la valeur et le reste
+        free(ret);
+        free(remaining);
+        return result;
+    }
 
     while (start[len] && (ft_isalnum(start[len]) || start[len] == '_'))
         len++;
 
     char *var_name = ft_substr(start, 0, len);
-    char *value = ft_getenv(var_name, env_list);
+    char *value = ft_getenv(var_name, env_list); // Cherche la variable
     free(var_name);
 
     if (value)
-        return ft_strdup(value);
-    return ft_strdup("");
+    {
+        char *remaining = ft_strdup(start + len); // Copie le reste après la variable
+        char *result = ft_strjoin(value, remaining); // Concatène la valeur et le reste
+        free(remaining);
+        return result;
+    }
+    return ft_strdup(""); // Retourne une chaîne vide si la variable n'existe pas
 }
+
 
 
 
