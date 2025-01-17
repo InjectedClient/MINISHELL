@@ -236,15 +236,17 @@ int execute_token(t_data *data, t_env *env_list, char **envp, int num_commands)
         return (1);
     }
 	}
-
-
-
 	i = 0;
 	while (i < num_commands)
 	{
         args = split_args(commands[i]);
 		if (is_builtin(args[0]) && num_commands == 1 && commands[i]->token != PIPE)
 		{
+			if (handle_redirections(commands[i], &infile, &outfile))
+			{
+				free_tab(args);
+				exit(1);
+			}
 			// Exécuter directement si pas de pipe
 			g_global = exec_builtins_with_redirections(args, env_list, infile, outfile);
 			free_tab(args);
@@ -256,12 +258,16 @@ int execute_token(t_data *data, t_env *env_list, char **envp, int num_commands)
 			if (pid == -1)
 			{
 				perror("fork");
+				free_tab(args);
 				return (1);
 			}
 			if (pid == 0) // Child
 			{
 				if (handle_redirections(commands[i], &infile, &outfile))
+				{
+					free_tab(args);
 					exit(1);
+				}
 				if (i > 0 && infile == -1)
 				{
 					dup2(pipes[i - 1][0], STDIN_FILENO);
@@ -277,10 +283,11 @@ int execute_token(t_data *data, t_env *env_list, char **envp, int num_commands)
 				}
 				if (is_builtin(args[0]))
 				{
-					g_global = exec_builtins(args, env_list);
+					g_global = exec_builtins_with_redirections(args, env_list, infile, outfile);
 					exit(g_global); // Quitter avec le code de sortie du builtin
 				}
 				exec(args, env_list, envp);
+				free_tab(args);
 				perror("exec");
 				exit(127);
 			}
@@ -298,16 +305,17 @@ int execute_token(t_data *data, t_env *env_list, char **envp, int num_commands)
 		int status;
 		wait(&status);
 
-		// Mettre à jour g_global avec le code de sortie du processus enfant
-		if (WIFEXITED(status)) // Si l’enfant s'est terminé normalement
+		if (WIFEXITED(status))
 		{
-			g_global = WEXITSTATUS(status);
+			if (i == num_commands - 1) // Dernière commande du pipeline
+				g_global = WEXITSTATUS(status);
 		}
-		else if (WIFSIGNALED(status)) // Si l’enfant s'est terminé à cause d’un signal
+		else if (WIFSIGNALED(status))
 		{
 			g_global = 128 + WTERMSIG(status);
 		}
 	}
+
     for (int i = 0; i < num_commands; i++)
     {
     free(commands[i]);
