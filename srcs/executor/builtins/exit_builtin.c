@@ -46,7 +46,12 @@ long	ft_atol(const char *str)
 	{
 		result = result * 10 + (*str - '0');
 		if (result < 0)
-			return (sign == 1 ? LONG_MAX : LONG_MIN);
+		{
+			if (sign == 1)
+				return (LONG_MAX);
+			else
+				return (LONG_MIN);
+		}
 		str++;
 	}
 	return (result * sign);
