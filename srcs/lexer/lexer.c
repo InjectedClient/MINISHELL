@@ -22,7 +22,7 @@ void	add_lexer_to_end(t_data *data, char *str)
 	t_lexer	*new;
 	t_lexer	*current;
 
-	new = create_new_lexer(str);
+	new = create_new_lexer(data, str);
 	if (data->lexer_list == NULL)
 	{
 		data->lexer_list = new;
@@ -45,11 +45,11 @@ void	add_lexer_to_end(t_data *data, char *str)
  * Crée un nouvel élément lexer avec le segment de commande donné.
  * Initialise les pointeurs next et prev à NULL.
  */
-t_lexer	*create_new_lexer(char *str)
+t_lexer	*create_new_lexer(t_data *data, char *str)
 {
 	t_lexer	*new;
 
-	new = malloc(sizeof(t_lexer));
+	new = malloc_track(data, sizeof(t_lexer));
 	if (!new)
 		return (NULL);
 	new->cmd_segment = str;
