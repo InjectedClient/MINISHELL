@@ -30,14 +30,14 @@ int	check_invalid_pipes(t_data *data)
 		if ((tmp->cmd_segment[i] == '>' && tmp->cmd_segment[i + 1] == '|')
 			|| (tmp->cmd_segment[i] == '<' && tmp->cmd_segment[i + 1] == '|'))
 		{
-			printf("check pipes for error\n");
+			printf("minishell: parse error near `|'\n");
 			i++;
 			return (0);
 		}
 		if ((tmp->cmd_segment[i] == '|' && tmp->cmd_segment[i + 1] == '<')
 			|| (tmp->cmd_segment[i] == '|' && tmp->cmd_segment[i + 1] == '>'))
 		{
-			printf("this file does not exist\n");
+			printf("minishell: no such file or directory\n");
 			i++;
 			return (0);
 		}
