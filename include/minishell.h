@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:00 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/17 16:37:23 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/21 15:19:34 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include <unistd.h>
 # include <signal.h>
 # include <fcntl.h>
+# include <limits.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/wait.h> 
