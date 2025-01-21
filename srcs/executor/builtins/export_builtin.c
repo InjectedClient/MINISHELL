@@ -32,6 +32,18 @@ void	print_sorted_env(t_env *env_list)
 	}
 }
 
+void	add_new_node(t_env *current, t_env *new_node, t_env **env_list)
+{
+	if (!current)
+		*env_list = new_node;
+	else
+	{
+		while (current->next)
+			current = current->next;
+		current->next = new_node;
+	}
+}
+
 void	add_env_variable(t_env **env_list, char *name, char *value, int equal)
 {
 	t_env	*new_node;
@@ -57,14 +69,23 @@ void	add_env_variable(t_env **env_list, char *name, char *value, int equal)
 		return ;
 	}
 	new_node->next = NULL;
-	if (!current)
-		*env_list = new_node;
-	else
+	add_new_node(current, new_node, env_list);
+}
+
+int	update_env(t_env *current, char *name, char *value)
+{
+	while (current)
 	{
-		while (current->next)
-			current = current->next;
-		current->next = new_node;
+		if (ft_strcmp(current->name, name) == 0)
+		{
+			free(current->value);
+			current->value = ft_strdup(value);
+			free_2(name, value);
+			return (1);
+		}
+		current = current->next;
 	}
+	return (0);
 }
 
 void	update_or_add_env(t_env **env_list, char *arg)
@@ -88,23 +109,8 @@ void	update_or_add_env(t_env **env_list, char *arg)
 	}
 	else
 		name = ft_strdup(arg);
-	// if (!name || (*(equal_sign + 1) && !value))
-	// {
-	// 	free_2(name, value);
-	// 	return ;
-	// }
-	while (current)
-	{
-		if (ft_strcmp(current->name, name) == 0)
-		{
-			free(current->value);
-			current->value = ft_strdup(value);
-			free_2(name, value);
-			return ;
-		}
-		current = current->next;
-	}
-	add_env_variable(env_list, name, value, equal);
+	if (!update_env(current, name, value))
+		add_env_variable(env_list, name, value, equal);
 }
 
 int	is_valid_env_format(char *arg)

@@ -12,20 +12,43 @@
 
 #include "../include/minishell.h"
 
+void	here_doc_read(int temp_fd, const char *delimiter)
+{
+	char		*line;
+
+	while (1)
+	{
+		line = readline("> ");
+		if (!line || strcmp(line, delimiter) == 0)
+		{
+			free(line);
+			break ;
+		}
+		write(temp_fd, line, strlen(line));
+		write(temp_fd, "\n", 1);
+		free(line);
+	}
+	return ;
+}
+
+void	counter_here_doc()
+{
+
+}
+
 int	handle_here_doc(const char *delimiter)
 {
 	static int	counter = 0;
 	char		temp_file[256];
 	char		*counter_str;
-	char		*line;
 	int			temp_fd;
 	int			i;
+	int			temp = counter;
 
 	counter_str = malloc(12);
 	strcpy(temp_file, "/tmp/minishell_heredoc_");
 	if (!counter_str)
 		return (-1);
-	int			temp = counter;
 	i = 0;
 	while (temp > 0)
 	{
@@ -42,18 +65,19 @@ int	handle_here_doc(const char *delimiter)
 		perror("minishell: open");
 		return (-1);
 	}
-	while (1)
-	{
-		line = readline("> ");
-		if (!line || strcmp(line, delimiter) == 0)
-		{
-			free(line);
-			break ;
-		}
-		write(temp_fd, line, strlen(line));
-		write(temp_fd, "\n", 1);
-		free(line);
-	}
+	here_doc_read(temp_fd, delimiter);
+	// while (1)
+	// {
+	// 	line = readline("> ");
+	// 	if (!line || strcmp(line, delimiter) == 0)
+	// 	{
+	// 		free(line);
+	// 		break ;
+	// 	}
+	// 	write(temp_fd, line, strlen(line));
+	// 	write(temp_fd, "\n", 1);
+	// 	free(line);
+	// }
 	close(temp_fd);
 	temp_fd = open(temp_file, O_RDONLY);
 	if (temp_fd == -1)

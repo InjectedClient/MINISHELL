@@ -148,6 +148,8 @@ void	free_2(char *var1, char *var2);
 void	free_3(char *var1, char *var2, char *var3);
 void	free_4(char *var1, char *var2, char *var3, char *var4);
 void	free_env_node(t_env *node);
+void	*ft_memcpy(void *dst, const void *src, size_t n);
+size_t 	ft_strlen_until(const char *str, const char *stop_chars);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ LEXER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
