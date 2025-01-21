@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:00 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/21 15:19:34 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/21 15:28:14 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,10 +184,9 @@ void	reset_quoting_state(t_quote *state);
 void	process_lexer_input(char *str, int *i, int *j, t_quote *state);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXECUTOR ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
-int		exec_cmd(char **cmd, char *envp[], t_env *env_list);
-int		exec(char *cmd[], t_env *env_list, char **envp, int fork);
-int		execute_token(t_data *data, t_env *env_list, char **envp);
-
+void	exec(char *cmd[], t_env *env_list, char **envp);
+int		execute_token(t_data *data, t_env *env_list, char **envp, int num_commands);
+int		count_commands(t_lexer *lexer_list);
 //Args
 int		count_args(t_lexer *arg);
 char	**split_args(t_lexer *cmd);

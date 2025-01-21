@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:36:08 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/16 14:31:12 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/21 15:27:38 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	looping(char *tmp, t_data *data, t_env *env_list, char **envp)
 {
 	t_lexer	*tmp_lex;
 	char	*processed_cmd;
-	int	num_commands;
+	int		num_commands;
 
 	if (!tmp)
 		exit_all(data);
