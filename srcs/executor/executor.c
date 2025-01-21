@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:27 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/21 15:25:51 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/21 16:50:58 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -278,7 +278,6 @@ int execute_token(t_data *data, t_env *env_list, char **envp, int num_commands)
 					exit(g_global); // Quitter avec le code de sortie du builtin
 				}
 				exec(args, env_list, envp);
-				perror("exec");
 				exit(127);
 			}
 		}
@@ -435,7 +434,7 @@ int execute_token(t_data *data, t_env *env_list, char **envp, int num_commands)
 //                 return (1);
 //         }
 //         if (current->token == REDIRECT_OUT || current->token == APPEND_OUT || current->token == REDIRECT_IN || current->token == HERE_DOC)
-//         {
+//         {printf
 //             if (handle_redirections(current, fds) == -1)
 //             {
 //                 cleanup(fds, prev_fd, pipe_fd, args);
