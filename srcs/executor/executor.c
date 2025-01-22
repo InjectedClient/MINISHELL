@@ -12,51 +12,6 @@
 
 #include "../include/minishell.h"
 
-
-int	is_builtin(char *cmd)
-{
-	int		i;
-	char	*builtins[8];
-
-	builtins[0] = "cd";
-	builtins[1] = "env";
-	builtins[2] = "echo";
-	builtins[3] = "exit";
-	builtins[4] = "pwd";
-	builtins[5] = "export";
-	builtins[6] = "unset";
-	builtins[7] = NULL;
-	i = 0;
-	while (builtins[i])
-	{
-		if (ft_strncmp(cmd, builtins[i], ft_strlen(cmd)) == 0)
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-int	exec_builtins(char **args, t_env *env_list)
-{
-	if (ft_strncmp(args[0], "echo", ft_strlen(args[0])) == 0)
-		return (builtin_echo(args));
-	else if (ft_strncmp(args[0], "cd", ft_strlen(args[0])) == 0)
-		return (builtin_cd(args, &env_list));
-	else if (ft_strncmp(args[0], "pwd", ft_strlen(args[0])) == 0)
-		return (builtin_pwd());
-	else if (ft_strncmp(args[0], "export", ft_strlen(args[0])) == 0)
-		return (builtin_export(args, &env_list));
-	else if (ft_strncmp(args[0], "unset", ft_strlen(args[0])) == 0)
-		return (builtin_unset(args, &env_list));
-	else if (ft_strncmp(args[0], "env", ft_strlen(args[0])) == 0)
-		return (builtin_env(env_list));
-	else if (ft_strncmp(args[0], "exit", ft_strlen(args[0])) == 0)
-		return (builtin_exit(args));
-	else
-		return (-1);
-}
-
-
 int	exec_cmd_2(char **cmd, char *envp[], t_env *env_list)
 {
 	char	*path;
@@ -79,22 +34,6 @@ void    exec(char *cmd[], t_env *env_list, char **envp)
     else
         g_global = exec_cmd_2(cmd, envp, env_list);
 }
-
-int	count_commands(t_lexer *lexer_list)
-{
-	int	count;
-	t_lexer	*current;
-
-	count = 1;
-	current = lexer_list;
-	while (current)
-	{
-		if (current->token == PIPE)
-			count++;
-		current = current->next;
-	}
-	return (count);
-}	
 
 t_lexer	**split_by_pipe(t_lexer *lexer_list, int command_count)
 {
@@ -126,57 +65,88 @@ t_lexer	**split_by_pipe(t_lexer *lexer_list, int command_count)
 	}
 	commands[index] = start;
 	return (commands);
+}
 
+int create_pipes(int num_commands, int pipes[][2])
+{
+	int i;
+
+	i = 0;
+    while (i < num_commands - 1)
+    {
+        if (pipe(pipes[i]) == -1)
+        {
+            perror("pipe");
+            for (int j = 0; j < i; j++)
+            {
+                close(pipes[j][0]);
+                close(pipes[j][1]);
+            }
+            return (1);
+        }
+		i++;
+    }
+    return (0);
 }
 
 
-int execute_token(t_data *data, t_env *env_list, char **envp, int num_commands)
+void wait_for_children(int num_commands)
+{
+	int i;
+
+	i = 0;
+    while (i < num_commands)
+    {
+        int status;
+        wait(&status);
+
+        if (WIFEXITED(status))
+        {
+            if (i == num_commands - 1)
+                g_global = WEXITSTATUS(status);
+        }
+        else if (WIFSIGNALED(status))
+        {
+            g_global = 128 + WTERMSIG(status);
+        }
+		i++;
+    }
+}
+
+
+int execute_token(t_lexer *lexer_list, t_env *env_list, char **envp, int num_commands)
 {
 	int	i;
 	int	pipes[num_commands - 1][2];
 	char	**args;
 	pid_t	pid;
 	t_lexer	**commands;
-    t_lexer *lexer_list;
     int infile;
     int outfile;
 
-    lexer_list = data->lexer_list;
 	commands = split_by_pipe(lexer_list, num_commands);
 	if (!commands)
-	{
-		perror("malloc error");
 		return (1);
-	}
-	i = 0;
-	for (i = 0; i < num_commands - 1; i++)
-	{	
-    if (pipe(pipes[i]) == -1)
+	if (create_pipes(num_commands, pipes) == 1)
     {
-        perror("pipe");
-        for (int j = 0; j < i; j++) // Fermer les pipes déjà créés
-        {
-            close(pipes[j][0]);
-            close(pipes[j][1]);
-        }
+        free_commands(commands, num_commands);
         return (1);
-    }
 	}
 	i = 0;
-	while (i < num_commands)
+	while (i < num_commands) //faire la fonction ici
 	{
         args = split_args(commands[i]);
 		if (is_builtin(args[0]) && num_commands == 1 && commands[i]->token != PIPE)
 		{
 			if (handle_redirections(commands[i], &infile, &outfile))
 			{
+				free_commands(commands, num_commands);
 				free_tab(args);
 				exit(1);
 			}
-			// Exécuter directement si pas de pipe
 			g_global = exec_builtins_with_redirections(args, env_list, infile, outfile);
 			free_tab(args);
-			return g_global; // Ne pas quitter le parent
+			return (g_global);
 		}
 		else
 		{
@@ -184,6 +154,7 @@ int execute_token(t_data *data, t_env *env_list, char **envp, int num_commands)
 			if (pid == -1)
 			{
 				perror("fork");
+				free_commands(commands, num_commands);
 				free_tab(args);
 				return (1);
 			}
@@ -195,22 +166,14 @@ int execute_token(t_data *data, t_env *env_list, char **envp, int num_commands)
 					exit(1);
 				}
 				if (i > 0 && infile == -1)
-				{
 					dup2(pipes[i - 1][0], STDIN_FILENO);
-				}
 				if (i < num_commands - 1 && outfile == -1)
-				{
 					dup2(pipes[i][1], STDOUT_FILENO);
-				}
-				for (int j = 0; j < num_commands - 1; j++)
-				{
-					close(pipes[j][0]);
-					close(pipes[j][1]);
-				}
+				close_pipes(num_commands, pipes);
 				if (is_builtin(args[0]))
 				{
 					g_global = exec_builtins_with_redirections(args, env_list, infile, outfile);
-					exit(g_global); // Quitter avec le code de sortie du builtin
+					exit(g_global);
 				}
 				exec(args, env_list, envp);
 				free_tab(args);
@@ -220,33 +183,8 @@ int execute_token(t_data *data, t_env *env_list, char **envp, int num_commands)
 		}
 		i++;
 	}
-    // Parent : Fermer tous les pipes
-    for (int i = 0; i < num_commands - 1; i++)
-    {
-        close(pipes[i][0]);
-        close(pipes[i][1]);
-    }
-	for (int i = 0; i < num_commands; i++)
-	{
-		int status;
-		wait(&status);
-
-		if (WIFEXITED(status))
-		{
-			if (i == num_commands - 1) // Dernière commande du pipeline
-				g_global = WEXITSTATUS(status);
-		}
-		else if (WIFSIGNALED(status))
-		{
-			g_global = 128 + WTERMSIG(status);
-		}
-	}
-
-    for (int i = 0; i < num_commands; i++)
-    {
-    free(commands[i]);
-    }
-    free(commands);
-
+    close_pipes(num_commands, pipes);
+	wait_for_children(num_commands);
+    free_commands(commands, num_commands);
     return (0);
 }

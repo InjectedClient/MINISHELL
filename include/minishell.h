@@ -187,7 +187,7 @@ void	process_lexer_input(char *str, int *i, int *j, t_quote *state);
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXECUTOR ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 int		exec_cmd(char **cmd, char *envp[], t_env *env_list);
 void		exec(char *cmd[], t_env *env_list, char **envp);
-int		execute_token(t_data *data, t_env *env_list, char **envp, int num_commands);
+int		execute_token(t_lexer *lexer_list, t_env *env_list, char **envp, int num_commands);
 
 int	count_commands(t_lexer *lexer_list);
 
@@ -218,6 +218,11 @@ int		handle_here_doc(const char *delimiter);
 int		exec_builtins_with_redirections(char **args, t_env *env_list,
 		int infile, int outfile);
 int		handle_redirections(t_lexer *command, int *infile, int *outfile);
+
+int	count_commands(t_lexer *lexer_list);
+void free_lexer_list(t_lexer *list);
+void free_commands(t_lexer **commands, int num_commands);
+void close_pipes(int num_commands, int pipes[][2]);
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXPAND ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
 void	expand_command(t_data *data, t_env *env_list);
