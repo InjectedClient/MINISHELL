@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:00 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/21 16:01:28 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/17 17:23:12 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@
 # include <unistd.h>
 # include <signal.h>
 # include <fcntl.h>
-# include <limits.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/wait.h> 
@@ -185,10 +184,12 @@ void	reset_quoting_state(t_quote *state);
 void	process_lexer_input(char *str, int *i, int *j, t_quote *state);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXECUTOR ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
-void	exec(char *cmd[], t_env *env_list, char **envp);
-int		execute_token(t_data *data, t_env *env_list, \
-		char **envp, int num_commands);
-int		count_commands(t_lexer *lexer_list);
+int		exec_cmd(char **cmd, char *envp[], t_env *env_list);
+void		exec(char *cmd[], t_env *env_list, char **envp);
+int		execute_token(t_data *data, t_env *env_list, char **envp, int num_commands);
+
+int	count_commands(t_lexer *lexer_list);
+
 //Args
 int		count_args(t_lexer *arg);
 char	**split_args(t_lexer *cmd);

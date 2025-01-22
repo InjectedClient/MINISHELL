@@ -11,27 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-// int is_single_quote(const char *cmd_segment)
-// {
-//     size_t len;
 
-//     if (!cmd_segment)
-//         return 0;
-
-//     len = ft_strlen(cmd_segment);
-//     return (len >= 2 && cmd_segment[0] == '\'' && cmd_segment[len - 1] == '\'');
-// }
-
-// int is_double_quote(const char *cmd_segment)
-// {
-//     size_t len;
-
-//     if (!cmd_segment)
-//         return 0;
-
-//     len = ft_strlen(cmd_segment);
-//     return (len >= 2 && cmd_segment[0] == '"' && cmd_segment[len - 1] == '"');
-// }
 
 int	starts_with_tilde(const char *cmd_segment)
 {
@@ -48,49 +28,113 @@ int	starts_with_dollar(const char *cmd_segment)
 }
 
 
-// char *handle_single_quote(const char *input)
-// {
-//     char *result = ft_strtrim(input, "'"); // Retire les guillemets simples.
-//     return result ? result : strdup("");  // Si rien, retourne une chaîne vide.
-// }
-
-// char *handle_double_quote(const char *input, t_env *env_list)
-// {
-//     char *trimmed = ft_strtrim(input, "\""); // Retire les guillemets doubles.
-//     char *expanded = expand_variable(trimmed, env_list); // Expansion des variables.
-//     free(trimmed);
-//     return expanded;
-// }
-
-char	*expand_variable(const char *input, t_env *env_list)
+void *ft_memcpy(void *dst, const void *src, size_t n)
 {
-	const char	*start;
-	size_t		len;
-	char		*var_name;
-	char		*value;
+    unsigned char *d;
+    const unsigned char *s;
+    size_t i;
 
-	if (input[0] != '$')
-		return (ft_strdup(input));
+    if (!dst && !src) // Gérer les cas où les deux pointeurs sont NULL
+        return NULL;
 
-	start = input + 1;
-	if (*start == '?')
-	{
-		char *ret = ft_itoa(g_global);
-		return (ret);
-	}
-	len = 0;
-	while (start[len] && (ft_isalnum(start[len]) || start[len] == '_'))
-		len++;
+    d = (unsigned char *)dst;
+    s = (const unsigned char *)src;
 
-	var_name = ft_substr(start, 0, len); // Extrait le nom de la variable.
-	value = ft_getenv(var_name, env_list); // Récupère sa valeur.
-	free(var_name);
+    i = 0;
+    while (i < n)
+    {
+        d[i] = s[i];
+        i++;
+    }
 
-	if (value)
-		return (ft_strdup(value));
-	return (ft_strdup(""));
-	//return value ? strdup(value) : strdup(""); // Si non définie, retourne une chaîne vide.
+    return dst;
 }
+
+size_t ft_strlen_until(const char *str, const char *stop_chars)
+{
+    size_t i = 0;
+
+    if (!str || !stop_chars)
+        return 0;
+
+    while (str[i])
+    {
+        size_t j = 0;
+        while (stop_chars[j])
+        {
+            if (str[i] == stop_chars[j]) // Arrête si un caractère correspond
+                return i;
+            j++;
+        }
+        i++;
+    }
+
+    return i; // Retourne la longueur totale si aucun caractère ne correspond
+}
+
+char *remove_quotes(const char *input)
+{
+    char *result = malloc(ft_strlen(input) + 1);
+    int i = 0, j = 0;
+    t_quote quote_status = {0, 0, 0};
+
+    if (!result)
+        return NULL;
+
+    while (input[i])
+    {
+        if (input[i] == '\'' && !quote_status.doubl_quot_status)
+            quote_status.singl_quot_status = !quote_status.singl_quot_status;
+        else if (input[i] == '\"' && !quote_status.singl_quot_status)
+            quote_status.doubl_quot_status = !quote_status.doubl_quot_status;
+        else
+            result[j++] = input[i];
+        i++;
+    }
+    result[j] = '\0';
+    return result;
+}
+
+
+char *expand_variable(const char *input, t_env *env_list, int in_single_quote)
+{
+    if (in_single_quote)
+        return ft_strdup(input); // Retourne tel quel dans les quotes simples
+
+    const char *start = input + 1; // Ignore le $
+    size_t len = 0;
+
+    if (*start == 34 || *start == '\0') // Cas où c'est uniquement "$"
+        return ft_strdup("$");
+
+    if (*start == '?') // Cas de "$?"
+    {
+        char *ret = ft_itoa(g_global);
+        char *remaining = ft_strdup(start + 1); // Copie le reste après "?"
+        char *result = ft_strjoin(ret, remaining); // Concatène la valeur et le reste
+        free(ret);
+        free(remaining);
+        return result;
+    }
+
+    while (start[len] && (ft_isalnum(start[len]) || start[len] == '_'))
+        len++;
+
+    char *var_name = ft_substr(start, 0, len);
+    char *value = ft_getenv(var_name, env_list); // Cherche la variable
+    free(var_name);
+
+    if (value)
+    {
+        char *remaining = ft_strdup(start + len); // Copie le reste après la variable
+        char *result = ft_strjoin(value, remaining); // Concatène la valeur et le reste
+        free(remaining);
+        return result;
+    }
+    return ft_strdup(""); // Retourne une chaîne vide si la variable n'existe pas
+}
+
+
 
 
 char	*expand_tilde(const char *input, t_env *env_list)
@@ -106,34 +150,68 @@ char	*expand_tilde(const char *input, t_env *env_list)
 }
 
 
-char	*expand_token(t_lexer *token, t_env *env_list)
+char *expand_token(t_lexer *token, t_env *env_list)
 {
-	// if (is_single_quote(token->cmd_segment))
-	//     return handle_single_quote(token->cmd_segment); // Pas d'expansion pour les guillemets simples.
-	// if (is_double_quote(token->cmd_segment))
-	//     return handle_double_quote(token->cmd_segment, env_list); // Expansion des variables dans les doubles quotes.
-	if (starts_with_tilde(token->cmd_segment))
-		return expand_tilde(token->cmd_segment, env_list); // Expansion de ~ en $HOME.
-	if (starts_with_dollar(token->cmd_segment))
-		return expand_variable(token->cmd_segment, env_list); // Expansion des variables d'environnement.
+    t_quote quote_status = {0, 0, 0}; // Structure pour suivre l'état des quotes
+    char *expanded = malloc(1024); // Stocker le segment expansé
+    int i = 0, j = 0;
 
-	return strdup(token->cmd_segment); // Si rien à faire, retourne tel quel.
+    if (!expanded)
+        return NULL;
+
+    while (token->cmd_segment[i])
+    {
+        if (token->cmd_segment[i] == '\'' && !quote_status.doubl_quot_status)
+        {
+            quote_status.singl_quot_status = !quote_status.singl_quot_status;
+            i++;
+        }
+        else if (token->cmd_segment[i] == '\"' && !quote_status.singl_quot_status)
+        {
+            quote_status.doubl_quot_status = !quote_status.doubl_quot_status;
+            i++;
+        }
+        else if (token->cmd_segment[i] == '$')
+        {
+            // Expansion des variables avec respect des quotes
+            char *var_expanded = expand_variable(&token->cmd_segment[i], env_list, quote_status.singl_quot_status);
+            if (var_expanded)
+            {
+                size_t len = ft_strlen(var_expanded);
+                ft_memcpy(&expanded[j], var_expanded, len);
+                j += len;
+                i += ft_strlen_until(&token->cmd_segment[i], " \t\"\'"); // Avancer
+                free(var_expanded);
+            }
+        }
+        else
+        {
+            expanded[j++] = token->cmd_segment[i++];
+        }
+    }
+
+    expanded[j] = '\0';
+    return expanded;
 }
 
-void	expand_command(t_data *data, t_env *env_list)
-{
-	t_lexer *current = data->lexer_list;
 
-	while (current)
-	{
-		char *expanded = expand_token(current, env_list); // Expansion du token.
-		if (!expanded)
-		{
-			perror("minishell: expansion failed");
-			exit(1); // Gère proprement l'erreur.
-		}
-		free(current->cmd_segment); // Libère l'ancien segment.
-		current->cmd_segment = expanded; // Remplace par le segment expansé.
-		current = current->next;
-	}
+void expand_command(t_data *data, t_env *env_list)
+{
+    t_lexer *current = data->lexer_list;
+
+    while (current)
+    {
+        char *expanded = expand_token(current, env_list); // Expansion du token
+        if (!expanded)
+        {
+            perror("minishell: expansion failed");
+            exit(1); // Gère proprement l'erreur
+        }
+        char *cleaned = remove_quotes(expanded); // Supprime les quotes
+        free(expanded);
+        free(current->cmd_segment); // Libère l'ancien segment
+        current->cmd_segment = cleaned; // Remplace par le segment expansé et nettoyé
+        current = current->next;
+    }
 }
+

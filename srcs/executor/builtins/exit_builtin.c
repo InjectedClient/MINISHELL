@@ -6,11 +6,13 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 14:38:30 by jle-neze          #+#    #+#             */
-/*   Updated: 2025/01/21 15:19:23 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/15 16:04:05 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
+
+#include <limits.h> // Pour LONG_MAX et LONG_MIN
 
 int	is_numeric(const char *str)
 {
