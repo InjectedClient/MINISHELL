@@ -28,23 +28,24 @@ t_lexer	**split_by_pipe(t_lexer *lexer_list)
 	return (commands);
 }
 
-int	create_pipes(int num_commands, int pipes[][2])
+int	create_pipes(int num_commands, int **pipes)
 {
 	int	i;
-	int	j;
 
 	i = 0;
 	while (i < num_commands - 1)
 	{
-		if (pipe(pipes[i]) == -1)
+		pipes[i] = malloc(sizeof(int) * 2);
+		if (!pipes[i] || pipe(pipes[i]) == -1)
 		{
 			perror("pipe");
-			while (j < i)
+			while (i-- > 0)
 			{
-				close(pipes[j][0]);
-				close(pipes[j][1]);
-				j++;
+				free(pipes[i]);
+				close(pipes[i][0]);
+				close(pipes[i][1]);
 			}
+			free(pipes);
 			return (1);
 		}
 		i++;

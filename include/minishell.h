@@ -216,7 +216,7 @@ int		builtin_env(t_env *env_list);
 int		builtin_exit(char **args);
 
 //Heredoc
-int		handle_here_doc(const char *delimiter);
+int	handle_here_doc_token(t_lexer *current, int *infile);
 int		exec_builtins_with_redirections(char **args, t_env *env_list,
 		int infile, int outfile);
 int		handle_redirections(t_lexer *command, int *infile, int *outfile);
@@ -224,19 +224,21 @@ int		handle_redirections(t_lexer *command, int *infile, int *outfile);
 int	count_commands(t_lexer *lexer_list);
 void free_lexer_list(t_lexer *list);
 void free_commands(t_lexer **commands, int num_commands);
-void close_pipes(int num_commands, int pipes[][2]);
 void	wait_for_children(int num_commands);
 int	exit_with_error(t_lexer **commands, int num_commands);
-void	child_process_1(t_lexer **commands, int i, int num_commands, int pipes[][2], int files[2]);
+void	child_process_1(t_lexer **commands, int i, int num_commands, int **pipes, int files[2]);
 void	child_process_2(t_env *env_list, char **envp, int files[2], int i, t_lexer **commands);
-void	end_execute_token(t_lexer **commands, int num_commands, int pipes[][2]);
+void	end_execute_token(t_lexer **commands, int num_commands, int **pipes);
 int	start_execute_token(t_lexer *lexer_list,
-		int num_commands, int pipes[][2], t_lexer ***commands);
+		int num_commands, int **pipes, t_lexer ***commands);
 t_lexer	**split_by_pipe(t_lexer *lexer_list);
-int	create_pipes(int num_commands, int pipes[][2]);
 int	execute_builtins_without_pipes(t_env *env_list, t_lexer **commands, int i, int files[2]);
 int	pid_error(t_lexer **commands, int num_commands);
 int count_commands_from_array(t_lexer **commands);
+
+//PIPES
+int create_pipes(int num_commands, int **pipes);
+void free_pipes(int num_commands, int **pipes);
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXPAND ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
 void	expand_command(t_data *data, t_env *env_list);

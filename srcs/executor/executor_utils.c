@@ -45,7 +45,7 @@ void	free_commands(t_lexer **commands, int num_commands)
 	free(commands);
 }
 
-void	close_pipes(int num_commands, int pipes[][2])
+void	free_pipes(int num_commands, int **pipes)
 {
 	int	i;
 
@@ -54,8 +54,10 @@ void	close_pipes(int num_commands, int pipes[][2])
 	{
 		close(pipes[i][0]);
 		close(pipes[i][1]);
+		free(pipes[i]);
 		i++;
 	}
+	free(pipes);
 }
 
 void	wait_for_children(int num_commands)

@@ -58,6 +58,8 @@ int	handle_redirections(t_lexer *command, int *infile, int *outfile)
 			error = handle_redirect_out(current, outfile);
 		else if (current->token == APPEND_OUT)
 			error = handle_append_out(current, outfile);
+		else if (current->token == HERE_DOC)
+			error = handle_here_doc_token(current, infile);
 		if (error)
 			break ;
 		current = current->next;

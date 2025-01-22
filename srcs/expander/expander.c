@@ -105,51 +105,52 @@ char	*expand_tilde(const char *input, t_env *env_list)
 	return (ft_strjoin(home, input + 1));
 }
 
-char	*expand_token(t_lexer *token, t_env *env_list)
+char *expand_token(t_lexer *token, t_env *env_list)
 {
-	t_quote	quote_status = {0, 0, 0};
-	char	*expanded;
-	char	*var_expanded;
-	int		i;
-	int		j;
-	size_t	len;
+    t_quote quote_status = {0, 0, 0};
+    char *expanded;
+    char *var_expanded;
+    int i = 0, j = 0;
 
-	expanded = malloc(1024);
-	i = 0;
-	j = 0;
-	if (!expanded)
-		return (NULL);
-	while (token->cmd_segment[i])
-	{
-		if (token->cmd_segment[i] == '\'' && !quote_status.doubl_quot_status)
-		{
-			quote_status.singl_quot_status = !quote_status.singl_quot_status;
-			i++;
-		}
-		else if (token->cmd_segment[i] == '\"'
-			&& !quote_status.singl_quot_status)
-		{
-			quote_status.doubl_quot_status = !quote_status.doubl_quot_status;
-			i++;
-		}
-		else if (token->cmd_segment[i] == '$')
-		{
-			var_expanded = expand_variable(&token->cmd_segment[i],
-					env_list, quote_status.singl_quot_status);
-			if (var_expanded)
-			{
-				len = ft_strlen(var_expanded);
-				ft_memcpy(&expanded[j], var_expanded, len);
-				j += len;
-				i += ft_strlen_until(&token->cmd_segment[i], " \t\"\'");
-				free(var_expanded);
-			}
-		}
-		else
-			expanded[j++] = token->cmd_segment[i++];
-	}
-	expanded[j] = '\0';
-	return (expanded);
+    expanded = malloc(ft_strlen(token->cmd_segment) * 2 + 1);
+    if (!expanded)
+        return (NULL);
+
+    while (token->cmd_segment[i])
+    {
+        if (token->cmd_segment[i] == '\'' && !quote_status.doubl_quot_status)
+        {
+            quote_status.singl_quot_status = !quote_status.singl_quot_status;
+            if (!quote_status.singl_quot_status)
+                i++;
+            else
+                expanded[j++] = token->cmd_segment[i++];
+        }
+        else if (token->cmd_segment[i] == '"' && !quote_status.singl_quot_status)
+        {
+            quote_status.doubl_quot_status = !quote_status.doubl_quot_status;
+            if (!quote_status.doubl_quot_status)
+                i++;
+            else
+                expanded[j++] = token->cmd_segment[i++];
+        }
+        else if (token->cmd_segment[i] == '$' && !quote_status.singl_quot_status)
+        {
+            var_expanded = expand_variable(&token->cmd_segment[i], env_list, quote_status.singl_quot_status);
+            if (var_expanded)
+            {
+                size_t len = ft_strlen(var_expanded);
+                ft_memcpy(&expanded[j], var_expanded, len);
+                j += len;
+                i += ft_strlen_until(&token->cmd_segment[i], " \t\"\'");
+                free(var_expanded);
+            }
+        }
+        else
+            expanded[j++] = token->cmd_segment[i++];
+    }
+    expanded[j] = '\0';
+    return (expanded);
 }
 
 void	expand_command(t_data *data, t_env *env_list)
