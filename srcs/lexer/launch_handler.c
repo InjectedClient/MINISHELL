@@ -45,7 +45,7 @@ void	looping(char *tmp, t_data *data, t_env *env_list, char **envp)
 		expand_command(data, env_list);
 		num_commands = count_commands(data->lexer_list);
 		if (tmp_lex && tmp_lex->cmd_segment)
-			execute_token(data, env_list, envp, num_commands);
+			execute_token(data->lexer_list, env_list, envp, num_commands);
 	}
 }
 
