@@ -215,6 +215,9 @@ int		builtin_exit(char **args);
 
 //Heredoc
 int		handle_here_doc(const char *delimiter);
+int		exec_builtins_with_redirections(char **args, t_env *env_list,
+		int infile, int outfile);
+int		handle_redirections(t_lexer *command, int *infile, int *outfile);
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXPAND ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
 void	expand_command(t_data *data, t_env *env_list);
