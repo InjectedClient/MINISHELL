@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:08:22 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/15 16:19:21 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/22 12:17:29 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,14 @@ int	check_invalid_pipes(t_data *data)
 		if ((tmp->cmd_segment[i] == '>' && tmp->cmd_segment[i + 1] == '|')
 			|| (tmp->cmd_segment[i] == '<' && tmp->cmd_segment[i + 1] == '|'))
 		{
-			printf("check pipes for error\n");
+			printf("minishell: parse error near `|'\n");
 			i++;
 			return (0);
 		}
 		if ((tmp->cmd_segment[i] == '|' && tmp->cmd_segment[i + 1] == '<')
 			|| (tmp->cmd_segment[i] == '|' && tmp->cmd_segment[i + 1] == '>'))
 		{
-			printf("this file does not exist\n");
+			printf("minishell: no such file or directory\n");
 			i++;
 			return (0);
 		}

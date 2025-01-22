@@ -30,7 +30,6 @@ void	child_process_2(t_env *env_list, char **envp, int files[2], int i, t_lexer 
 	}
 	exec(args, env_list, envp);
 	free_tab(args);
-	perror("exec");
 	exit(127);
 }
 
