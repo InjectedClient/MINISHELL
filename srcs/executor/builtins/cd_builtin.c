@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_builtin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jle-neze <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 13:32:25 by jle-neze          #+#    #+#             */
-/*   Updated: 2025/01/10 13:36:50 by jle-neze         ###   ########.fr       */
+/*   Updated: 2025/01/22 14:32:16 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,17 @@
 int	error_cd(void)
 {
 	perror("minishell: cd");
+	g_global = 1;
 	return (1);
 }
 
 int	cd_errors(char *type)
 {
 	if (ft_strcmp("arg", type) == 0)
+	{
 		write(2, "minishell: cd: too many arguments\n", 34);
+		g_global = 1;
+	}
 	else if (ft_strcmp("home", type) == 0)
 		write(2, "minishell: cd: HOME not set\n", 28);
 	else if (ft_strcmp("oldpwd", type) == 0)

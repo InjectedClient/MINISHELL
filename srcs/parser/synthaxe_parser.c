@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:08:27 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/14 17:04:22 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/22 14:25:16 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ int	is_a_directory(t_data *data)
 {
 	if (!check_directory(data->input_cmd))
 	{
+		g_global = 126;
 		return (0);
 	}
 	return (1);
