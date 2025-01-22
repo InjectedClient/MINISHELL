@@ -6,15 +6,12 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:36:08 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/16 14:31:12 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/22 14:10:12 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-/**
- * Parcourt et affiche le contenu de la liste lexer.
- */
 void	print_lexer_content(t_data *data)
 {
 	t_lexer	*current;
@@ -30,7 +27,7 @@ void	looping(char *tmp, t_data *data, t_env *env_list, char **envp)
 {
 	t_lexer	*tmp_lex;
 	char	*processed_cmd;
-	int	num_commands;
+	int		num_commands;
 
 	if (!tmp)
 		exit_all(data);

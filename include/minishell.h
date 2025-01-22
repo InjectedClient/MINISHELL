@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:00 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/15 16:52:05 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/22 14:14:38 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,21 @@ typedef struct s_quote
 	int				singl_quot_start_status;
 }	t_quote;
 
+typedef struct s_env
+{
+	char			*name;
+	char			*value;
+	int				equal_sign;
+	struct s_env	*next;
+}	t_env;
+
 typedef struct s_lexer
 {
+	t_token			token;
+	t_env			*envlist;
+	int				command_count;
 	int				segment_position;
 	char			*cmd_segment;
-	t_token			token;
 	struct s_lexer	*next;
 	struct s_lexer	*prev;
 }	t_lexer;
@@ -68,14 +78,6 @@ typedef struct s_free_memory
 	void					*add;
 	struct s_free_memory	*next;
 }	t_free_memory;
-
-typedef struct s_env
-{
-	char			*name;
-	char			*value;
-	int				equal_sign;
-	struct s_env	*next;
-}	t_env;
 
 typedef struct s_data {
 	t_lexer			*lexer_list;
@@ -93,7 +95,6 @@ typedef struct s_data {
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ PARSER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
-void	init_data(t_data *data, int argc, char **argv);
 int		check_quotes(char *str, t_data *data);
 int		check_redirections(char *str);
 int		check_cmd_start(char *str);
@@ -149,7 +150,7 @@ void	free_3(char *var1, char *var2, char *var3);
 void	free_4(char *var1, char *var2, char *var3, char *var4);
 void	free_env_node(t_env *node);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
-size_t 	ft_strlen_until(const char *str, const char *stop_chars);
+size_t	ft_strlen_until(const char *str, const char *stop_chars);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ LEXER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
@@ -167,6 +168,7 @@ void	get_token_in_node(t_lexer **lexer_list, t_lexer *tmp);
 void	print_lexer_content(t_data *data);
 t_token	which_redir(t_lexer *tmp);
 int		check_redir_error(t_lexer *tmp);
+void	init_data(t_lexer *lexer, t_data *data, int argc, char **argv);
 int		check_redirect(const char *cmd, char c);
 void	get_data_in_node(t_lexer **lexer_list);
 char	*add_space(const char *command);
@@ -186,10 +188,10 @@ void	process_lexer_input(char *str, int *i, int *j, t_quote *state);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXECUTOR ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 int		exec_cmd(char **cmd, char *envp[], t_env *env_list);
-void		exec(char *cmd[], t_env *env_list, char **envp);
-int		execute_token(t_lexer *lexer_list, t_env *env_list, char **envp, int num_commands);
-
-int	count_commands(t_lexer *lexer_list);
+void	exec(char *cmd[], t_env *env_list, char **envp);
+int		execute_token(t_lexer *lexer_list, t_env *env_list, \
+		char **envp, int num_commands);
+int		count_commands(t_lexer *lexer_list);
 
 //Args
 int		count_args(t_lexer *arg);
@@ -217,26 +219,28 @@ int		builtin_exit(char **args);
 
 //Heredoc
 int		handle_here_doc(const char *delimiter);
-int		exec_builtins_with_redirections(char **args, t_env *env_list,
+int		exec_builtins_with_redirections(char **args, t_env *env_list, \
 		int infile, int outfile);
 int		handle_redirections(t_lexer *command, int *infile, int *outfile);
-
-int	count_commands(t_lexer *lexer_list);
-void free_lexer_list(t_lexer *list);
-void free_commands(t_lexer **commands, int num_commands);
-void close_pipes(int num_commands, int pipes[][2]);
+int		count_commands(t_lexer *lexer_list);
+void	free_lexer_list(t_lexer *list);
+void	free_commands(t_lexer **commands, int num_commands);
+void	close_pipes(int num_commands, int pipes[][2]);
 void	wait_for_children(int num_commands);
-int	exit_with_error(t_lexer **commands, int num_commands);
-void	child_process_1(t_lexer **commands, int i, int num_commands, int pipes[][2], int files[2]);
-void	child_process_2(t_env *env_list, char **envp, int files[2], int i, t_lexer **commands);
+int		exit_with_error(t_lexer **commands, int num_commands);
+void	child_process_1(t_lexer **commands, int i, int num_commands, \
+		int pipes[][2], int files[2]);
+void	child_process_2(t_env *env_list, char **envp, int files[2], \
+		int i, t_lexer **commands);
 void	end_execute_token(t_lexer **commands, int num_commands, int pipes[][2]);
-int	start_execute_token(t_lexer *lexer_list,
+int		start_execute_token(t_lexer *lexer_list, \
 		int num_commands, int pipes[][2], t_lexer ***commands);
 t_lexer	**split_by_pipe(t_lexer *lexer_list);
-int	create_pipes(int num_commands, int pipes[][2]);
-int	execute_builtins_without_pipes(t_env *env_list, t_lexer **commands, int i, int files[2]);
-int	pid_error(t_lexer **commands, int num_commands);
-int count_commands_from_array(t_lexer **commands);
+int		create_pipes(int num_commands, int pipes[][2]);
+int		execute_builtins_without_pipes(t_env *env_list, t_lexer \
+		**commands, int i, int files[2]);
+int		pid_error(t_lexer **commands, int num_commands);
+int		count_commands_from_array(t_lexer **commands);
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXPAND ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
 void	expand_command(t_data *data, t_env *env_list);

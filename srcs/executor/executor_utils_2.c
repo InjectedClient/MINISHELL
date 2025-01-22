@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   executor_utils_2.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/22 14:14:53 by nlambert          #+#    #+#             */
+/*   Updated: 2025/01/22 14:15:05 by nlambert         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 int	exit_with_error(t_lexer **commands, int num_commands)
@@ -6,7 +18,8 @@ int	exit_with_error(t_lexer **commands, int num_commands)
 	return (1);
 }
 
-void	child_process_1(t_lexer **commands, int i, int num_commands, int pipes[][2], int files[2])
+void	child_process_1(t_lexer **commands, int i, \
+		int num_commands, int pipes[][2], int files[2])
 {
 	if (handle_redirections(commands[i], &files[0], &files[1]))
 		exit(exit_with_error(commands, num_commands));
