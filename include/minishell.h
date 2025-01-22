@@ -91,6 +91,17 @@ typedef struct s_data {
 	char			**args;
 }	t_data;
 
+typedef struct s_expand_args
+{
+    const char  *cmd_segment;
+    t_env       *env_list;
+    t_quote     *quote_status;
+    char        *expanded;
+    int         *i;
+    int         *j;
+}   t_expand_args;
+
+
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ PARSER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
 void	init_data(t_data *data, int argc, char **argv);
@@ -241,7 +252,23 @@ int create_pipes(int num_commands, int **pipes);
 void free_pipes(int num_commands, int **pipes);
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXPAND ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
+t_quote	init_quote_status(void);
+char	*expand_token(t_lexer *token, t_env *env_list);
 void	expand_command(t_data *data, t_env *env_list);
+size_t	ft_strlen_until(const char *str, const char *stop_chars);
+int	starts_with_tilde(const char *cmd_segment);
+int	starts_with_dollar(const char *cmd_segment);
+char	*remove_quotes(const char *input);
+char	*handle_special_variable(const char *start);
+char	*expand_variable_name(const char *start,
+		t_env *env_list, size_t len);
+char	*expand_variable(const char *input, t_env *env_list,
+		int in_single_quote);
+char	*expand_tilde(const char *input, t_env *env_list);
+int	handle_single_quote(t_expand_args *args);
+int	handle_double_quote(t_expand_args *args);
+int	handle_variable_expansion(t_expand_args *args);
+
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ERRORS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 // Error
