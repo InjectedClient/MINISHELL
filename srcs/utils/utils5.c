@@ -36,24 +36,3 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 	return (dst);
 }
 
-size_t	ft_strlen_until(const char *str, const char *stop_chars)
-{
-	size_t	i;
-	size_t	j;
-
-	i = 0;
-	if (!str || !stop_chars)
-		return (0);
-	while (str[i])
-	{
-		j = 0;
-		while (stop_chars[j])
-		{
-			if (str[i] == stop_chars[j])
-				return (i);
-			j++;
-		}
-		i++;
-	}
-	return (i);
-}
