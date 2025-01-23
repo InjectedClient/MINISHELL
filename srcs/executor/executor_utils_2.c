@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   executor_utils_2.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/23 14:52:36 by nlambert          #+#    #+#             */
+/*   Updated: 2025/01/23 14:53:16 by nlambert         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 int	exit_with_error(t_lexer **commands, int num_commands)
@@ -6,7 +18,8 @@ int	exit_with_error(t_lexer **commands, int num_commands)
 	return (1);
 }
 
-void	child_process_1(t_lexer **commands, int i, int num_commands, int **pipes, int files[2])
+void	child_process_1(t_lexer **commands, int i, \
+		int num_commands, int **pipes, int files[2])
 {
 	if (handle_redirections(commands[i], &files[0], &files[1]))
 		exit(exit_with_error(commands, num_commands));
@@ -17,7 +30,8 @@ void	child_process_1(t_lexer **commands, int i, int num_commands, int **pipes, i
 	free_pipes(num_commands, pipes);
 }
 
-void	child_process_2(t_env *env_list, char **envp, int files[2], int i, t_lexer **commands)
+void	child_process_2(t_env *env_list, char **envp, \
+		int files[2], int i, t_lexer **commands)
 {
 	char	**args;
 
