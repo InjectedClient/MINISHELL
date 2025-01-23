@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/22 14:14:53 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/22 14:15:05 by nlambert         ###   ########.fr       */
+/*   Created: 2025/01/23 14:52:36 by nlambert          #+#    #+#             */
+/*   Updated: 2025/01/23 14:53:16 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	exit_with_error(t_lexer **commands, int num_commands)
 }
 
 void	child_process_1(t_lexer **commands, int i, \
-		int num_commands, int pipes[][2], int files[2])
+		int num_commands, int **pipes, int files[2])
 {
 	if (handle_redirections(commands[i], &files[0], &files[1]))
 		exit(exit_with_error(commands, num_commands));
@@ -27,10 +27,11 @@ void	child_process_1(t_lexer **commands, int i, \
 		dup2(pipes[i - 1][0], STDIN_FILENO);
 	if (i < num_commands - 1 && files[1] == -1)
 		dup2(pipes[i][1], STDOUT_FILENO);
-	close_pipes(num_commands, pipes);
+	free_pipes(num_commands, pipes);
 }
 
-void	child_process_2(t_env *env_list, char **envp, int files[2], int i, t_lexer **commands)
+void	child_process_2(t_env *env_list, char **envp, \
+		int files[2], int i, t_lexer **commands)
 {
 	char	**args;
 
@@ -43,18 +44,19 @@ void	child_process_2(t_env *env_list, char **envp, int files[2], int i, t_lexer 
 	}
 	exec(args, env_list, envp);
 	free_tab(args);
+	perror("exec");
 	exit(127);
 }
 
-void	end_execute_token(t_lexer **commands, int num_commands, int pipes[][2])
+void	end_execute_token(t_lexer **commands, int num_commands, int **pipes)
 {
-	close_pipes(num_commands, pipes);
+	free_pipes(num_commands, pipes);
 	wait_for_children(num_commands);
 	free_commands(commands, num_commands);
 }
 
 int	start_execute_token(t_lexer *lexer_list,
-		int num_commands, int pipes[][2], t_lexer ***commands)
+		int num_commands, int **pipes, t_lexer ***commands)
 {
 	if (create_pipes(num_commands, pipes) == 1)
 		return (1);

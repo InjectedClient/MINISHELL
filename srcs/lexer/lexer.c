@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:36:12 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/14 16:52:36 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/23 16:29:40 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,19 @@ void	get_data_in_node(t_lexer **lexer_list)
 {
 	t_lexer	*tmp;
 	int		i;
+	int		y;
 
 	i = 1;
+	y = 0;
 	tmp = *lexer_list;
 	while (tmp)
 	{
 		if (tmp->cmd_segment[0] == '|')
+		{
 			i = 0;
+			y++;
+		}
+		tmp->command_count = y + 1;
 		tmp->segment_position = i;
 		tmp = tmp->next;
 		i++;

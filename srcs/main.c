@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:39:02 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/22 14:08:04 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/23 15:36:11 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,14 @@ unsigned int	g_global = 0;
 
 int	main(int argc, char **argv, char *envp[])
 {
+	(void)argv;
 	t_data	data;
-	t_lexer	lexer;
 	t_env	*env_list;
 	char	*tmp;
 
 	(void)envp;
 	if (argc != 1)
 		return (printf("wrong number of args"), 0);
-	init_data(&lexer, &data, argc, argv);
 	env_list = init_env_list(envp);
 	while (1)
 	{

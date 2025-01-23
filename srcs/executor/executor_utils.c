@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/22 14:11:27 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/22 14:11:28 by nlambert         ###   ########.fr       */
+/*   Created: 2025/01/23 14:52:25 by nlambert          #+#    #+#             */
+/*   Updated: 2025/01/23 14:52:26 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	free_commands(t_lexer **commands, int num_commands)
 	free(commands);
 }
 
-void	close_pipes(int num_commands, int pipes[][2])
+void	free_pipes(int num_commands, int **pipes)
 {
 	int	i;
 
@@ -66,8 +66,10 @@ void	close_pipes(int num_commands, int pipes[][2])
 	{
 		close(pipes[i][0]);
 		close(pipes[i][1]);
+		free(pipes[i]);
 		i++;
 	}
+	free(pipes);
 }
 
 void	wait_for_children(int num_commands)

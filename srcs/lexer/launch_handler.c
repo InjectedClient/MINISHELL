@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:36:08 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/22 14:10:12 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/23 15:48:59 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,16 @@ void	looping(char *tmp, t_data *data, t_env *env_list, char **envp)
 			return ;
 		tmp_lex = data->lexer_list;
 		expand_command(data, env_list);
+		init_lexer_env(data->lexer_list, env_list);
 		num_commands = count_commands(data->lexer_list);
+		
 		if (tmp_lex && tmp_lex->cmd_segment)
 			execute_token(data->lexer_list, env_list, envp, num_commands);
 	}
 }
 
 /**
- * Lance le lexer, compte les mots dans la commande d'entrée,
+ * Lance le lexer, compte les mots dan s la commande d'entrée,
  * traite la chaîne d'entrée et affiche le contenu du lexer.
  */
 void	lexer_launch(t_data *data)

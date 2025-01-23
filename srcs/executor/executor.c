@@ -39,11 +39,14 @@ int	execute_token(t_lexer *lexer_list, t_env *env_list,
 		char **envp, int num_commands)
 {
 	int		i;
-	int		pipes[num_commands - 1][2];
+	int		**pipes;
 	pid_t	pid;
 	t_lexer	**commands;
 	int		files[2];
 
+	pipes = malloc(sizeof(int *) * (num_commands - 1));
+	if (!pipes)
+		return (1);
 	commands = NULL;
 	if (start_execute_token(lexer_list, num_commands, pipes, &commands) == 1)
 		return (1);
