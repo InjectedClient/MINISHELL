@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:54 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/23 14:02:09 by jle-neze         ###   ########.fr       */
+/*   Updated: 2025/01/23 15:21:10 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ t_quote	init_quote_status(void)
 
 void	init_i_j(int *i, int *j)
 {
-	i = 0;
-	j = 0;
+	*i = 0;
+	*j = 0;
 }
 
 char	*expand_token(t_lexer *token, t_env *env_list)
