@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:27 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/15 15:53:13 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/23 17:54:09 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,38 @@ void	exec(char *cmd[], t_env *env_list, char **envp)
 		g_global = exec_cmd_2(cmd, envp, env_list);
 }
 
-int	execute_token(t_lexer *lexer_list, t_env *env_list,
-		char **envp, int num_commands)
+int	execute_commands(t_lexer **commands, char **envp, int **pipes, int *files)
 {
 	int		i;
-	int		**pipes;
+	int		num_commands;
 	pid_t	pid;
+
+	num_commands = commands[0]->command_count;
+	i = -1;
+	while (++i < num_commands)
+	{
+		if (is_builtin(commands[0]->cmd_segment) && \
+		num_commands == 1 && commands[i]->token != PIPE)
+		{
+			execute_builtins_without_pipes(commands[0]->envlist, \
+			commands, i, files);
+			return (1);
+		}
+		pid = fork();
+		if (pid == -1)
+			pid_error(commands, num_commands);
+		if (pid == 0)
+		{
+			child_process_1(commands, i, pipes, files);
+			child_process_2(envp, files, i, commands);
+		}
+	}
+	return (0);
+}
+
+int	execute_token(t_lexer *lexer_list, char **envp, int num_commands)
+{
+	int		**pipes;
 	t_lexer	**commands;
 	int		files[2];
 
@@ -50,22 +76,8 @@ int	execute_token(t_lexer *lexer_list, t_env *env_list,
 	commands = NULL;
 	if (start_execute_token(lexer_list, num_commands, pipes, &commands) == 1)
 		return (1);
-	i = -1;
-	while (++i < num_commands)
-	{
-		if (is_builtin(commands[0]->cmd_segment)
-			&& num_commands == 1 && commands[i]->token != PIPE)
-			return (execute_builtins_without_pipes(env_list,
-					commands, i, files));
-		pid = fork();
-		if (pid == -1)
-			pid_error(commands, num_commands);
-		if (pid == 0)
-		{
-			child_process_1(commands, i, num_commands, pipes, files);
-			child_process_2(env_list, envp, files, i, commands);
-		}
-	}
+	if (execute_commands(commands, envp, pipes, files))
+		return (g_global);
 	end_execute_token(commands, num_commands, pipes);
 	return (0);
 }
