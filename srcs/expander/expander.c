@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:54 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/15 13:13:28 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/23 14:02:09 by jle-neze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,12 @@ t_quote	init_quote_status(void)
 	return (quote_status);
 }
 
+void	init_i_j(int *i, int *j)
+{
+	i = 0;
+	j = 0;
+}
+
 char	*expand_token(t_lexer *token, t_env *env_list)
 {
 	t_quote			quote_status;
@@ -30,8 +36,7 @@ char	*expand_token(t_lexer *token, t_env *env_list)
 	int				j;
 	t_expand_args	args;
 
-	i = 0;
-	j = 0;
+	init_i_j(&i, &j);
 	quote_status = init_quote_status();
 	expanded = malloc(ft_strlen(token->cmd_segment) * 2 + 1);
 	if (!expanded)
