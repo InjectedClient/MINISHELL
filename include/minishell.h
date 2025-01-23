@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:00 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/23 15:18:56 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/23 15:49:45 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,6 @@ typedef struct s_expand_args
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ PARSER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
-void	init_data(t_lexer *lexer, t_data *data, int argc, char **argv);
 int		check_quotes(char *str, t_data *data);
 int		check_redirections(char *str);
 int		check_cmd_start(char *str);
@@ -194,6 +193,7 @@ int		is_doubl_quote_closed(t_quote *state);
 int		is_only_single_quote_on(t_quote *state);
 void	reset_quoting_state(t_quote *state);
 void	process_lexer_input(char *str, int *i, int *j, t_quote *state);
+void	init_lexer_env(t_lexer *lexer_list, t_env *env_list);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXECUTOR ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 int		exec_cmd(char **cmd, char *envp[], t_env *env_list);

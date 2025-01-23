@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:36:12 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/14 16:52:36 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/23 15:49:31 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,5 +76,19 @@ void	get_data_in_node(t_lexer **lexer_list)
 		tmp->segment_position = i;
 		tmp = tmp->next;
 		i++;
+	}
+}
+void	init_lexer_env(t_lexer *lexer_list, t_env *env_list)
+{
+	t_lexer	*current;
+	int		num_commands;
+
+	current = lexer_list;
+	num_commands = count_commands(lexer_list);
+	while (current)
+	{
+		current-> envlist = env_list;
+		current-> command_count = num_commands;
+		current = current->next;
 	}
 }
