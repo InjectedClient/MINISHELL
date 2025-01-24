@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:00 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/23 17:54:47 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/24 15:34:06 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,6 @@ typedef struct s_env
 typedef struct s_lexer
 {
 	t_token			token;
-	t_env			*envlist;
-	int				command_count;
 	int				segment_position;
 	char			*cmd_segment;
 	struct s_lexer	*next;
@@ -81,8 +79,10 @@ typedef struct s_free_memory
 
 typedef struct s_data {
 	t_lexer			*lexer_list;
-	t_lexer			*tokens;
+	t_lexer			**commands; //commands split by pipes
+	t_env			*envlist;
 	t_free_memory	*free_memory;
+	int				command_count;
 	int				w_count;
 	int				is_sing_quot;
 	int				is_doub_quot;
