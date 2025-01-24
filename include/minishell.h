@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:00 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/23 15:49:45 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/23 17:54:47 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,13 +193,10 @@ int		is_doubl_quote_closed(t_quote *state);
 int		is_only_single_quote_on(t_quote *state);
 void	reset_quoting_state(t_quote *state);
 void	process_lexer_input(char *str, int *i, int *j, t_quote *state);
-void	init_lexer_env(t_lexer *lexer_list, t_env *env_list);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXECUTOR ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
-int		exec_cmd(char **cmd, char *envp[], t_env *env_list);
 void	exec(char *cmd[], t_env *env_list, char **envp);
-int		execute_token(t_lexer *lexer_list, t_env *env_list, \
-		char **envp, int num_commands);
+int		execute_token(t_lexer *lexer_list, char **envp, int num_commands);
 
 int		count_commands(t_lexer *lexer_list);
 
@@ -238,10 +235,8 @@ void	free_lexer_list(t_lexer *list);
 void	free_commands(t_lexer **commands, int num_commands);
 void	wait_for_children(int num_commands);
 int		exit_with_error(t_lexer **commands, int num_commands);
-void	child_process_1(t_lexer **commands, int i, \
-		int num_commands, int **pipes, int files[2]);
-void	child_process_2(t_env *env_list, char **envp, \
-		int files[2], int i, t_lexer **commands);
+void	child_process_1(t_lexer **commands, int i, int **pipes, int files[2]);
+void	child_process_2(char **envp, int files[2], int i, t_lexer **commands);
 void	end_execute_token(t_lexer **commands, int num_commands, int **pipes);
 int		start_execute_token(t_lexer *lexer_list, \
 		int num_commands, int **pipes, t_lexer ***commands);

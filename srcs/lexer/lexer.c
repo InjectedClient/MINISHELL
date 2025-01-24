@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:36:12 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/23 16:29:40 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/23 16:49:38 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	get_data_in_node(t_lexer **lexer_list)
 			i = 0;
 			y++;
 		}
-		tmp->command_count = y + 1;
+		tmp->command_count = count_commands(*lexer_list);
 		tmp->segment_position = i;
 		tmp = tmp->next;
 		i++;
