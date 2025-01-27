@@ -14,7 +14,6 @@
 
 unsigned int	g_global = 0;
 
-
 int	main(int argc, char **argv, char *envp[])
 {
 	t_data	data;

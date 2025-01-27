@@ -20,7 +20,7 @@ int	exit_with_error(t_lexer **commands, int num_commands)
 
 void	child_process_1(t_data *data, int i, int **pipes, int files[2])
 {
-	int	num_commands;
+	int		num_commands;
 	t_lexer	**commands;
 
 	commands = data->commands;
@@ -49,8 +49,7 @@ void	child_process_2(char **envp, int files[2], int i, t_data *data)
 	}
 	exec(args, data->env_list, envp);
 	free_tab(args);
-	perror("exec");
-	exit(127);
+	exit(g_global);
 }
 
 void	free_commands_pipes(t_data *data, int **pipes)

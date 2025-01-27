@@ -73,7 +73,7 @@ int	execute_token(t_data *data, char **envp)
 		return (1);
 	if (!create_pipes(data, pipes))
 		return (1);
-	if(!init_commands(data))
+	if (!init_commands(data))
 	{
 		free_pipes(data->num_commands, pipes);
 		return (1);

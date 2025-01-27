@@ -38,7 +38,7 @@ char	*expand_token(t_lexer *token, t_env *env_list)
 
 	init_i_j(&i, &j);
 	quote_status = init_quote_status();
-	expanded = malloc(ft_strlen(token->cmd_segment) * 2 + 1);
+	expanded = malloc(ft_strlen(token->cmd_segment) * 8 + 1);
 	if (!expanded)
 		return (NULL);
 	args = (t_expand_args){token->cmd_segment,

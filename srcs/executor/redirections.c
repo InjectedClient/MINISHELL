@@ -73,7 +73,10 @@ int	handle_redirections(t_lexer *command, int *infile, int *outfile)
 		else if (current->token == HERE_DOC)
 			error = handle_here_doc_token(current, infile);
 		if (error)
+		{
+			g_global = error;
 			break ;
+		}
 		current = current->next;
 	}
 	return (error);
