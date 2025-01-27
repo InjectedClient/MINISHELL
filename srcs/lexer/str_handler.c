@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:36:16 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/14 16:58:22 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/27 12:38:15 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ char	*add_space(const char *command)
 		return (NULL);
 	i = 0;
 	fill_command_with_spaces(command, new_command, state, i);
+	free(state);
 	return (new_command);
 }
 
@@ -84,6 +85,11 @@ void	process_lexer_input(char *str, int *i, int *j, t_quote *state)
 		}
 	}
 }
+void init_kj(int *k, int *j)
+{
+	*k = 0;
+	*j = 0;
+}
 
 /**
  * Extrait un mot de la chaîne de caractères et l'ajoute à la liste lexer.
@@ -94,15 +100,13 @@ int	get_word_in_list(char *str, int i, t_data *data, t_lexer *tmp)
 	int		j;
 	int		k;
 	int		x;
-	t_quote	*state;
+	t_quote	*state = malloc(sizeof(t_quote)); // Déclaration et initialisation combinées
 
-	state = malloc(sizeof(t_quote));
 	if (!state)
 		return (0);
 	word = NULL;
 	x = i;
-	k = 0;
-	j = 0;
+	init_kj(&k, &j); // Passer les paramètres par référence
 	reset_quoting_state(state);
 	process_lexer_input(str, &i, &j, state);
 	word = malloc(sizeof(char) * (j + sizeof('\0')));
@@ -114,6 +118,7 @@ int	get_word_in_list(char *str, int i, t_data *data, t_lexer *tmp)
 	add_lexer_to_end(data, word);
 	get_data_in_node(&data->lexer_list);
 	get_token_in_node(&data->lexer_list, tmp);
+	free(state);
 	return (j);
 }
 

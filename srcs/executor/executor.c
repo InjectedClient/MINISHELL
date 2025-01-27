@@ -35,49 +35,71 @@ void	exec(char *cmd[], t_env *env_list, char **envp)
 		g_global = exec_cmd_2(cmd, envp, env_list);
 }
 
-int	execute_commands(t_lexer **commands, char **envp, int **pipes, int *files)
+int	execute_commands(t_data *data, char **envp, int **pipes, int *files)
 {
 	int		i;
-	int		num_commands;
+	t_lexer	**commands;
 	pid_t	pid;
 
-	num_commands = commands[0]->command_count;
+	commands = data->commands;
 	i = -1;
-	while (++i < num_commands)
+	while (++i < data->num_commands)
 	{
 		if (is_builtin(commands[0]->cmd_segment) && \
-		num_commands == 1 && commands[i]->token != PIPE)
+		data->num_commands == 1 && commands[i]->token != PIPE)
 		{
-			execute_builtins_without_pipes(commands[0]->envlist, \
-			commands, i, files);
+			execute_builtins_without_pipes(data, i, files);
 			return (1);
 		}
 		pid = fork();
 		if (pid == -1)
-			pid_error(commands, num_commands);
+			pid_error(commands, data->num_commands);
 		if (pid == 0)
 		{
-			child_process_1(commands, i, pipes, files);
-			child_process_2(envp, files, i, commands);
+			child_process_1(data, i, pipes, files);
+			child_process_2(envp, files, i, data);
 		}
 	}
 	return (0);
 }
 
-int	execute_token(t_lexer *lexer_list, char **envp, int num_commands)
+int	execute_token(t_data *data, char **envp)
 {
 	int		**pipes;
-	t_lexer	**commands;
 	int		files[2];
 
-	pipes = malloc(sizeof(int *) * (num_commands - 1));
+	pipes = malloc(sizeof(int *) * (data->num_commands - 1));
 	if (!pipes)
 		return (1);
-	commands = NULL;
-	if (start_execute_token(lexer_list, num_commands, pipes, &commands) == 1)
+	if (!create_pipes(data, pipes))
 		return (1);
-	if (execute_commands(commands, envp, pipes, files))
+	if(!init_commands(data))
+	{
+		free_pipes(data->num_commands, pipes);
+		return (1);
+	}
+	if (execute_commands(data, envp, pipes, files))
+	{
+		free_commands_pipes(data, pipes);
 		return (g_global);
-	end_execute_token(commands, num_commands, pipes);
+	}
+	free_pipes(data->num_commands, pipes);
+	wait_for_children(data->num_commands);
+	free_commands(data->commands, data->num_commands);
 	return (0);
+}
+
+void	free_data(t_data *data)
+{
+	if (!data->args)
+		return ;
+	if (data->args)
+		free_tab(data->args);
+	if (data->lexer_list)
+		free_lexer_list(data->lexer_list);
+	if (data->env_list)
+		free_env_list(data->env_list);
+	if (data->input_cmd)
+		free(data->input_cmd);
+	free(data);
 }

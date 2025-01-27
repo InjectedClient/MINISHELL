@@ -40,12 +40,12 @@ t_lexer	**split_by_pipe(t_lexer *lexer_list)
 	return (commands);
 }
 
-int	create_pipes(int num_commands, int **pipes)
+int	 create_pipes(t_data *data, int **pipes)
 {
 	int	i;
 
 	i = 0;
-	while (i < num_commands - 1)
+	while (i < data->num_commands - 1)
 	{
 		pipes[i] = malloc(sizeof(int) * 2);
 		if (!pipes[i] || pipe(pipes[i]) == -1)
@@ -58,19 +58,20 @@ int	create_pipes(int num_commands, int **pipes)
 				close(pipes[i][1]);
 			}
 			free(pipes);
-			return (1);
+			return (0);
 		}
 		i++;
 	}
-	return (0);
+	return (1);
 }
 
-int	execute_builtins_without_pipes(t_env *env_list,
-		t_lexer **commands, int i, int files[2])
+int	execute_builtins_without_pipes(t_data *data, int i, int files[2])
 {
 	char	**args;
 	int		num_commands;
+	t_lexer	**commands;
 
+	commands = data->commands;
 	num_commands = count_commands_from_array(commands);
 	args = split_args(commands[i]);
 	if (handle_redirections(commands[i], &files[0], &files[1]))
@@ -79,7 +80,7 @@ int	execute_builtins_without_pipes(t_env *env_list,
 		free_tab(args);
 		exit(1);
 	}
-	g_global = exec_builtins_with_redirections(args, env_list,
+	g_global = exec_builtins_with_redirections(args, data->env_list,
 			files[0], files[1]);
 	free_tab(args);
 	return (g_global);

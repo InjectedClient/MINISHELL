@@ -78,7 +78,7 @@ void	get_data_in_node(t_lexer **lexer_list)
 			i = 0;
 			y++;
 		}
-		tmp->command_count = count_commands(*lexer_list);
+		//tmp->num_commands = count_commands(*lexer_list);
 		tmp->segment_position = i;
 		tmp = tmp->next;
 		i++;

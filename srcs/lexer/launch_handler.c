@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:36:08 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/23 17:48:19 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/27 12:29:19 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,37 +23,32 @@ void	print_lexer_content(t_data *data)
 	}
 }
 
-static void	init_env_lexer(t_lexer *lexer_list, t_env *env_list)
+void	init_data(t_data *data)
 {
-	while (lexer_list)
-	{
-		lexer_list->envlist = env_list;
-		lexer_list = lexer_list->next;
-	}
-	return ;
+	data->num_commands = count_commands(data->lexer_list);
+	data->commands = NULL;
 }
 
 void	looping(char *tmp, t_data *data, t_env *env_list, char **envp)
 {
 	t_lexer	*tmp_lex;
 	char	*processed_cmd;
-	int		num_commands;
 
 	if (!tmp)
 		exit_all(data);
 	if (tmp && tmp[0])
 	{
 		processed_cmd = add_space(tmp);
-		data->input_cmd = processed_cmd;
+		data->input_cmd = ft_strdup(processed_cmd);
+		free(processed_cmd);
 		lexer_launch(data);
 		if (!is_a_directory(data) || !ft_check_parser(data))
 			return ;
 		tmp_lex = data->lexer_list;
-		init_env_lexer(data->lexer_list, env_list);
 		expand_command(data, env_list);
-		num_commands = count_commands(data->lexer_list);
+		init_data(data);
 		if (tmp_lex && tmp_lex->cmd_segment)
-			execute_token(data->lexer_list, envp, num_commands);
+			execute_token(data, envp);
 	}
 }
 

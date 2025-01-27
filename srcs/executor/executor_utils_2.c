@@ -18,11 +18,13 @@ int	exit_with_error(t_lexer **commands, int num_commands)
 	return (1);
 }
 
-void	child_process_1(t_lexer **commands, int i, int **pipes, int files[2])
+void	child_process_1(t_data *data, int i, int **pipes, int files[2])
 {
 	int	num_commands;
+	t_lexer	**commands;
 
-	num_commands = commands[i]->command_count;
+	commands = data->commands;
+	num_commands = data->num_commands;
 	if (handle_redirections(commands[i], &files[0], &files[1]))
 		exit(exit_with_error(commands, num_commands));
 	if (i > 0 && files[0] == -1)
@@ -32,37 +34,35 @@ void	child_process_1(t_lexer **commands, int i, int **pipes, int files[2])
 	free_pipes(num_commands, pipes);
 }
 
-void	child_process_2(char **envp, int files[2], int i, t_lexer **commands)
+void	child_process_2(char **envp, int files[2], int i, t_data *data)
 {
 	char	**args;
+	t_lexer	**commands;
 
+	commands = data->commands;
 	args = split_args(commands[i]);
 	if (is_builtin(args[0]))
 	{
-		g_global = exec_builtins_with_redirections(args, commands[i]->envlist,
+		g_global = exec_builtins_with_redirections(args, data->env_list,
 				files[0], files[1]);
 		exit(g_global);
 	}
-	exec(args, commands[i]->envlist, envp);
+	exec(args, data->env_list, envp);
 	free_tab(args);
 	perror("exec");
 	exit(127);
 }
 
-void	end_execute_token(t_lexer **commands, int num_commands, int **pipes)
+void	free_commands_pipes(t_data *data, int **pipes)
 {
-	free_pipes(num_commands, pipes);
-	wait_for_children(num_commands);
-	free_commands(commands, num_commands);
+	free_pipes(data->num_commands, pipes);
+	free_commands(data->commands, data->num_commands);
 }
 
-int	start_execute_token(t_lexer *lexer_list,
-		int num_commands, int **pipes, t_lexer ***commands)
+int	init_commands(t_data *data)
 {
-	if (create_pipes(num_commands, pipes) == 1)
-		return (1);
-	*commands = split_by_pipe(lexer_list);
-	if (!commands)
-		return (1);
-	return (0);
+	data->commands = split_by_pipe(data->lexer_list);
+	if (!data->commands)
+		return (0);
+	return (1);
 }

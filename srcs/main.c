@@ -14,6 +14,7 @@
 
 unsigned int	g_global = 0;
 
+
 int	main(int argc, char **argv, char *envp[])
 {
 	t_data	data;
@@ -24,6 +25,7 @@ int	main(int argc, char **argv, char *envp[])
 	if (argc != 1)
 		return (printf("wrong number of args"), 0);
 	env_list = init_env_list(envp);
+	data.env_list = env_list;
 	while (1)
 	{
 		tmp = NULL;
