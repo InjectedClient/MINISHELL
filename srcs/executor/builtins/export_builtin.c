@@ -6,53 +6,70 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 14:18:51 by jle-neze          #+#    #+#             */
-/*   Updated: 2025/01/10 17:19:58 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/04 13:58:34 by jle-neze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
-void	add_env_variable(t_env **env_list, char *name, char *value, int equal)
+t_env	*create_env_node2(char *name, char *value, int equal)
 {
 	t_env	*new_node;
-	t_env	*current;
 
-	current = *env_list;
 	new_node = malloc(sizeof(t_env));
 	if (!new_node)
-	{
-		free_2(name, value);
-		return ;
-	}
+		return (NULL);
 	new_node->name = ft_strdup(name);
+	if (!new_node->name)
+	{
+		free(new_node);
+		return (NULL);
+	}
 	if (value)
+	{
 		new_node->value = ft_strdup(value);
+		if (!new_node->value)
+		{
+			free_3_env(new_node->name, NULL, new_node);
+			return (NULL);
+		}
+	}
 	else
 		new_node->value = NULL;
 	new_node->equal_sign = equal;
-	if (!new_node->name || (value && !new_node->value))
-	{
-		free_2(name, value);
-		free_env_node(new_node);
-		return ;
-	}
 	new_node->next = NULL;
-	add_new_node(current, new_node, env_list);
+	return (new_node);
+}
+
+void	add_env_variable(t_env **env_list, char *name, char *value, int equal)
+{
+	t_env	*new_node;
+
+	new_node = create_env_node2(name, value, equal);
+	if (!new_node)
+		return ;
+	add_new_node(new_node, env_list);
 }
 
 int	update_env(t_env *current, char *name, char *value)
 {
+	char	*new_value;
+
+	new_value = ft_strdup(value);
+	if (!new_value)
+		return (0);
 	while (current)
 	{
 		if (ft_strcmp(current->name, name) == 0)
 		{
-			free(current->value);
-			current->value = ft_strdup(value);
-			free_2(name, value);
+			if (current->value)
+				free(current->value);
+			current->value = new_value;
 			return (1);
 		}
 		current = current->next;
 	}
+	free(new_value);
 	return (0);
 }
 
@@ -74,27 +91,14 @@ void	update_or_add_env(t_env **env_list, char *arg)
 		name = ft_substr(arg, 0, equal_sign - arg);
 		if (*(equal_sign + 1) != '\0')
 			value = ft_strdup(equal_sign + 1);
+		else
+			value = ft_strdup("");
 	}
 	else
 		name = ft_strdup(arg);
 	if (!update_env(current, name, value))
 		add_env_variable(env_list, name, value, equal);
-}
-
-int	is_valid_env_format(char *arg)
-{
-	int		i;
-
-	if (!ft_isalpha(arg[0]) && arg[0] != '_')
-		return (0);
-	i = 1;
-	while (arg[i] && arg[i] != '=')
-	{
-		if (!ft_isalnum(arg[i]) && arg[i] != '_')
-			return (0);
-		i++;
-	}
-	return (1);
+	free_2(name, value);
 }
 
 int	builtin_export(char **args, t_env **env_list)

@@ -19,11 +19,18 @@ int	starts_with_tilde(const char *cmd_segment)
 	return (cmd_segment[0] == '~');
 }
 
-int	starts_with_dollar(const char *cmd_segment)
+char	*ft_strtrim(const char *str)
 {
-	if (!cmd_segment)
-		return (0);
-	return (cmd_segment[0] == '$');
+	char	*end;
+
+	while (*str && isspace((unsigned char)*str))
+		str++;
+	if (*str == '\0')
+		return (ft_strdup(""));
+	end = (char *)str + ft_strlen(str) - 1;
+	while (end > str && isspace((unsigned char)*end))
+		end--;
+	return (ft_strndup(str, end - str + 1));
 }
 
 char	*remove_quotes(const char *input)
@@ -78,6 +85,7 @@ char	*expand_variable_name(const char *start,
 	char	*value;
 	char	*remaining;
 	char	*result;
+	char	*trimmed_result;
 
 	var_name = ft_substr(start, 0, len);
 	value = ft_getenv(var_name, env_list);
@@ -87,7 +95,9 @@ char	*expand_variable_name(const char *start,
 		remaining = ft_strdup(start + len);
 		result = ft_strjoin(value, remaining);
 		free(remaining);
-		return (result);
+		trimmed_result = ft_strtrim(result);
+		free(result);
+		return (trimmed_result);
 	}
 	return (ft_strdup(""));
 }

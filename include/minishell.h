@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:00 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/27 12:38:24 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/30 18:00:55 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef enum s_token{
 	FD,
 	DELIMITER,
 	PIPE,
+	DOT,
 }	t_token;
 
 typedef struct s_quote
@@ -118,13 +119,14 @@ int		check_directory(char *str);
 int		check_pipe_bracket(char *str);
 int		ft_check_parser(t_data *data);
 int		is_a_directory(t_data *data);
-
+void	check_prevbb(t_lexer *token);
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ SIGNAL ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
-void	new_line(int sig);
 void	reset_prompt(int sig);
 void	signals_wait_cmd(void);
 void	signals_run_cmd(void);
+void	handle_heredoc_sigint(int sig);
+void	signals_heredoc(void);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ UTILS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
@@ -156,7 +158,9 @@ int		ft_strcmp(const char *s1, const char *s2);
 
 void	free_2(char *var1, char *var2);
 void	free_3(char *var1, char *var2, char *var3);
+void	free_3_env(char *var1, char *var2, t_env *var3);
 void	free_4(char *var1, char *var2, char *var3, char *var4);
+void	free_4_env(char *var1, char *var2, char *var3, t_env *var4);
 void	free_env_node(t_env *node);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
 size_t	ft_strlen_until(const char *str, const char *stop_chars);
@@ -166,7 +170,7 @@ void	init_kj(int *k, int *j);
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ LEXER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
 void	lexer_launch(t_data *data);
-void	looping(char *tmp, t_data *data, t_env *env_list, char **envp);
+void	looping(char *tmp, t_data *data, t_env *env_list);
 int		count_words_in_input(char *str);
 void	process_input_string(\
 		t_data *data, t_lexer *tmp, t_lexer *current, int i);
@@ -197,11 +201,13 @@ void	reset_quoting_state(t_quote *state);
 void	process_lexer_input(char *str, int *i, int *j, t_quote *state);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXECUTOR ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
-void	exec(char *cmd[], t_env *env_list, char **envp);
-int		execute_token(t_data *data, char **envp);
-
+void	exec(char *cmd[], t_data *data);
+int		execute_token(t_data *data);
+int		handle_cmd_without_pipe(t_data *data);
 int		count_commands(t_lexer *lexer_list);
-
+void	exec_cmd_with_fork(char **cmd, t_env *env_list);
+char	**list_to_array(t_env *env);
+int		create_pids(t_data *data, pid_t **pid);
 //Args
 int		count_args(t_lexer *arg);
 char	**split_args(t_lexer *cmd);
@@ -213,42 +219,37 @@ char	*ft_getenv_dup(char *path, t_env *env_list);
 
 //Builtins
 int		is_builtin(char *cmd);
-int		exec_builtins(char **args, t_env *env_list);
+int		exec_builtins(char **args, t_data *data);
 
 int		builtin_echo(char **args);
 int		builtin_cd(char **args, t_env **env_list);
 int		builtin_pwd(void);
 int		builtin_export(char **args, t_env **env_list);
 void	print_sorted_env(t_env *env_list);
-void	add_new_node(t_env *current, t_env *new_node, t_env **env_list);
+void	add_new_node(t_env *new_node, t_env **env_list);
 void	update_or_add_env(t_env **env_list, char *arg);
 int		builtin_unset(char **args, t_env **env_list);
 int		builtin_env(t_env *env_list);
 int		builtin_exit(char **args);
+int		init_saved_fds(int *saved_stdin, int *saved_stdout);
+int		restore_and_close_saved_fds(int saved_stdin, int saved_stdout);
+int		is_valid_env_format(char *arg);
 
 //Heredoc
 int		handle_here_doc_token(t_lexer *current, int *infile);
-int		exec_builtins_with_redirections(char **args, t_env *env_list, \
-		int infile, int outfile);
 int		handle_redirections(t_lexer *command, int *infile, int *outfile);
 
 int		count_commands(t_lexer *lexer_list);
 void	free_lexer_list(t_lexer *list);
-void	free_commands(t_lexer **commands, int num_commands);
-void	wait_for_children(int num_commands);
-int		exit_with_error(t_lexer **commands, int num_commands);
-void	child_process_1(t_data *data, int i, int **pipes, int files[2]);
-void	child_process_2(char **envp, int files[2], int i, t_data *data);
-void	free_commands_pipes(t_data *data, int **pipes);
+void	free_commands(t_lexer ***commands, int num_commands);
+int		wait_for_children(pid_t *pids, int num_commands);
+void	child_process(t_data *data, int **pipes, int i);
 int		init_commands(t_data *data);
-t_lexer	**split_by_pipe(t_lexer *lexer_list);
-int		execute_builtins_without_pipes(t_data *data, int i, int files[2]);
-int		pid_error(t_lexer **commands, int num_commands);
-int		count_commands_from_array(t_lexer **commands);
-
-//PIPES
-int		create_pipes(t_data *data, int **pipes);
-void	free_pipes(int num_commands, int **pipes);
+t_lexer	**split_by_pipe(t_data *data);
+int		create_pipes(t_data *data, int ***pipes);
+void	close_pipes(int **pipes, int num_commands);
+void	free_pipes(int num_commands, int ***pipes);
+void	free_pids(pid_t **pids);
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXPAND ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
 t_quote	init_quote_status(void);
@@ -256,7 +257,6 @@ char	*expand_token(t_lexer *token, t_env *env_list);
 void	expand_command(t_data *data, t_env *env_list);
 size_t	ft_strlen_until(const char *str, const char *stop_chars);
 int		starts_with_tilde(const char *cmd_segment);
-int		starts_with_dollar(const char *cmd_segment);
 char	*remove_quotes(const char *input);
 char	*handle_special_variable(const char *start);
 char	*expand_variable_name(const char *start, \

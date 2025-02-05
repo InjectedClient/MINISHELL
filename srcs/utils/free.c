@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:39:08 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/15 11:01:50 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/30 15:06:16 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,14 @@ void	free_4(char *var1, char *var2, char *var3, char *var4)
 		free(var3);
 	if (var4)
 		free(var4);
+}
+
+void	free_3_env(char *var1, char *var2, t_env *var3)
+{
+	if (var1)
+		free(var1);
+	if (var2)
+		free(var2);
+	if (var3)
+		free(var3);
 }

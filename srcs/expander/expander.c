@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:54 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/23 15:21:10 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/04 16:05:36 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	*expand_token(t_lexer *token, t_env *env_list)
 
 	init_i_j(&i, &j);
 	quote_status = init_quote_status();
-	expanded = malloc(ft_strlen(token->cmd_segment) * 8 + 1);
+	expanded = malloc(sizeof(char) * 4200);
 	if (!expanded)
 		return (NULL);
 	args = (t_expand_args){token->cmd_segment,
@@ -70,10 +70,15 @@ void	expand_command(t_data *data, t_env *env_list)
 		if (!expanded)
 		{
 			perror("minishell: expansion failed");
-			exit(1);
+			continue ;
 		}
 		cleaned = remove_quotes(expanded);
 		free(expanded);
+		if (!cleaned)
+		{
+			perror("minishell: expansion failed");
+			continue ;
+		}
 		free(current->cmd_segment);
 		current->cmd_segment = cleaned;
 		current = current->next;

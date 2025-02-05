@@ -6,11 +6,36 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:45:59 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/14 16:58:50 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/30 18:04:19 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+/**
+ * Ajoute des espaces autour des opérateurs dans la commande donnée.
+ */
+char	*add_space(const char *command)
+{
+	size_t	new_len;
+	size_t	i;
+	char	*new_command;
+	t_quote	*state;
+
+	state = malloc(sizeof(t_quote));
+	if (!state)
+		return (0);
+	state->doubl_quot_status = 0;
+	state->singl_quot_status = 0;
+	new_len = calculate_new_length(command);
+	new_command = malloc(new_len + 1);
+	if (!new_command)
+		return (NULL);
+	i = 0;
+	fill_command_with_spaces(command, new_command, state, i);
+	free(state);
+	return (new_command);
+}
 
 /**
  * Vérifie si le token précédent est une redirection.
@@ -61,29 +86,4 @@ void	get_token_in_node(t_lexer **lexer_list, t_lexer *tmp)
 			tmp->token = ARG;
 		tmp = tmp->next;
 	}
-}
-
-/**
- * Ajoute des espaces autour des opérateurs dans la commande donnée.
- */
-char	*add_space(const char *command)
-{
-	size_t	new_len;
-	size_t	i;
-	char	*new_command;
-	t_quote	*state;
-
-	state = malloc(sizeof(t_quote));
-	if (!state)
-		return (0);
-	state->doubl_quot_status = 0;
-	state->singl_quot_status = 0;
-	new_len = calculate_new_length(command);
-	new_command = malloc(new_len + 1);
-	if (!new_command)
-		return (NULL);
-	i = 0;
-	fill_command_with_spaces(command, new_command, state, i);
-	free(state);
-	return (new_command);
 }

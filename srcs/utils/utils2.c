@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:39:28 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/15 11:07:41 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:20:40 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,20 +50,4 @@ void	exit_all(t_data *data)
 	(void)data;
 	printf("exit\n");
 	exit(0);
-}
-
-void	ft_free_all(t_data *data)
-{
-	t_free_memory	*tmp;
-	t_free_memory	*next;
-
-	tmp = data->free_memory;
-	while (tmp)
-	{
-		next = tmp->next;
-		if (tmp->add)
-			free(tmp->add);
-		free(tmp);
-		tmp = next;
-	}
 }

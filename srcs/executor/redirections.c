@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 14:53:23 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/23 14:53:24 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/30 14:43:33 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int	handle_append_out(t_lexer *current, int *outfile)
 			O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (*outfile == -1)
 	{
+		write(2, "minishell: ", 11);
 		perror(current->next->cmd_segment);
 		return (1);
 	}
@@ -32,6 +33,7 @@ int	handle_redirect_out(t_lexer *current, int *outfile)
 			O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (*outfile == -1)
 	{
+		write(2, "minishell: ", 11);
 		perror(current->next->cmd_segment);
 		return (1);
 	}
@@ -45,12 +47,27 @@ int	handle_redirect_in(t_lexer *current, int *infile)
 	*infile = open(current->next->cmd_segment, O_RDONLY);
 	if (*infile == -1)
 	{
+		write(2, "minishell: ", 11);
 		perror(current->next->cmd_segment);
 		return (1);
 	}
 	dup2(*infile, STDIN_FILENO);
 	close(*infile);
 	return (0);
+}
+
+void	close_fd(int *infile, int *outfile)
+{
+	if (*infile != -1)
+	{
+		close(*infile);
+		*infile = -1;
+	}
+	if (*outfile != -1)
+	{
+		close(*outfile);
+		*outfile = -1;
+	}
 }
 
 int	handle_redirections(t_lexer *command, int *infile, int *outfile)
@@ -73,32 +90,10 @@ int	handle_redirections(t_lexer *command, int *infile, int *outfile)
 		else if (current->token == HERE_DOC)
 			error = handle_here_doc_token(current, infile);
 		if (error)
-		{
-			g_global = error;
 			break ;
-		}
 		current = current->next;
 	}
+	if (error)
+		close_fd(infile, outfile);
 	return (error);
-}
-
-int	exec_builtins_with_redirections(char **args, t_env *env_list,
-		int infile, int outfile)
-{
-	int	saved_stdin;
-	int	saved_stdout;
-	int	status;
-
-	saved_stdin = dup(STDIN_FILENO);
-	saved_stdout = dup(STDOUT_FILENO);
-	if (infile != -1)
-		dup2(infile, STDIN_FILENO);
-	if (outfile != -1)
-		dup2(outfile, STDOUT_FILENO);
-	status = exec_builtins(args, env_list);
-	dup2(saved_stdin, STDIN_FILENO);
-	dup2(saved_stdout, STDOUT_FILENO);
-	close(saved_stdin);
-	close(saved_stdout);
-	return (status);
 }

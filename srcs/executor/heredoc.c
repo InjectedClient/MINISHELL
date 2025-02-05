@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:44 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/15 14:03:44 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/30 17:31:52 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ int	handle_here_doc(const char *delimiter)
 
 int	handle_here_doc_token(t_lexer *current, int *infile)
 {
+	signals_heredoc();
 	*infile = handle_here_doc(current->next->cmd_segment);
 	if (*infile == -1)
 	{
@@ -96,6 +97,7 @@ int	handle_here_doc_token(t_lexer *current, int *infile)
 		return (1);
 	}
 	dup2(*infile, STDIN_FILENO);
-	close(*infile);
+	signals_wait_cmd();
+	signals_run_cmd();
 	return (0);
 }

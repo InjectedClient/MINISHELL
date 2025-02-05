@@ -6,11 +6,27 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:36:08 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/27 12:29:19 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:18:04 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+int	count_commands(t_lexer *lexer_list)
+{
+	int		count;
+	t_lexer	*current;
+
+	count = 1;
+	current = lexer_list;
+	while (current)
+	{
+		if (current->token == PIPE)
+			count++;
+		current = current->next;
+	}
+	return (count);
+}
 
 void	print_lexer_content(t_data *data)
 {
@@ -29,7 +45,7 @@ void	init_data(t_data *data)
 	data->commands = NULL;
 }
 
-void	looping(char *tmp, t_data *data, t_env *env_list, char **envp)
+void	looping(char *tmp, t_data *data, t_env *env_list)
 {
 	t_lexer	*tmp_lex;
 	char	*processed_cmd;
@@ -48,7 +64,7 @@ void	looping(char *tmp, t_data *data, t_env *env_list, char **envp)
 		expand_command(data, env_list);
 		init_data(data);
 		if (tmp_lex && tmp_lex->cmd_segment)
-			execute_token(data, envp);
+			g_global = execute_token(data);
 	}
 }
 

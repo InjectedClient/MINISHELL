@@ -38,6 +38,6 @@ int	cmd_not_exec(void)
 
 int	cmd_not_found(void)
 {
-	perror("minishell ");
+	perror("command not found");
 	return (127);
 }

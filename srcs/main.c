@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:39:02 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/23 17:02:53 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:14:28 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,6 @@ int	main(int argc, char **argv, char *envp[])
 		tmp = readline("minishell$ ");
 		signals_run_cmd();
 		add_history(tmp);
-		looping(tmp, &data, env_list, envp);
+		looping(tmp, &data, env_list);
 	}
 }
