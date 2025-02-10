@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:08:27 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/05 15:49:13 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/10 13:14:17 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	check_token_error(t_data *data)
 	while (tmp)
 	{
 		i = 0;
-		if ((!nb_redir(tmp->cmd_segment) || !nb_redir(tmp->cmd_segment)) &&
+		if ((!nb_redir(tmp->cmd_segment) || !nb_redir(tmp->cmd_segment)) && \
 			(tmp->cmd_segment[i - 1] == '?'))
 			return (0);
 		if (tmp->cmd_segment[i] == '|' && tmp->cmd_segment[i + 1] == '|')

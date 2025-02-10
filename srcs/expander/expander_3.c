@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 13:52:33 by jle-neze          #+#    #+#             */
-/*   Updated: 2025/02/04 14:04:11 by jle-neze         ###   ########.fr       */
+/*   Updated: 2025/02/10 13:36:52 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,18 @@ char	*expand_variable(const char *input, t_env *env_list,
 		int in_single_quote)
 {
 	const char	*start;
+	char		*start2;
 	size_t		len;
 
 	start = input + 1;
+	start2 = (char *)start;
+	if (*start2 && (ft_isdigit(*start2) || *start2 == '='))
+	{
+		if (*start2 == '=')
+			return (ft_strdup(start2 - 1));
+		start2++;
+		return (ft_strdup(start2));
+	}
 	len = 0;
 	if (in_single_quote)
 		return (ft_strdup(input));

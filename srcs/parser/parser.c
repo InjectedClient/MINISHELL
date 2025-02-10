@@ -6,11 +6,29 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:08:29 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/15 16:16:47 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/10 13:39:07 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+int	check_lexer_start_pipe(t_data *data)
+{
+	t_lexer	*tmp;
+
+	tmp = data->lexer_list;
+	if (tmp->token == PIPE && tmp->next->token == PIPE)
+	{
+		printf("minishell: syntax error near unexpected token `||'\n");
+		return (0);
+	}
+	if (tmp->token == PIPE)
+	{
+		printf("minishell: syntax error near unexpected token `|'\n");
+		return (0);
+	}
+	return (1);
+}
 
 int	ft_check_parser(t_data *data)
 {
@@ -18,6 +36,8 @@ int	ft_check_parser(t_data *data)
 
 	count = 1;
 	if (!check_quotes(data->input_cmd, data))
+		count = 0;
+	else if (!check_lexer_start_pipe(data))
 		count = 0;
 	else if (!check_cmd_start(data->input_cmd))
 		count = 0;
