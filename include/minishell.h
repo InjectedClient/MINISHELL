@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:00 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/30 18:00:55 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/10 16:01:27 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <signal.h>
+# include <limits.h>
 # include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -267,6 +268,7 @@ char	*expand_tilde(const char *input, t_env *env_list);
 int		handle_single_quote(t_expand_args *args);
 int		handle_double_quote(t_expand_args *args);
 int		handle_variable_expansion(t_expand_args *args);
+int		handle_heredoc(t_lexer *current, int *infile);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ERRORS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 // Error

@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 14:53:23 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/30 14:43:33 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:59:15 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int	handle_redirections(t_lexer *command, int *infile, int *outfile)
 		else if (current->token == APPEND_OUT)
 			error = handle_append_out(current, outfile);
 		else if (current->token == HERE_DOC)
-			error = handle_here_doc_token(current, infile);
+			error = handle_heredoc(current, infile);
 		if (error)
 			break ;
 		current = current->next;
