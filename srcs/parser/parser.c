@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:08:29 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/10 13:39:07 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/11 14:46:37 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,18 @@ int	check_lexer_start_pipe(t_data *data)
 	t_lexer	*tmp;
 
 	tmp = data->lexer_list;
-	if (tmp->token == PIPE && tmp->next->token == PIPE)
+	if (tmp)
 	{
-		printf("minishell: syntax error near unexpected token `||'\n");
-		return (0);
-	}
-	if (tmp->token == PIPE)
-	{
-		printf("minishell: syntax error near unexpected token `|'\n");
-		return (0);
+		if (tmp->token == PIPE && tmp->next->token == PIPE)
+		{
+			printf("minishell: syntax error near unexpected token `||'\n");
+			return (0);
+		}
+		if (tmp->token == PIPE)
+		{
+			printf("minishell: syntax error near unexpected token `|'\n");
+			return (0);
+		}
 	}
 	return (1);
 }

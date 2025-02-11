@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:08:27 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/11 12:26:06 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/11 16:09:07 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,19 +47,28 @@ int	check_cmd_start(char *str)
  	Utilise nb_brack et invalid_pipes_check pour check les chevrons + pipes,
 	et affiche les messages d'erreurs relatifs aux chevrons et aux pipes.
 */
-int	check_token_error(t_data *data)
+int	ft_strcmp_che(char *str)
+{
+	if (str[0] && str[1])
+	{
+		if (str[0] == '<' && str[1] == '<')
+			return (1);
+	}
+	return (0);
+}
+
+int	check_token_error3(t_data *data, t_lexer *tmp, int flag)
 {
 	int		i;
-	t_lexer	*tmp;
 
-	if (!data || !data->lexer_list)
-		return (0);
-	tmp = data->lexer_list;
 	while (tmp)
 	{
 		i = 0;
-		if (!tmp->cmd_segment || !nb_redir(tmp->cmd_segment))
-			return (0);
+		if (!flag)
+		{
+			if (!tmp->cmd_segment || !nb_redir(tmp->cmd_segment))
+				return (0);
+		}
 		if (tmp->cmd_segment[i] == '|' && tmp->cmd_segment[i + 1] == '|')
 		{
 			printf("minishell: syntax error near unexpected token `||'\n");
@@ -69,6 +78,22 @@ int	check_token_error(t_data *data)
 			return (0);
 		tmp = tmp->next;
 	}
+	return (1);
+}
+
+int	check_token_error(t_data *data)
+{
+	int		flag;
+	t_lexer	*tmp;
+
+	flag = 0;
+	if (!data || !data->lexer_list)
+		return (0);
+	tmp = data->lexer_list;
+	if (tmp[0].token == 0)
+		flag = 1;
+	if (check_token_error3(data, tmp, flag) == 0)
+		return (0);
 	return (1);
 }
 
@@ -90,28 +115,6 @@ int	check_slash(char *str, char c)
 		if ((str[0] == c && str[1] == '.'))
 			return (0);
 		i++;
-	}
-	return (1);
-}
-
-/*
-	Détermine si le segment de commande est un répertoire.
-*/
-int	check_directory(char *str)
-{
-	if (!check_slash(str, '/'))
-	{
-		printf ("minishell: %s: Is a directory\n", str);
-		return (0);
-	}
-	return (1);
-}
-
-int	is_a_directory(t_data *data)
-{
-	if (!check_directory(data->input_cmd))
-	{
-		return (0);
 	}
 	return (1);
 }

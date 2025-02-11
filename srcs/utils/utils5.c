@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 11:08:29 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/11 12:40:33 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/11 16:31:55 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,5 @@ void	free_lexer_list2(t_lexer *lexer_list)
 		lexer_list = lexer_list->next;
 		if (tmp->cmd_segment)
 			free(tmp->cmd_segment);
-		free(tmp);
 	}
 }
