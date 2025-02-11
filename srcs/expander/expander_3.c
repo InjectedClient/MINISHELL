@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 13:52:33 by jle-neze          #+#    #+#             */
-/*   Updated: 2025/02/11 12:20:44 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/11 13:33:13 by jle-neze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,23 +16,20 @@ char	*expand_variable(const char *input, t_env *env_list,
 		int in_single_quote)
 {
 	const char	*start;
-	char		*start2;
 	size_t		len;
 
 	start = input + 1;
-	start2 = (char *)start;
-	if (*start2 && (ft_isdigit(*start2) || *start2 == '='))
+	if (*start && (ft_isdigit(*start) || *start == '='))
 	{
-		if (*start2 == '=')
-			return (ft_strdup(start2 - 1));
-		start2++;
-		return (ft_strdup(start2));
+		if (*start == '=')
+			return (ft_strdup(input));
+		return (ft_strdup(""));
 	}
-	len = 0;
 	if (in_single_quote)
 		return (ft_strdup(input));
-	if (*start == 34 || *start == '\0' || *start == '?')
+	if (*start == '"' || *start == '\0' || *start == '?')
 		return (handle_special_variable(start));
+	len = 0;
 	while (start[len] && (ft_isalnum(start[len]) || start[len] == '_'))
 		len++;
 	return (expand_variable_name(start, env_list, len));
