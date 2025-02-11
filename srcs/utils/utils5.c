@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 11:08:29 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/11 12:28:48 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/11 12:40:33 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,22 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 	return (dst);
 }
 
-void init_ij(int *i, int *j)
+void	init_ij(int *i, int *j)
 {
 	*i = 0;
 	*j = 0;
+}
+
+void	free_lexer_list2(t_lexer *lexer_list)
+{
+	t_lexer	*tmp;
+
+	while (lexer_list)
+	{
+		tmp = lexer_list;
+		lexer_list = lexer_list->next;
+		if (tmp->cmd_segment)
+			free(tmp->cmd_segment);
+		free(tmp);
+	}
 }
