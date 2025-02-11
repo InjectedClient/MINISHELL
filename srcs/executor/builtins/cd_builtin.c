@@ -37,7 +37,7 @@ int	init_path_cd(char	*arg, char **path, t_env **env_list)
 	{
 		*path = ft_getenv_dup("OLDPWD", *env_list);
 		if (!*path)
-			return (cd_errors("oldpwd"));
+			return (1);
 		printf("%s\n", *path);
 	}
 	else
