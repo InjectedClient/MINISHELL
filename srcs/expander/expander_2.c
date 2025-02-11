@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jle-neze <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 13:53:01 by jle-neze          #+#    #+#             */
-/*   Updated: 2025/01/23 13:53:08 by jle-neze         ###   ########.fr       */
+/*   Updated: 2025/02/11 12:18:21 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,4 +90,3 @@ char	*expand_variable_name(const char *start, t_env *env_list, size_t len)
 		return (ft_strdup(value));
 	return (ft_strdup(""));
 }
-

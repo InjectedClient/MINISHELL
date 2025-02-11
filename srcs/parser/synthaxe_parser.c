@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:08:27 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/10 13:14:17 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/11 12:26:06 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,25 +52,23 @@ int	check_token_error(t_data *data)
 	int		i;
 	t_lexer	*tmp;
 
-	i = 0;
-	tmp = NULL;
+	if (!data || !data->lexer_list)
+		return (0);
 	tmp = data->lexer_list;
 	while (tmp)
 	{
 		i = 0;
-		if ((!nb_redir(tmp->cmd_segment) || !nb_redir(tmp->cmd_segment)) && \
-			(tmp->cmd_segment[i - 1] == '?'))
+		if (!tmp->cmd_segment || !nb_redir(tmp->cmd_segment))
 			return (0);
 		if (tmp->cmd_segment[i] == '|' && tmp->cmd_segment[i + 1] == '|')
 		{
-			printf("minishell : syntax error near unexpected token\n");
+			printf("minishell: syntax error near unexpected token `||'\n");
 			return (0);
 		}
 		if (!check_invalid_pipes(data))
 			return (0);
 		tmp = tmp->next;
 	}
-	tmp = data->lexer_list;
 	return (1);
 }
 

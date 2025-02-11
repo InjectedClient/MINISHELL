@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:08:26 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/14 17:04:22 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/11 12:28:58 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,22 @@ int	nb_redir(char *str)
 	int	i;
 	int	j;
 
-	i = 0;
-	j = 0;
+	init_ij(&i, &j);
+	if (!str)
+		return (0);
 	while (str[i])
 	{
 		if (str[i] == '<' || str[i] == '>')
 		{
 			j++;
+			if (i > 0 && (str[i - 1] == '<' || str[i - 1] == '>'))
+			{
+				if (str[i] != str[i - 1])
+				{
+					printf("minishell: syntax error near unexpected token `%c%c'\n", str[i - 1], str[i]);
+					return (0);
+				}
+			}
 		}
 		i++;
 	}

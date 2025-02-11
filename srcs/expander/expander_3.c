@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 13:52:33 by jle-neze          #+#    #+#             */
-/*   Updated: 2025/02/10 13:36:52 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/11 12:20:44 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,44 +84,15 @@ int	handle_double_quote(t_expand_args *args)
 
 size_t	get_variable_token_length(const char *input)
 {
-	size_t	len = 1; // On commence après le '$'
+	size_t	len;
 
+	len = 1;
 	if (!input[len])
 		return (len);
-	// Si le caractère suivant est '"' ou '?' ou '=' ou un chiffre, on consomme juste ce caractère en plus
-	if (input[len] == '"' || input[len] == '?' || input[len] == '=' || ft_isdigit(input[len]))
+	if (input[len] == '"' || input[len] == '?' || input[len] == '=' || \
+	ft_isdigit(input[len]))
 		return (len + 1);
-	// Sinon, on parcourt le nom de la variable (lettres, chiffres et '_')
 	while (input[len] && (ft_isalnum(input[len]) || input[len] == '_'))
 		len++;
 	return (len);
 }
-
-int	handle_variable_expansion(t_expand_args *args)
-{
-	char	*var_expanded;
-	size_t	len;
-
-	var_expanded = NULL;
-	if (args->cmd_segment[*(args->i)] == '$'
-		&& !args->quote_status->singl_quot_status)
-		var_expanded = expand_variable(&args->cmd_segment[*(args->i)],
-				args->env_list, args->quote_status->singl_quot_status);
-	if (args->cmd_segment[*(args->i)] == '~')
-		var_expanded = expand_tilde(&args->cmd_segment[*(args->i)],
-				args->env_list);
-	if (var_expanded)
-	{
-		len = ft_strlen(var_expanded);
-		ft_memcpy(&args->expanded[*(args->j)], var_expanded, len);
-		*(args->j) += len;
-		// On avance de la longueur exacte du token de variable
-		size_t token_len = get_variable_token_length(&args->cmd_segment[*(args->i)]);
-		*(args->i) += token_len;
-		free(var_expanded);
-		return (1);
-	}
-	free(var_expanded);
-	return (0);
-}
-

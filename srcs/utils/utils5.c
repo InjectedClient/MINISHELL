@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 11:08:29 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/15 11:10:43 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/11 12:28:48 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,10 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 		i++;
 	}
 	return (dst);
+}
+
+void init_ij(int *i, int *j)
+{
+	*i = 0;
+	*j = 0;
 }

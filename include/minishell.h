@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:00 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/10 16:01:27 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/11 12:29:08 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -251,6 +251,8 @@ int		create_pipes(t_data *data, int ***pipes);
 void	close_pipes(int **pipes, int num_commands);
 void	free_pipes(int num_commands, int ***pipes);
 void	free_pids(pid_t **pids);
+void init_ij(int *i, int *j);
+
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXPAND ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
 t_quote	init_quote_status(void);
@@ -269,6 +271,8 @@ int		handle_single_quote(t_expand_args *args);
 int		handle_double_quote(t_expand_args *args);
 int		handle_variable_expansion(t_expand_args *args);
 int		handle_heredoc(t_lexer *current, int *infile);
+int		handle_variable_expansion(t_expand_args *args);
+size_t	get_variable_token_length(const char *input);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ERRORS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 // Error
