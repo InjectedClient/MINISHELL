@@ -78,26 +78,16 @@ char	*handle_special_variable(const char *start)
 	return (ft_strdup("$"));
 }
 
-char	*expand_variable_name(const char *start,
-		t_env *env_list, size_t len)
+char	*expand_variable_name(const char *start, t_env *env_list, size_t len)
 {
 	char	*var_name;
 	char	*value;
-	char	*remaining;
-	char	*result;
-	char	*trimmed_result;
 
 	var_name = ft_substr(start, 0, len);
 	value = ft_getenv(var_name, env_list);
 	free(var_name);
 	if (value)
-	{
-		remaining = ft_strdup(start + len);
-		result = ft_strjoin(value, remaining);
-		free(remaining);
-		trimmed_result = ft_strtrim(result);
-		free(result);
-		return (trimmed_result);
-	}
+		return (ft_strdup(value));
 	return (ft_strdup(""));
 }
+

@@ -82,6 +82,21 @@ int	handle_double_quote(t_expand_args *args)
 	return (0);
 }
 
+size_t	get_variable_token_length(const char *input)
+{
+	size_t	len = 1; // On commence après le '$'
+
+	if (!input[len])
+		return (len);
+	// Si le caractère suivant est '"' ou '?' ou '=' ou un chiffre, on consomme juste ce caractère en plus
+	if (input[len] == '"' || input[len] == '?' || input[len] == '=' || ft_isdigit(input[len]))
+		return (len + 1);
+	// Sinon, on parcourt le nom de la variable (lettres, chiffres et '_')
+	while (input[len] && (ft_isalnum(input[len]) || input[len] == '_'))
+		len++;
+	return (len);
+}
+
 int	handle_variable_expansion(t_expand_args *args)
 {
 	char	*var_expanded;
@@ -100,11 +115,13 @@ int	handle_variable_expansion(t_expand_args *args)
 		len = ft_strlen(var_expanded);
 		ft_memcpy(&args->expanded[*(args->j)], var_expanded, len);
 		*(args->j) += len;
-		*(args->i) += ft_strlen_until(&args->cmd_segment[*(args->i)],
-				" \t\"\'");
+		// On avance de la longueur exacte du token de variable
+		size_t token_len = get_variable_token_length(&args->cmd_segment[*(args->i)]);
+		*(args->i) += token_len;
 		free(var_expanded);
 		return (1);
 	}
 	free(var_expanded);
 	return (0);
 }
+
