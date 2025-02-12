@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_builtin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jle-neze <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 14:35:26 by jle-neze          #+#    #+#             */
-/*   Updated: 2025/01/10 14:35:28 by jle-neze         ###   ########.fr       */
+/*   Updated: 2025/02/12 16:47:54 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	builtin_env(t_env *env_list)
 	{
 		if (current->value)
 			printf("%s=%s\n", current->name, current->value);
-		if (current->equal_sign && !current->value)
+		else if (current->equal_sign)
 			printf("%s=\n", current->name);
 		current = current->next;
 	}

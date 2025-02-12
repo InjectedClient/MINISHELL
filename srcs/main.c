@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:39:02 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/11 14:30:25 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/12 16:53:30 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,6 @@ int	main(int argc, char **argv, char *envp[])
 		signals_run_cmd();
 		add_history(tmp);
 		looping(tmp, &data, env_list);
+		free(tmp);
 	}
 }

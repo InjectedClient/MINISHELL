@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 15:28:51 by jle-neze          #+#    #+#             */
-/*   Updated: 2025/01/15 14:03:20 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/12 16:47:38 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ t_env	*create_env_node(char *env_var)
 		return (NULL);
 	new_node->name = ft_strndup(env_var, equal_sign - env_var);
 	new_node->value = ft_strdup(equal_sign + 1);
+	new_node->equal_sign = 1;
 	new_node->next = NULL;
 	if (!new_node->name || !new_node->value)
 	{

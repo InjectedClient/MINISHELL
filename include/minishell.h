@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:00 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/11 14:30:27 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/12 16:18:32 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,7 +230,7 @@ void	print_sorted_env(t_env *env_list);
 void	add_new_node(t_env *new_node, t_env **env_list);
 void	update_or_add_env(t_env **env_list, char *arg);
 int		builtin_unset(char **args, t_env **env_list);
-int		builtin_env(t_env *env_list);
+int		v(t_env *env_list);
 int		builtin_exit(char **args);
 int		init_saved_fds(int *saved_stdin, int *saved_stdout);
 int		restore_and_close_saved_fds(int saved_stdin, int saved_stdout);
@@ -241,7 +241,7 @@ int		handle_here_doc_token(t_lexer *current, int *infile);
 int		handle_redirections(t_lexer *command, int *infile, int *outfile);
 
 int		count_commands(t_lexer *lexer_list);
-void	free_lexer_list(t_lexer *list);
+void	free_lexer_list(t_lexer **lexer_list);
 void	free_commands(t_lexer ***commands, int num_commands);
 int		wait_for_children(pid_t *pids, int num_commands);
 void	child_process(t_data *data, int **pipes, int i);
@@ -252,7 +252,6 @@ void	close_pipes(int **pipes, int num_commands);
 void	free_pipes(int num_commands, int ***pipes);
 void	free_pids(pid_t **pids);
 void	init_ij(int *i, int *j);
-void	free_lexer_list2(t_lexer *lexer_list);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXPAND ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 

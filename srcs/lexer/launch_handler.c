@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:36:08 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/11 16:34:57 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/12 17:04:13 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,18 @@ void	looping(char *tmp, t_data *data, t_env *env_list)
 		free(processed_cmd);
 		lexer_launch(data);
 		if (!is_a_directory(data) || !ft_check_parser(data))
+		{
+			free(data->input_cmd);
 			return ;
+		}
 		tmp_lex = data->lexer_list;
 		expand_command(data, env_list);
 		init_data(data);
 		if (tmp_lex && tmp_lex->cmd_segment)
 			g_global = execute_token(data);
 	}
+	free(data->input_cmd);
+	free_lexer_list(&data->lexer_list);
 }
 
 /**

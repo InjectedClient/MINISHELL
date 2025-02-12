@@ -6,24 +6,11 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 16:15:44 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/30 16:16:17 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/12 16:09:06 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-void	free_lexer_list(t_lexer *list)
-{
-	t_lexer	*temp;
-
-	while (list)
-	{
-		temp = list->next;
-		free(list->cmd_segment);
-		free(list);
-		list = temp;
-	}
-}
 
 void	free_commands(t_lexer ***commands, int num_commands)
 {
@@ -35,7 +22,7 @@ void	free_commands(t_lexer ***commands, int num_commands)
 	while (i < num_commands)
 	{
 		if ((*commands)[i])
-			free_lexer_list((*commands)[i]);
+			free_lexer_list(&(*commands)[i]);
 		i++;
 	}
 	free((*commands));

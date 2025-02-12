@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 11:08:29 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/11 16:31:55 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/12 17:05:46 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,18 @@ void	init_ij(int *i, int *j)
 	*j = 0;
 }
 
-void	free_lexer_list2(t_lexer *lexer_list)
+void	free_lexer_list(t_lexer **lexer_list)
 {
-	t_lexer	*tmp;
+	t_lexer	*current;
+	t_lexer	*next;
 
-	while (lexer_list)
+	current = *lexer_list;
+	while (current)
 	{
-		tmp = lexer_list;
-		lexer_list = lexer_list->next;
-		if (tmp->cmd_segment)
-			free(tmp->cmd_segment);
+		next = current->next;
+		free(current->cmd_segment);
+		free(current);
+		current = next;
 	}
+	*lexer_list = NULL;
 }

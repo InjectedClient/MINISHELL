@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:27 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/10 14:03:42 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/12 17:03:28 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,18 +64,5 @@ int	execute_token(t_data *data)
 	status = execute_commands(data, pipes, pids);
 	free_pids(&pids);
 	free_pipes(data->num_commands, &pipes);
-	free_commands(&data->commands, data->num_commands);
 	return (status);
-}
-
-void	free_data(t_data *data)
-{
-	if (!data->args)
-		return ;
-	if (data->lexer_list)
-		free_lexer_list(data->lexer_list);
-	if (data->env_list)
-		free_env_list(data->env_list);
-	if (data->input_cmd)
-		free(data->input_cmd);
 }
