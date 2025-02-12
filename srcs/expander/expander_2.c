@@ -62,31 +62,32 @@ char	*remove_quotes(const char *input)
 
 char	*handle_special_variable(const char *start)
 {
-	char	*ret;
-	char	*remaining;
-	char	*result;
-
 	if (*start == '?')
-	{
-		ret = ft_itoa(g_global);
-		remaining = ft_strdup(start + 1);
-		result = ft_strjoin(ret, remaining);
-		free(ret);
-		free(remaining);
-		return (result);
-	}
+		return (ft_itoa(g_global));
 	return (ft_strdup("$"));
 }
 
-char	*expand_variable_name(const char *start, t_env *env_list, size_t len)
-{
-	char	*var_name;
-	char	*value;
 
-	var_name = ft_substr(start, 0, len);
-	value = ft_getenv(var_name, env_list);
-	free(var_name);
-	if (value)
-		return (ft_strdup(value));
-	return (ft_strdup(""));
+char	*expand_variable_name(const char *start,
+	t_env *env_list, size_t len)
+{
+char	*var_name;
+char	*value;
+char	*remaining;
+char	*result;
+char	*trimmed_result;
+
+var_name = ft_substr(start, 0, len);
+value = ft_getenv(var_name, env_list);
+free(var_name);
+if (value)
+{
+	remaining = ft_strdup(start + len);
+	result = ft_strjoin(value, remaining);
+	free(remaining);
+	trimmed_result = ft_strtrim(result);
+	free(result);
+	return (trimmed_result);
+}
+return (ft_strdup(""));
 }

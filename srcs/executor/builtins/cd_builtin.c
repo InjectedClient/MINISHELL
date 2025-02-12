@@ -31,7 +31,7 @@ int	cd_errors(char *type)
 	return (1);
 }
 
-int	init_path_cd(char	*arg, char **path, t_env **env_list)
+int	init_path_cd(char *arg, char **path, t_env **env_list)
 {
 	if (ft_strcmp(arg, "-") == 0)
 	{
