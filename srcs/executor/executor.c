@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:27 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/12 17:03:28 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/13 12:54:54 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,17 +52,22 @@ int	execute_token(t_data *data)
 	pids = NULL;
 	status = 0;
 	if (data->num_commands == 1)
+	{
+		free_commands(&data->commands);
+		return (handle_cmd_without_pipe(data));
+	}
 		return (handle_cmd_without_pipe(data));
 	if (init_commands(data) == 0 || create_pids(data, &pids) == 0
 		|| create_pipes(data, &pipes) == 0)
 	{
 		free_pids(&pids);
 		free_pipes(data->num_commands, &pipes);
-		free_commands(&data->commands, data->num_commands);
+		free_commands(&data->commands);
 		return (1);
 	}
 	status = execute_commands(data, pipes, pids);
 	free_pids(&pids);
 	free_pipes(data->num_commands, &pipes);
+	free_commands(&data->commands);
 	return (status);
 }

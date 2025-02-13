@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:00 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/13 11:44:14 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/13 12:40:33 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,6 +204,8 @@ void	process_lexer_input(char *str, int *i, int *j, t_quote *state);
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXECUTOR ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 void	exec(char *cmd[], t_data *data);
 int		execute_token(t_data *data);
+void	free_commands(t_lexer ***commands);
+void	free_commands_2(t_lexer ***commands, int num_commands);
 int		handle_cmd_without_pipe(t_data *data);
 int		count_commands(t_lexer *lexer_list);
 void	exec_cmd_with_fork(char **cmd, t_env *env_list);
@@ -230,7 +232,6 @@ void	print_sorted_env(t_env *env_list);
 void	add_new_node(t_env *new_node, t_env **env_list);
 void	update_or_add_env(t_env **env_list, char *arg);
 int		builtin_unset(char **args, t_env **env_list);
-int		v(t_env *env_list);
 int		builtin_exit(char **args);
 int		init_saved_fds(int *saved_stdin, int *saved_stdout);
 int		restore_and_close_saved_fds(int saved_stdin, int saved_stdout);
@@ -242,7 +243,6 @@ int		handle_redirections(t_lexer *command, int *infile, int *outfile);
 
 int		count_commands(t_lexer *lexer_list);
 void	free_lexer_list(t_lexer **lexer_list);
-void	free_commands(t_lexer ***commands, int num_commands);
 int		wait_for_children(pid_t *pids, int num_commands);
 void	child_process(t_data *data, int **pipes, int i);
 int		init_commands(t_data *data);

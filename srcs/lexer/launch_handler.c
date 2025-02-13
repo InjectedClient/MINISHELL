@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:36:08 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/12 17:04:13 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/13 12:46:08 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void	looping(char *tmp, t_data *data, t_env *env_list)
 	}
 	free(data->input_cmd);
 	free_lexer_list(&data->lexer_list);
+	free_commands(&data->commands);
 }
 
 /**
