@@ -71,14 +71,15 @@ int	get_word_in_list(char *str, int i, t_data *data, t_lexer *tmp)
 	int		k;
 	t_quote	*state;
 
+	// x est inutile car la valeur de i restera inchange donc autant garder i
 	word = NULL;
 	k = 0;
 	j = 0;
 	state = malloc(sizeof(t_quote));
 	if (!state)
 		return (-1);
-	reset_quoting_state(state);
-	process_lexer_input(str, i, &j, state);
+	reset_quoting_state(state); // Met les quotes a 0
+	process_lexer_input(str, i, &j, state); // Pas besoin de passer le pointeur cest une copie on ne reutilise pas i apres
 	word = malloc(sizeof(char) * (j + sizeof('\0')));
 	if (!word)
 		return (0);
@@ -113,12 +114,13 @@ void	process_input_string(char *input_cmd, t_lexer *tmp, t_lexer *current)
 		j = 0;
 		while (input_cmd[i] == ' ' || (input_cmd[i] >= '\t' && input_cmd[i] <= '\r'))
 			i++;
-		// if (!input_cmd || input_cmd[i])
+		// if (!input_cmd || !input_cmd[i])
 		// {
 		// 	lexer_list = NULL;
-		// 	get_token_in_node(&current, tmp);
+		// 	get_token_in_node(&current, tmp); // Je ne suis pas certain quon rentre dans cette fonction et quand bien emme current est NULL
 		// 	return ;
 		// }
+		// j = get_word_in_list(data->input_cmd, i, data, tmp); //ici on passe une copie de i donc i restera inchangee dans cette fonction de plus tmp est NULL
 		j = get_word_in_list(input_cmd, i, data, tmp);
 		if (x == 0)
 			current = data->lexer_list;

@@ -51,12 +51,12 @@ void	looping(char *tmp, t_data *data, t_env *env_list)
 	char	*processed_cmd;
 
 	if (!tmp)
-		exit_all(data);
+		//TODO : error;
 	if (tmp && tmp[0])
 	{
-		processed_cmd = add_space(tmp);
-		data->input_cmd = ft_strdup(processed_cmd);
-		free(processed_cmd);
+		data->input_cmd = add_space(tmp);
+		if (!data->input_cmd)
+			//TODO : error;
 		lexer_launch(data);
 		if (!is_a_directory(data) || !ft_check_parser(data))
 		{
@@ -78,17 +78,17 @@ void	looping(char *tmp, t_data *data, t_env *env_list)
  * Lance le lexer, compte les mots dan s la commande d'entrée,
  * traite la chaîne d'entrée et affiche le contenu du lexer.
  */
-void	lexer_launch(t_data *data)
+void	lexer_launch(char *input_cmd)
 {
-	int		i;
+	//int		i;
 	t_lexer	*current;
 	t_lexer	*tmp;
 
 	tmp = NULL;
 	current = NULL;
-	data->lexer_list = NULL;
-	data->w_count = count_words_in_input(data->input_cmd);
-	i = 0;
-	process_input_string(data, tmp, current, i);
+	//data->lexer_list = NULL;
+	//data->w_count = count_words_in_input(data->input_cmd);
+	//process_input_string(data, tmp, current, i);
+	process_input_string(input_cmd, tmp, current);
 	print_lexer_content(data);
 }
