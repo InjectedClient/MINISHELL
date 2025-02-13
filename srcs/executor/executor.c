@@ -42,14 +42,19 @@ int	execute_commands(t_data *data, int **pipes, pid_t *pids)
 	return (status);
 }
 
+void	init_pipe_pid(int ***pipes, pid_t **pids)
+{
+	*pipes = NULL;
+	*pids = NULL;
+}
+
 int	execute_token(t_data *data)
 {
 	int		status;
 	int		**pipes;
 	pid_t	*pids;
 
-	pipes = NULL;
-	pids = NULL;
+	init_pipe_pid(&pipes, &pids);
 	status = 0;
 	if (data->num_commands == 1)
 	{

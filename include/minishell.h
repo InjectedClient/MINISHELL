@@ -252,6 +252,7 @@ void	close_pipes(int **pipes, int num_commands);
 void	free_pipes(int num_commands, int ***pipes);
 void	free_pids(pid_t **pids);
 void	init_ij(int *i, int *j);
+int		process_heredoc(t_lexer *command, int *infile, t_lexer **redirection_start);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXPAND ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 

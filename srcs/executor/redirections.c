@@ -74,31 +74,14 @@ int	handle_redirections(t_lexer *command, int *infile, int *outfile)
 {
 	t_lexer	*current;
 	int		error;
-	int		heredoc_found;
 
-	heredoc_found = 0;
 	*infile = -1;
 	*outfile = -1;
 	error = 0;
 	current = command;
-	while (current)
-	{
-		if (current->token == HERE_DOC)
-		{
-			heredoc_found = 1;
-			break ;
-		}
-		current = current->next;
-	}
-	if (heredoc_found)
-	{
-		error = handle_all_heredocs(command, infile);
-		if (error)
-			return (error);
-		dup2(*infile, STDIN_FILENO);
-		close(*infile);
-		*infile = STDIN_FILENO;
-	}
+	error = process_heredoc(command, infile, &current);
+	if (error)
+		return (error);
 	while (current)
 	{
 		if (current->token == REDIRECT_IN)
