@@ -41,7 +41,7 @@ int	count_words_in_input(char *str)
  */
 void	process_lexer_input(char *str, int i, int *j, t_quote *state)
 {
-	while (str[i])
+	while (str[i]) //Plus besoin dutiliserr un deferecement de pointeur sur i car on ne modifie pas i
 	{
 		update_quoting_state(str[i], state);
 		if (!ft_white_space(str[i]) && (!state->doubl_quot_status && \
