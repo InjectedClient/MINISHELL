@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:44 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/13 11:37:58 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/13 11:41:53 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	handle_all_heredocs(t_lexer *command, int *infile)
 	{
 		if (current->token == HERE_DOC)
 		{
-			char *delimiter = current->next->cmd_segment;
+			char	*delimiter = current->next->cmd_segment;
 			handle_heredoc_2(delimiter, tmp_fd);
 		}
 		current = current->next;

@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:00 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/12 17:15:00 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/13 11:44:14 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,6 +274,7 @@ int		handle_heredoc(t_lexer *current, int *infile);
 int		handle_variable_expansion(t_expand_args *args);
 size_t	get_variable_token_length(const char *input);
 int		builtin_env(t_env *env_list);
+int		handle_all_heredocs(t_lexer *command, int *infile);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ERRORS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 // Error
