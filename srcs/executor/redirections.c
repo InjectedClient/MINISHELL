@@ -79,7 +79,7 @@ int	handle_redirections(t_lexer *command, int *infile, int *outfile)
 	*outfile = -1;
 	error = 0;
 	current = command;
-	error = process_heredoc(command, infile, &current);
+	// error = process_heredoc(command, infile, &current);
 	if (error)
 		return (error);
 	while (current)

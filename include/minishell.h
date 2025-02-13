@@ -82,15 +82,12 @@ typedef struct s_free_memory
 typedef struct s_data {
 	t_lexer			*lexer_list;
 	t_lexer			**commands;
-	t_env			*env_list;
-	t_free_memory	*free_memory;
+	char			*input_cmd;
 	int				num_commands;
 	int				w_count;
 	int				is_sing_quot;
 	int				is_doub_quot;
-	char			*input_cmd;
-	int				sig1;
-	int				sig2;
+	t_env			*env_list;
 	char			**args;
 }	t_data;
 
