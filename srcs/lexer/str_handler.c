@@ -77,7 +77,7 @@ int	get_word_in_list(char *str, int i, t_data *data, t_lexer *tmp)
 	j = 0;
 	state = malloc(sizeof(t_quote));
 	if (!state)
-		return (-1);
+		return (-1); // On retourne -1 pour indiquer une erreur
 	reset_quoting_state(state); // Met les quotes a 0
 	process_lexer_input(str, i, &j, state); // Pas besoin de passer le pointeur cest une copie on ne reutilise pas i apres
 	word = malloc(sizeof(char) * (j + sizeof('\0')));
@@ -122,10 +122,13 @@ void	process_input_string(char *input_cmd, t_lexer *tmp, t_lexer *current)
 		// }
 		// j = get_word_in_list(data->input_cmd, i, data, tmp); //ici on passe une copie de i donc i restera inchangee dans cette fonction de plus tmp est NULL
 		j = get_word_in_list(input_cmd, i, data, tmp);
+		if (j == -1)
+			//TODO : error; ou allors retourner un piinteur NULL pour sassurer que rien nesst vide
 		if (x == 0)
 			current = data->lexer_list;
 		i = i + j;
 		x++;
 	}
 	data->lexer_list = current;
+	return (lexer_list); // On retourne la liste lexer
 }
