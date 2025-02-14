@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 14:08:29 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/11 14:46:37 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/14 17:10:44 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ int	ft_check_parser(t_data *data)
 		count = 0;
 	else if (!check_lexer_start_pipe(data))
 		count = 0;
-	else if (!check_cmd_start(data->input_cmd))
-		count = 0;
+	// else if (!check_cmd_start(data->input_cmd))
+	// 	count = 0;
 	else if (!check_token_error(data))
 		count = 0;
 	else if (!check_redirection_arg(data))

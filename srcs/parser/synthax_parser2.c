@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 16:07:47 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/11 16:08:18 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/14 17:16:10 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*
 	Détermine si le segment de commande est un répertoire.
 */
-int	check_directory(char *str)
+int	check_directory(char *str) //TODO 
 {
 	if (!check_slash(str, '/'))
 	{

@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:36:12 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/30 15:10:28 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/14 16:21:36 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,23 @@
  * Si la liste est vide, initialise la liste avec le nouvel élément.
  * CHECK SI CETTE FONCTION EST UTILISEE
  */
-void	add_lexer_to_end(t_data *data, char *str)
+int	add_lexer_to_end(t_lexer *lexer_list, char *str)
 {
 	t_lexer	*new;
 	t_lexer	*current;
 
 	new = create_new_lexer(str);
-	if (data->lexer_list == NULL)
+	if (!new)
+		return(0);
+	if (lexer_list == NULL)
 	{
-		data->lexer_list = new;
+		lexer_list = new;
 		new->next = NULL;
 		new->prev = NULL;
 	}
 	else
 	{
-		current = data->lexer_list;
+		current = lexer_list;
 		while (current->next)
 			current = current->next;
 		current->next = new;
@@ -52,6 +54,7 @@ t_lexer	*create_new_lexer(char *str)
 	new = malloc(sizeof(t_lexer));
 	if (!new)
 		return (NULL);
+	
 	new->cmd_segment = str;
 	new->next = NULL;
 	new->prev = NULL;

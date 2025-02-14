@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:36:16 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/11 14:39:29 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/14 16:33:04 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	process_lexer_input(char *str, int i, int *j, t_quote *state)
 /**
  * Extrait un mot de la chaîne de caractères et l'ajoute à la liste lexer.
  */
-int	get_word_in_list(char *str, int i, t_data *data, t_lexer *tmp)
+int	get_word_in_list(char *str, int i, t_lexer *tmp)
 {
 	char	*word;
 	int		j;
@@ -86,9 +86,10 @@ int	get_word_in_list(char *str, int i, t_data *data, t_lexer *tmp)
 	word[j] = '\0';
 	while (k < j)
 		word[k++] = str[i++];
-	add_lexer_to_end(data, word);
-	get_data_in_node(&data->lexer_list);
-	get_token_in_node(&data->lexer_list, tmp);
+	printf("lexer: %s\n", word);
+	if (!add_lexer_to_end(lexer_list, word))
+		//TODO error + free all + free state
+	
 	free(state);
 	return (j);
 }
@@ -96,13 +97,13 @@ int	get_word_in_list(char *str, int i, t_data *data, t_lexer *tmp)
 /**
  * Traite la chaîne de caractères d'entrée et remplit la liste lexer.
  */
-void	process_input_string(char *input_cmd, t_lexer *tmp, t_lexer *current)
+t_lexer	*process_input_string(char *input_cmd, t_lexer *tmp, t_lexer *current)
 {
 	int	i;
 	int	j;
 	int	x;
-	t_lexer	*tmp;
-	t_lexer	*current;
+	//t_lexer	*tmp;
+	//t_lexer	*current;
 	t_lexer	*lexer_list;
 
 	tmp = NULL;
@@ -121,11 +122,11 @@ void	process_input_string(char *input_cmd, t_lexer *tmp, t_lexer *current)
 		// 	return ;
 		// }
 		// j = get_word_in_list(data->input_cmd, i, data, tmp); //ici on passe une copie de i donc i restera inchangee dans cette fonction de plus tmp est NULL
-		j = get_word_in_list(input_cmd, i, data, tmp);
+		j = get_word_in_list(input_cmd, i, tmp);
 		if (j == -1)
-			//TODO : error; ou allors retourner un piinteur NULL pour sassurer que rien nesst vide
+			return (0);
 		if (x == 0)
-			current = data->lexer_list;
+			current = lexer_list;
 		i = i + j;
 		x++;
 	}

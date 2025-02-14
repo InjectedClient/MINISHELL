@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:39:02 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/12 16:53:30 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/14 17:20:40 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,14 @@ void	update_env_shlvl(t_env **env_list)
 
 void	init_data(t_data *data, t_env *env_list)
 {
+	data->input_cmd = NULL;
 	data->lexer_list = NULL;
 	data->commands = NULL;
-	data->input_cmd = NULL;
 	data->num_commands = 0;
-	data->w_count = 0;
 	data->is_sing_quot = 0;
 	data->is_doub_quot = 0;
 
-	data->env_list = env_list;
+	data->env_list = env_list; //TODO enlever env list et peut etre creer une autre struct exec
 }
 
 int	check_env(char **envp)

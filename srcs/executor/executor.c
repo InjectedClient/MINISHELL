@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:27 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/13 12:54:54 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/14 16:58:39 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	init_pipe_pid(int ***pipes, pid_t **pids)
 	*pids = NULL;
 }
 
-int	execute_token(t_data *data)
+int	execute_token(t_data commands, int num-commands, envlist)
 {
 	int		status;
 	int		**pipes;

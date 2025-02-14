@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:00 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/13 12:40:33 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/14 15:20:40 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,11 +167,10 @@ void	init_kj(int *k, int *j);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ LEXER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
-void	lexer_launch(t_data *data);
+void	lexer_launch(t_data *data, char *input_cmd);
 void	looping(char *tmp, t_data *data, t_env *env_list);
 int		count_words_in_input(char *str);
-void	process_input_string(\
-		t_data *data, t_lexer *tmp, t_lexer *current, int i);
+t_lexer	*process_input_string(t_data *data, char *input_cmd, t_lexer *tmp, t_lexer *current);
 int		check_prev(t_lexer *token);
 void	cmd_or_arg(t_lexer *tmp, t_lexer *first);
 int		get_word_in_list(char *str, int i, t_data *data, t_lexer *tmp);
@@ -196,7 +195,7 @@ int		is_doubl_quote_open(t_quote *state);
 int		is_doubl_quote_closed(t_quote *state);
 int		is_only_single_quote_on(t_quote *state);
 void	reset_quoting_state(t_quote *state);
-void	process_lexer_input(char *str, int *i, int *j, t_quote *state);
+void	process_lexer_input(char *str, int i, int *j, t_quote *state);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ EXECUTOR ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 void	exec(char *cmd[], t_data *data);
@@ -204,7 +203,7 @@ int		execute_token(t_data *data);
 void	free_commands(t_lexer ***commands);
 void	free_commands_2(t_lexer ***commands, int num_commands);
 int		handle_cmd_without_pipe(t_data *data);
-int		count_commands(t_lexer *lexer_list);
+//int		count_commands(t_lexer *lexer_list);
 void	exec_cmd_with_fork(char **cmd, t_env *env_list);
 char	**list_to_array(t_env *env);
 int		create_pids(t_data *data, pid_t **pid);
@@ -267,7 +266,7 @@ char	*expand_variable(const char *input, t_env *env_list, \
 char	*expand_tilde(const char *input, t_env *env_list);
 int		handle_single_quote(t_expand_args *args);
 int		handle_double_quote(t_expand_args *args);
-int		handle_variable_expansion(t_expand_args *args);
+//int		handle_variable_expansion(t_expand_args *args);
 int		handle_heredoc(t_lexer *current, int *infile);
 int		handle_variable_expansion(t_expand_args *args);
 size_t	get_variable_token_length(const char *input);
