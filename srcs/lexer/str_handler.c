@@ -75,26 +75,29 @@ int	get_word_in_list(char *str, int i, t_data *data, t_lexer *tmp)
 	char	*word;
 	int		j;
 	int		k;
-	int		x;
 	t_quote	*state;
 
+	word = NULL;
+	k = 0;
+	j = 0;
 	state = malloc(sizeof(t_quote));
 	if (!state)
-		return (0);
-	word = NULL;
-	x = i;
-	init_kj(&k, &j);
+		return (-1);
 	reset_quoting_state(state);
-	process_lexer_input(str, &i, &j, state);
+	process_lexer_input(str, i, &j, state);
 	word = malloc(sizeof(char) * (j + sizeof('\0')));
 	if (!word)
 		return (0);
 	word[j] = '\0';
 	while (k < j)
-		word[k++] = str[x++];
-	add_lexer_to_end(data, word);
-	get_data_in_node(&data->lexer_list);
-	get_token_in_node(&data->lexer_list, tmp);
+		word[k++] = str[i++];
+	printf("lexer: %s\n", word);
+	if (!add_lexer_to_end(lexer_list, word))
+	{
+		free_data(data);
+		free(state);
+		return (0);
+	}	
 	free(state);
 	return (j);
 }

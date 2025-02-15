@@ -39,9 +39,11 @@ void	print_lexer_content(t_data *data)
 	}
 }
 
-void	init_data(t_data *data)
+void init_data(t_data *data)
 {
-	data->num_commands = count_commands(data->lexer_list);
+	data->input_cmd = NULL;
+	data->lexer_list = NULL;
+	data->num_commands = 0;
 	data->commands = NULL;
 }
 
@@ -50,6 +52,7 @@ void	looping(char *tmp, t_data *data, t_env *env_list)
 	t_lexer	*tmp_lex;
 	char *input_cmd;
 
+	input_cmd = NULL;
 	if (!tmp)
 	{
 		free(tmp);
@@ -74,8 +77,13 @@ void	looping(char *tmp, t_data *data, t_env *env_list)
 			return ;
 		}
 		tmp_lex = data->lexer_list;
+		data->num_commands = count_commands(data->lexer_list); // je remplace init data par data_num 
+		if (!data->num_commands)
+		{
+			free_data(data);
+			return ;
+		}
 		expand_command(data, env_list);
-		init_data(data);
 		if (tmp_lex && tmp_lex->cmd_segment)
 			g_global = execute_token(data);
 	}

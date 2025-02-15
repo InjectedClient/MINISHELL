@@ -80,8 +80,8 @@ typedef struct s_free_memory
 }	t_free_memory;
 
 typedef struct s_data {
-	t_lexer			*lexer_list;
 	t_lexer			**commands;
+	t_lexer			*lexer_list;
 	t_env			*env_list;
 	int				num_commands;
 	int				is_sing_quot;
@@ -118,7 +118,6 @@ int		check_directory(char *str);
 int		check_pipe_bracket(char *str);
 int		ft_check_parser(t_data *data);
 int		is_a_directory(t_data *data);
-void	check_prevbb(t_lexer *token);
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ SIGNAL ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
 void	reset_prompt(int sig);
@@ -129,6 +128,8 @@ void	signals_heredoc(void);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ UTILS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
+void	reset_data(t_data *data);
+void	init_data(t_data *data);
 int		ft_strncmp(const char *first, const char *second, size_t length);
 int		ft_strlen(const char *str);
 char	*ft_strjoin(char const *s1, char const *s2);
@@ -177,8 +178,7 @@ void	process_input_string(\
 int		check_prev(t_lexer *token);
 void	cmd_or_arg(t_lexer *tmp, t_lexer *first);
 int		get_word_in_list(char *str, int i, t_data *data, t_lexer *tmp);
-void	add_lexer_to_end(t_data *data, char *str);
-t_lexer	*create_new_lexer(char *str);
+void	add_lexer_to_end(t_lexer *lexer, char *str);
 void	get_token_in_node(t_lexer **lexer_list, t_lexer *tmp);
 void	print_lexer_content(t_data *data);
 t_token	which_redir(t_lexer *tmp);

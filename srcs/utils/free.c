@@ -79,4 +79,9 @@ void free_data(t_data *data)
         free_args(data->args);
         data->args = NULL;
     }
+	if(data->env_list)
+	{
+		free_env_list(data->env_list);
+		data->env_list = NULL;
+	}
 }

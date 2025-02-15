@@ -46,6 +46,7 @@ int	main(int argc, char **argv, char *envp[])
 		printf("No environment found\n");
 		return (0);
 	}
+	reset_data(&data);
 	env_list = init_env_list(envp);
 	data.env_list = env_list;
 	update_env_shlvl(&env_list);
