@@ -58,7 +58,7 @@ void	looping(char *tmp, t_data *data, t_env *env_list)
 		data->input_cmd = ft_strdup(processed_cmd);
 		free(processed_cmd);
 		lexer_launch(data);
-		if (!is_a_directory(data) || !ft_check_parser(data))
+		if (!ft_check_parser(data))
 		{
 			free(data->input_cmd);
 			return ;

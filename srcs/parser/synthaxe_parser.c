@@ -17,21 +17,11 @@
 	commande. Signale une erreur si un pipe est utilisé seul ou si les
 	redirections sont mal formées.
 */
-int	check_cmd_start(char *str)
+int	check_redir_start(char *str)
 {
 	int	i;
 
 	i = 0;
-	if (str[0] == '|' && str[1] == '|')
-	{
-		printf("minishell: syntax error near unexpected token `||'\n");
-		return (0);
-	}
-	if (str[0] == '|')
-	{
-		printf("minishell:  syntax error near unexpected token `|'\n");
-		return (0);
-	}
 	if (str[i] == '<' || str[i] == '>')
 	{
 		if (!check_redirections(str))
@@ -112,7 +102,7 @@ int	check_slash(char *str, char c)
 			return (0);
 		if ((str[0] == c && str[1] == c))
 			return (0);
-		if ((str[0] == c && str[1] == '.'))
+		if ((str[0] == '.' && str[0] == c))
 			return (0);
 		i++;
 	}

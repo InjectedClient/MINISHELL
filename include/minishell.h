@@ -108,7 +108,7 @@ typedef struct s_expand_args
 
 int		check_quotes(char *str, t_data *data);
 int		check_redirections(char *str);
-int		check_cmd_start(char *str);
+int		check_redir_start(char *str);
 int		check_redirection_arg(t_data *data);
 int		check_invalid_pipes(t_data *data);
 int		nb_redir(char *str);
