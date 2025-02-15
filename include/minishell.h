@@ -83,9 +83,7 @@ typedef struct s_data {
 	t_lexer			*lexer_list;
 	t_lexer			**commands;
 	t_env			*env_list;
-	t_free_memory	*free_memory;
 	int				num_commands;
-	int				w_count;
 	int				is_sing_quot;
 	int				is_doub_quot;
 	char			*input_cmd;
@@ -167,10 +165,11 @@ void	*ft_memcpy(void *dst, const void *src, size_t n);
 size_t	ft_strlen_until(const char *str, const char *stop_chars);
 void	free_env_list(t_env *head);
 void	init_kj(int *k, int *j);
+void	free_data(t_data *data);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ LEXER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
-void	lexer_launch(t_data *data);
+t_lexer	*lexer_launch(t_data *data, char *input_cmd);
 void	looping(char *tmp, t_data *data, t_env *env_list);
 int		count_words_in_input(char *str);
 void	process_input_string(\
@@ -285,6 +284,5 @@ int		cmd_not_exec(void);
 int		cmd_not_found(void);
 int		fork_error(void);
 t_env	*init_env_list(char **envp);
-void	free_data(t_data *data);
 
 #	endif

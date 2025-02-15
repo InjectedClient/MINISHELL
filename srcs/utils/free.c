@@ -51,3 +51,32 @@ void	free_3_env(char *var1, char *var2, t_env *var3)
 	if (var3)
 		free(var3);
 }
+
+void free_data(t_data *data)
+{
+    if (data->lexer_list)
+	{
+        free_lexer_list(data->lexer_list);
+        data->lexer_list = NULL;
+    }
+    if (data->commands)
+	{
+        free_commands(data->commands);
+        data->commands = NULL;
+    }
+	if (data->num_commands)
+	{
+        free(data->num_commands);
+        data->num_commands = NULL;
+    }
+    if (data->input_cmd)
+	{
+        free(data->input_cmd);
+        data->input_cmd = NULL;
+    }
+    if (data->args)
+	{
+        free_args(data->args);
+        data->args = NULL;
+    }
+}
