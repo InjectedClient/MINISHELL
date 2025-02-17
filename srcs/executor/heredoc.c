@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:44 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/17 18:40:11 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/17 19:13:44 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,14 @@ void	handle_heredoc_2(char *delimiter, int tmp_fd)
 
 	while (1)
 	{
-		line = readline("heredoc > ");
-		if (!line || ft_strcmp(line, delimiter) == 0)
+		line = readline("> ");
+		if (!line || ft_strcmp(line, delimiter) == 0 || g_global == 130)
 		{
+			if (g_global == 130)
+			{
+				free(line);
+				break ;
+			}
 			free(line);
 			break ;
 		}
