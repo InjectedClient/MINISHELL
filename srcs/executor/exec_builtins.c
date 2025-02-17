@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 16:23:01 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/12 17:11:30 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/05 14:10:45 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,8 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-int	exec_builtins(char **args, t_data *data)
+int	exec_builtins(char **args, t_env *env_list)
 {
-	t_env	*env_list;
-
-	env_list = data->env_list;
 	if (ft_strcmp(args[0], "echo") == 0)
 		return (builtin_echo(args));
 	else if (ft_strcmp(args[0], "cd") == 0)

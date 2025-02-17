@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 16:14:56 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/13 12:45:55 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:14:57 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	wait_for_children(pid_t *pids, int num_commands)
 	return (last_status);
 }
 
-void	child_process(t_data *data, int **pipes, int i)
+void	child_process(t_data *data, int **pipes, int i, t_env *env_list)
 {
 	int		files[2];
 	t_lexer	*command;
@@ -53,7 +53,7 @@ void	child_process(t_data *data, int **pipes, int i)
 		close(pipes[i][1]);
 	}
 	close_pipes(pipes, data->num_commands);
-	exec(args, data);
+	exec(args, env_list);
 	free_array(args);
 	exit (1);
 }

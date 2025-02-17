@@ -19,7 +19,6 @@ int	check_directory(char *str)
 {
 	if (!check_slash(str, '/'))
 	{
-		g_global = 126;
 		printf ("minishell: %s: Is a directory\n", str);
 		return (0);
 	}

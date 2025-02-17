@@ -17,12 +17,14 @@
  * Si la liste est vide, initialise la liste avec le nouvel élément.
  * CHECK SI CETTE FONCTION EST UTILISEE
  */
-void	add_lexer_to_end(t_data *data, char *str)
+int	add_lexer_to_end(t_data *data, char *str)
 {
 	t_lexer	*new;
 	t_lexer	*current;
 
 	new = create_new_lexer(str);
+	if (!new)
+		return (0);
 	if (data->lexer_list == NULL)
 	{
 		data->lexer_list = new;
@@ -38,7 +40,7 @@ void	add_lexer_to_end(t_data *data, char *str)
 		new->prev = current;
 		new->next = NULL;
 	}
-	return ;
+	return (1);
 }
 
 /**

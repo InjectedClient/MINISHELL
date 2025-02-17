@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 13:53:01 by jle-neze          #+#    #+#             */
-/*   Updated: 2025/02/13 11:43:11 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/17 14:00:17 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,8 @@ char	*handle_special_variable(const char *start)
 	return (ft_strdup("$"));
 }
 
-char	*expand_variable_name(const char *start, t_env *env_list, size_t len)
+char	*expand_variable_name(const char *start,
+	t_env *env_list, size_t len)
 {
 	char	*var_name;
 	char	*value;

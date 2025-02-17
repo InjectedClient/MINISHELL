@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:39:08 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/30 15:06:16 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/17 14:03:13 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,19 @@ void	free_3_env(char *var1, char *var2, t_env *var3)
 		free(var2);
 	if (var3)
 		free(var3);
+}
+
+int	free_word_and_state(char **word, t_quote **state)
+{
+	if (*word)
+	{
+		free(*word);
+		*word = NULL;
+	}
+	if (*state)
+	{
+		free(*state);
+		*state = NULL;
+	}
+	return (-1);
 }

@@ -42,7 +42,7 @@ int	ft_check_parser(t_data *data)
 		count = 0;
 	else if (!check_lexer_start_pipe(data))
 		count = 0;
-	else if (!check_redir_start(data->input_cmd))
+	else if (!check_cmd_start(data->input_cmd))
 		count = 0;
 	else if (!check_token_error(data))
 		count = 0;

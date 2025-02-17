@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 14:53:23 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/13 11:40:42 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/17 13:59:25 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,14 +74,32 @@ int	handle_redirections(t_lexer *command, int *infile, int *outfile)
 {
 	t_lexer	*current;
 	int		error;
+	int		heredoc_found;
 
+	heredoc_found = 0;
 	*infile = -1;
 	*outfile = -1;
 	error = 0;
 	current = command;
-	error = process_heredoc(command, infile, &current);
-	if (error)
-		return (error);
+	while (current)
+	{
+		if (current->token == HERE_DOC)
+		{
+			heredoc_found = 1;
+			break ;
+		}
+		current = current->next;
+	}
+	if (heredoc_found)
+	{
+		error = handle_all_heredocs(command, infile);
+		if (error)
+			return (error);
+		dup2(*infile, STDIN_FILENO);
+		close(*infile);
+		*infile = STDIN_FILENO;
+	}
+	current = command;
 	while (current)
 	{
 		if (current->token == REDIRECT_IN)

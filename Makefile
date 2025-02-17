@@ -1,3 +1,4 @@
+# Nom de l'exécutable
 NAME = minishell
 
 # Compilateur et options

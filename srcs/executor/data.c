@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 16:15:28 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/30 16:15:29 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/17 13:54:39 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ t_lexer	**split_by_pipe(t_data *data)
 	t_lexer	**commands;
 	t_lexer	*current;
 	t_lexer	*start;
+	t_lexer	*pipe_node;
 
 	commands = malloc(sizeof(t_lexer *) * (data->num_commands + 1));
 	if (!commands)
@@ -29,10 +30,16 @@ t_lexer	**split_by_pipe(t_data *data)
 	{
 		if (current->token == PIPE)
 		{
-			current->prev->next = NULL;
-			current->prev = NULL;
+			pipe_node = current;
+			if (pipe_node->prev)
+				pipe_node->prev->next = NULL;
 			commands[index++] = start;
-			start = current->next;
+			start = pipe_node->next;
+			current = pipe_node->next;
+			if (pipe_node->cmd_segment)
+				free(pipe_node->cmd_segment);
+			free(pipe_node);
+			continue ;
 		}
 		current = current->next;
 	}
