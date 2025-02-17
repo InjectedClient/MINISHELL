@@ -78,30 +78,30 @@ void free_data(t_data *data)
 	}
 }
 
-#include <stdio.h>
+// #include <stdio.h>
 
-void print_commands(t_data *data)
-{
-    int i;
-    t_lexer *token;
+// void print_commands(t_data *data)
+// {
+//     int i;
+//     t_lexer *token;
 
-    if (!data->commands)
-    {
-        printf("Aucune commande trouvée dans data->commands.\n");
-        return;
-    }
-    for (i = 0; data->commands[i] != NULL; i++)
-    {
-        printf("Commande %d:\n", i + 1);
-        token = data->commands[i];
-        while (token)
-        {
-            // Affiche le segment et le type du token
-            printf("   Token: [%s] | Type: %d\n", token->cmd_segment, token->token);
-            token = token->next;
-        }
-    }
-}
+//     if (!data->commands)
+//     {
+//         printf("Aucune commande trouvée dans data->commands.\n");
+//         return;
+//     }
+//     for (i = 0; data->commands[i] != NULL; i++)
+//     {
+//         printf("Commande %d:\n", i + 1);
+//         token = data->commands[i];
+//         while (token)
+//         {
+//             // Affiche le segment et le type du token
+//             printf("   Token: [%s] | Type: %d\n", token->cmd_segment, token->token);
+//             token = token->next;
+//         }
+//     }
+// }
 
 
 void	looping(char *tmp, t_data *data, t_env *env_list)
@@ -110,7 +110,10 @@ void	looping(char *tmp, t_data *data, t_env *env_list)
 
 	temp = NULL;
 	if (!tmp)
+	{
+		free(tmp);
 		exit_all(data);
+	}
 	if (tmp && tmp[0])
 	{
 		data->input_cmd = add_space(tmp);

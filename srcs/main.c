@@ -68,5 +68,6 @@ int	main(int argc, char **argv, char *envp[])
 		init_data(&data);
 		looping(tmp, &data, env_list);
 		free_data(&data);
+		free(tmp);
 	}
 }
