@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 11:08:29 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/11 16:31:55 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/17 17:44:24 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,19 @@ void	free_lexer_list2(t_lexer *lexer_list)
 		if (tmp->cmd_segment)
 			free(tmp->cmd_segment);
 	}
+}
+
+int	rm_space(char *str)
+{
+	int	len;
+
+	len = ft_strlen(str);
+	if (len == 0)
+		return (0);
+	while (len > 0 && str[len - 1] == ' ')
+	{
+		str[len - 1] = '\0';
+		len--;
+	}
+	return (1);
 }

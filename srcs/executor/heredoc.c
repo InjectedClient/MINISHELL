@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:44 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/17 13:58:22 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/17 18:40:11 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	handle_heredoc_2(char *delimiter, int tmp_fd)
 
 	while (1)
 	{
-		line = readline("> ");
+		line = readline("heredoc > ");
 		if (!line || ft_strcmp(line, delimiter) == 0)
 		{
 			free(line);
@@ -36,6 +36,7 @@ int	handle_all_heredocs(t_lexer *command, int *infile)
 	char	*delimiter;
 	t_lexer	*current;
 
+	signals_heredoc();
 	tmp_fd = open("heredoc_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (tmp_fd == -1)
 	{

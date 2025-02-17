@@ -3,7 +3,7 @@ NAME = minishell
 
 # Compilateur et options
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -I include 
+CFLAGS = -Wall -Wextra -Werror -g -I include 
 
 # Répertoires
 SRC_DIR = srcs

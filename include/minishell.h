@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:00 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/17 14:02:59 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/17 18:12:29 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/wait.h> 
+# include <sys/ioctl.h>
 
 extern unsigned int	g_global;
 
@@ -120,6 +121,7 @@ int		check_pipe_bracket(char *str);
 int		ft_check_parser(t_data *data);
 int		is_a_directory(t_data *data);
 void	check_prevbb(t_lexer *token);
+int		rm_space(char *str);
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ SIGNAL ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
 void	reset_prompt(int sig);

@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 12:01:57 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/30 17:40:27 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/17 18:40:15 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,20 @@
 
 void	handle_heredoc_sigint(int sig)
 {
-	(void)sig;
-	g_global = 130;
-	write(1, "\n", 1);
-	close(0);
+	char	eof;
+
+	if (sig == SIGINT)
+	{
+		printf("\n");
+		g_global = 130;
+		rl_done = 1;
+		eof = 4;
+		ioctl(STDIN_FILENO, TIOCSTI, &eof);
+	}
 }
 
 void	signals_heredoc(void)
 {
-	signal(SIGINT, &handle_heredoc_sigint);
+	signal(SIGINT, handle_heredoc_sigint);
 	signal(SIGQUIT, SIG_IGN);
 }

@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 16:45:59 by nlambert          #+#    #+#             */
-/*   Updated: 2025/01/30 18:04:19 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/17 17:45:16 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ char	*add_space(const char *command)
 	i = 0;
 	fill_command_with_spaces(command, new_command, state, i);
 	free(state);
+	rm_space(new_command);
 	return (new_command);
 }
 
