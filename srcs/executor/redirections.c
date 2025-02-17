@@ -99,6 +99,7 @@ int	handle_redirections(t_lexer *command, int *infile, int *outfile)
         close(*infile);
         *infile = STDIN_FILENO;
     }
+	current = command;
 	while (current)
 	{
 		if (current->token == REDIRECT_IN)

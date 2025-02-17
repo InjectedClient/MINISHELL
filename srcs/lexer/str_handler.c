@@ -61,40 +61,56 @@ void	process_lexer_input(char *str, int *i, int *j, t_quote *state)
 	}
 }
 
+/**
+ * Extrait un mot de la chaîne de caractères et l'ajoute à la liste lexer.
+ */
+
 void	init_kj(int *k, int *j)
 {
 	*k = 0;
 	*j = 0;
 }
 
-/**
- * Extrait un mot de la chaîne de caractères et l'ajoute à la liste lexer.
- */
-int	get_word_in_list(char *str, int i, t_data *data, t_lexer *tmp)
+int free_word_and_state(char **word, t_quote **state)
 {
+	if (*word)
+	{
+		free(*word);
+		*word = NULL;
+	}
+	if (*state)
+	{
+		free(*state);
+		*state = NULL;
+	}
+	return (-1);
+}
+
+int	get_word_in_list(char *str, int i, t_data *data)
+{
+	t_quote	*state;
 	char	*word;
 	int		j;
 	int		k;
 	int		x;
-	t_quote	*state;
 
+	state = NULL;
+	word = NULL;
+	init_kj(&k, &j);
+	x = i;
 	state = malloc(sizeof(t_quote));
 	if (!state)
-		return (0);
-	word = NULL;
-	x = i;
-	init_kj(&k, &j);
+		return (-1);
 	reset_quoting_state(state);
 	process_lexer_input(str, &i, &j, state);
 	word = malloc(sizeof(char) * (j + sizeof('\0')));
 	if (!word)
-		return (0);
+		return (free_word_and_state(&word, &state));
 	word[j] = '\0';
 	while (k < j)
 		word[k++] = str[x++];
-	add_lexer_to_end(data, word);
-	get_data_in_node(&data->lexer_list);
-	get_token_in_node(&data->lexer_list, tmp);
+	if (add_lexer_to_end(data, word) == 0)
+		return (free_word_and_state(&word, &state));
 	free(state);
 	return (j);
 }
@@ -102,13 +118,18 @@ int	get_word_in_list(char *str, int i, t_data *data, t_lexer *tmp)
 /**
  * Traite la chaîne de caractères d'entrée et remplit la liste lexer.
  */
-void	process_input_string(t_data *data, t_lexer *tmp, \
-		t_lexer *current, int i)
+int	process_input_string(t_data *data)
 {
+	t_lexer	*tmp;
+	t_lexer	*current;
 	int	j;
 	int	x;
+	int	i;
 
+	tmp = NULL;
+	current = NULL;
 	x = 0;
+	i = 0;
 	while (data->input_cmd[i])
 	{
 		j = 0;
@@ -119,13 +140,16 @@ void	process_input_string(t_data *data, t_lexer *tmp, \
 		{
 			data->lexer_list = current;
 			get_token_in_node(&current, tmp);
-			return ;
+			return (1);
 		}
-		j = get_word_in_list(data->input_cmd, i, data, tmp);
+		j = get_word_in_list(data->input_cmd, i, data);
+		if (j == -1)
+			return (0);
 		if (x == 0)
 			current = data->lexer_list;
 		i = i + j;
 		x++;
 	}
 	data->lexer_list = current;
+	return (1);
 }

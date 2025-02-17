@@ -32,6 +32,16 @@ void	update_env_shlvl(t_env **env_list)
 	free(shlvl_update);
 }
 
+void	init_data(t_data *data)
+{
+	data->input_cmd = NULL;
+	data->lexer_list = NULL;
+	data->commands = NULL;
+	data->num_commands = 0;
+	data->is_sing_quot = 0;
+	data->is_doub_quot = 0;
+}
+
 int	main(int argc, char **argv, char *envp[])
 {
 	t_data	data;
@@ -47,7 +57,6 @@ int	main(int argc, char **argv, char *envp[])
 		return (0);
 	}
 	env_list = init_env_list(envp);
-	data.env_list = env_list;
 	update_env_shlvl(&env_list);
 	while (1)
 	{
@@ -56,6 +65,8 @@ int	main(int argc, char **argv, char *envp[])
 		tmp = readline("minishell$ ");
 		signals_run_cmd();
 		add_history(tmp);
+		init_data(&data);
 		looping(tmp, &data, env_list);
+		free_data(&data);
 	}
 }

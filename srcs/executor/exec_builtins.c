@@ -35,11 +35,8 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-int	exec_builtins(char **args, t_data *data)
+int	exec_builtins(char **args, t_env *env_list)
 {
-	t_env	*env_list;
-
-	env_list = data->env_list;
 	if (ft_strcmp(args[0], "echo") == 0)
 		return (builtin_echo(args));
 	else if (ft_strcmp(args[0], "cd") == 0)

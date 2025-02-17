@@ -41,13 +41,13 @@ void	exec_cmd_with_fork(char **cmd, t_env *env_list)
 	exit (1);
 }
 
-int	exec_cmd_without_pipe(char **cmd, t_data *data)
+int	exec_cmd_without_pipe(char **cmd, t_env *env_list)
 {
 	int		status;
 	pid_t	pid;
 
 	if (is_builtin(cmd[0]))
-		return (exec_builtins(cmd, data));
+		return (exec_builtins(cmd, env_list));
 	pid = fork();
 	if (pid == -1)
 	{
@@ -55,7 +55,7 @@ int	exec_cmd_without_pipe(char **cmd, t_data *data)
 		return (1);
 	}
 	if (pid == 0)
-		exec_cmd_with_fork(cmd, data->env_list);
+		exec_cmd_with_fork(cmd, env_list);
 	wait(&status);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
@@ -64,7 +64,7 @@ int	exec_cmd_without_pipe(char **cmd, t_data *data)
 	return (0);
 }
 
-int	handle_cmd_without_pipe(t_data *data)
+int	handle_cmd_without_pipe(t_data *data, t_env *env_list)
 {
 	int		files[2];
 	int		stdin_stdout[2];
@@ -86,7 +86,7 @@ int	handle_cmd_without_pipe(t_data *data)
 		restore_and_close_saved_fds(stdin_stdout[0], stdin_stdout[1]);
 		return (1);
 	}
-	status = exec_cmd_without_pipe(args, data);
+	status = exec_cmd_without_pipe(args, env_list);
 	free_array(args);
 	if (restore_and_close_saved_fds(stdin_stdout[0], stdin_stdout[1]))
 		return (1);

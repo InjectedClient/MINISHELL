@@ -50,6 +50,7 @@ t_env	*create_env_node(char *env_var)
 		return (NULL);
 	new_node->name = ft_strndup(env_var, equal_sign - env_var);
 	new_node->value = ft_strdup(equal_sign + 1);
+	new_node->equal_sign = 1;
 	new_node->next = NULL;
 	if (!new_node->name || !new_node->value)
 	{

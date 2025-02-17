@@ -32,7 +32,7 @@ int	wait_for_children(pid_t *pids, int num_commands)
 	return (last_status);
 }
 
-void	child_process(t_data *data, int **pipes, int i)
+void	child_process(t_data *data, int **pipes, int i, t_env *env_list)
 {
 	int		files[2];
 	t_lexer	*command;
@@ -53,7 +53,7 @@ void	child_process(t_data *data, int **pipes, int i)
 		close(pipes[i][1]);
 	}
 	close_pipes(pipes, data->num_commands);
-	exec(args, data);
+	exec(args, env_list);
 	free_array(args);
 	exit (1);
 }

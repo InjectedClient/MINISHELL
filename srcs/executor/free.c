@@ -12,36 +12,6 @@
 
 #include "../include/minishell.h"
 
-void	free_lexer_list(t_lexer *list)
-{
-	t_lexer	*temp;
-
-	while (list)
-	{
-		temp = list->next;
-		free(list->cmd_segment);
-		free(list);
-		list = temp;
-	}
-}
-
-void	free_commands(t_lexer ***commands, int num_commands)
-{
-	int	i;
-
-	if (!commands || !*commands)
-		return ;
-	i = 0;
-	while (i < num_commands)
-	{
-		if ((*commands)[i])
-			free_lexer_list((*commands)[i]);
-		i++;
-	}
-	free((*commands));
-	*commands = NULL;
-}
-
 void	free_pipes(int num_commands, int ***pipes)
 {
 	int	i;

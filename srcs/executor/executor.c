@@ -12,15 +12,15 @@
 
 #include "../include/minishell.h"
 
-void	exec(char *cmd[], t_data *data)
+void	exec(char *cmd[], t_env *env_list)
 {
 	if (is_builtin(cmd[0]))
-		exit (exec_builtins(cmd, data));
+		exit (exec_builtins(cmd, env_list));
 	else
-		exec_cmd_with_fork(cmd, data->env_list);
+		exec_cmd_with_fork(cmd, env_list);
 }
 
-int	execute_commands(t_data *data, int **pipes, pid_t *pids)
+int	execute_commands(t_data *data, int **pipes, pid_t *pids, t_env *env_list)
 {
 	int		i;
 	int		status;
@@ -35,14 +35,14 @@ int	execute_commands(t_data *data, int **pipes, pid_t *pids)
 			return (0);
 		}
 		if (pids[i] == 0)
-			child_process(data, pipes, i);
+			child_process(data, pipes, i, env_list);
 	}
 	close_pipes(pipes, data->num_commands);
 	status = wait_for_children(pids, data->num_commands);
 	return (status);
 }
 
-int	execute_token(t_data *data)
+int	execute_token(t_data *data, t_env *env_list)
 {
 	int		status;
 	int		**pipes;
@@ -52,30 +52,16 @@ int	execute_token(t_data *data)
 	pids = NULL;
 	status = 0;
 	if (data->num_commands == 1)
-		return (handle_cmd_without_pipe(data));
-	if (init_commands(data) == 0 || create_pids(data, &pids) == 0
-		|| create_pipes(data, &pipes) == 0)
+		return (handle_cmd_without_pipe(data, env_list));
+	if (create_pids(data, &pids) == 0 || create_pipes(data, &pipes) == 0)
 	{
 		free_pids(&pids);
 		free_pipes(data->num_commands, &pipes);
-		free_commands(&data->commands, data->num_commands);
 		return (1);
 	}
-	status = execute_commands(data, pipes, pids);
+	status = execute_commands(data, pipes, pids, env_list);
 	free_pids(&pids);
 	free_pipes(data->num_commands, &pipes);
-	free_commands(&data->commands, data->num_commands);
 	return (status);
 }
 
-void	free_data(t_data *data)
-{
-	if (!data->args)
-		return ;
-	if (data->lexer_list)
-		free_lexer_list(data->lexer_list);
-	if (data->env_list)
-		free_env_list(data->env_list);
-	if (data->input_cmd)
-		free(data->input_cmd);
-}
