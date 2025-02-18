@@ -103,38 +103,48 @@ int	get_word_in_list(char *str, int i, t_data *data)
 /**
  * Traite la chaîne de caractères d'entrée et remplit la liste lexer.
  */
-int	process_input_string(t_data *data)
-{
-	t_lexer	*tmp;
-	t_lexer	*current;
-	int		j;
-	int		x;
-	int		i;
-
-	tmp = NULL;
-	current = NULL;
-	x = 0;
-	i = 0;
-	while (data->input_cmd[i])
-	{
-		j = 0;
-		while (data->input_cmd[i] == ' ' || \
-		(data->input_cmd[i] >= '\t' && data->input_cmd[i] <= '\r'))
-			i++;
-		if (!data->input_cmd || !data->input_cmd[i])
-		{
-			data->lexer_list = current;
-			get_token_in_node(&current, tmp);
-			return (1);
-		}
-		j = get_word_in_list(data->input_cmd, i, data);
-		if (j == -1)
-			return (0);
-		if (x == 0)
-			current = data->lexer_list;
-		i = i + j;
-		x++;
-	}
-	data->lexer_list = current;
-	return (1);
-}
+ static int	process_token(t_data *data, int *i, int *x, t_lexer **current)
+ {
+	 int	j;
+ 
+	 while (data->input_cmd[*i] == ' ' ||
+		 (data->input_cmd[*i] >= '\t' && data->input_cmd[*i] <= '\r'))
+		 (*i)++;
+	 if (!data->input_cmd || !data->input_cmd[*i])
+	 {
+		 data->lexer_list = *current;
+		 get_token_in_node(current, NULL);
+		 return (2);
+	 }
+	 j = get_word_in_list(data->input_cmd, *i, data);
+	 if (j == -1)
+		 return (-1);
+	 if (*x == 0)
+		 *current = data->lexer_list;
+	 *i += j;
+	 (*x)++;
+	 return (1);
+ }
+ 
+ int	process_input_string(t_data *data)
+ {
+	 int		i;
+	 int		x;
+	 int		ret;
+	 t_lexer	*current;
+ 
+	 i = 0;
+	 x = 0;
+	 current = NULL;
+	 while (data->input_cmd[i])
+	 {
+		 ret = process_token(data, &i, &x, &current);
+		 if (ret == -1)
+			 return (0);
+		 if (ret == 2)
+			 return (1);
+	 }
+	 data->lexer_list = current;
+	 return (1);
+ }
+ 

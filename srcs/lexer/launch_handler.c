@@ -78,32 +78,6 @@ void	free_data(t_data *data)
 	}
 }
 
-// #include <stdio.h>
-
-// void print_commands(t_data *data)
-// {
-//     int i;
-//     t_lexer *token;
-
-//     if (!data->commands)
-//     {
-//         printf("Aucune commande trouvée dans data->commands.\n");
-//         return;
-//     }
-//     for (i = 0; data->commands[i] != NULL; i++)
-//     {
-//         printf("Commande %d:\n", i + 1);
-//         token = data->commands[i];
-//         while (token)
-//         {
-//             // Affiche le segment et le type du token
-//             printf("   Token: [%s] | Type: %d\n", token->cmd_segment, 
-//				token->token);
-//             token = token->next;
-//         }
-//     }
-// }
-
 void	looping(char *tmp, t_data *data, t_env *env_list)
 {
 	t_lexer	*temp;
@@ -133,14 +107,3 @@ void	looping(char *tmp, t_data *data, t_env *env_list)
 			g_global = execute_token(data, env_list);
 	}
 }
-
-/**
- * Lance le lexer, compte les mots dan s la commande d'entrée,
- * traite la chaîne d'entrée et affiche le contenu du lexer.
- */
-// void	lexer_launch(t_data *data)
-// {
-// 	data->lexer_list = NULL;
-// 	data->w_count = count_words_in_input(data->input_cmd);
-// 	// print_lexer_content(data);
-// }

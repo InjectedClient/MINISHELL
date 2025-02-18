@@ -35,11 +35,22 @@ void	handle_heredoc_2(char *delimiter, int tmp_fd)
 	}
 }
 
+static void	process_heredocs(t_lexer *command, int tmp_fd)
+{
+	t_lexer	*current;
+
+	current = command;
+	while (current)
+	{
+		if (current->token == HERE_DOC)
+			handle_heredoc_2(current->next->cmd_segment, tmp_fd);
+		current = current->next;
+	}
+}
+
 int	handle_all_heredocs(t_lexer *command, int *infile)
 {
-	int		tmp_fd;
-	char	*delimiter;
-	t_lexer	*current;
+	int	tmp_fd;
 
 	signals_heredoc();
 	tmp_fd = open("heredoc_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -48,16 +59,7 @@ int	handle_all_heredocs(t_lexer *command, int *infile)
 		perror("open heredoc_tmp");
 		return (1);
 	}
-	current = command;
-	while (current)
-	{
-		if (current->token == HERE_DOC)
-		{
-			delimiter = current->next->cmd_segment;
-			handle_heredoc_2(delimiter, tmp_fd);
-		}
-		current = current->next;
-	}
+	process_heredocs(command, tmp_fd);
 	close(tmp_fd);
 	*infile = open("heredoc_tmp", O_RDONLY);
 	if (*infile == -1)
@@ -68,3 +70,4 @@ int	handle_all_heredocs(t_lexer *command, int *infile)
 	unlink("heredoc_tmp");
 	return (0);
 }
+
