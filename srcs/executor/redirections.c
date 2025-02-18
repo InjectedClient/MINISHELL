@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 14:53:23 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/17 13:59:25 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/18 14:10:14 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,13 @@ void	close_fd(int *infile, int *outfile)
 	}
 }
 
-static int	process_heredocs(t_lexer *command, int *infile)
+int	process_heredocs(t_lexer *command, int *infile)
 {
 	t_lexer	*current;
 	int		error;
-	int		heredoc_found = 0;
+	int		heredoc_found;
 
+	heredoc_found = 0;
 	current = command;
 	while (current)
 	{
@@ -88,39 +89,11 @@ static int	process_heredocs(t_lexer *command, int *infile)
 	}
 	if (heredoc_found)
 	{
-		if ((error = handle_all_heredocs(command, infile)))
+		error = handle_all_heredocs(command, infile);
+		if (error)
 			return (error);
 		dup2(*infile, STDIN_FILENO);
-		close(*infile);
 		*infile = STDIN_FILENO;
 	}
 	return (0);
 }
-
-int	handle_redirections(t_lexer *command, int *infile, int *outfile)
-{
-	t_lexer	*current;
-	int		error;
-
-	*infile = -1;
-	*outfile = -1;
-	if ((error = process_heredocs(command, infile)))
-		return (error);
-	current = command;
-	while (current)
-	{
-		if (current->token == REDIRECT_IN)
-			error = handle_redirect_in(current, infile);
-		else if (current->token == REDIRECT_OUT)
-			error = handle_redirect_out(current, outfile);
-		else if (current->token == APPEND_OUT)
-			error = handle_append_out(current, outfile);
-		if (error)
-			break ;
-		current = current->next;
-	}
-	if (error)
-		close_fd(infile, outfile);
-	return (error);
-}
-

@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:39:28 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/11 16:36:54 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/18 14:12:16 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,10 @@ char	*ft_strdup(const char *source)
 	return (copy);
 }
 
-void	exit_all(t_data *data)
+void	exit_all(t_data *data, char *tmp)
 {
 	(void)data;
+	free(tmp);
 	printf("exit\n");
 	exit(0);
 }

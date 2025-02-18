@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:44 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/17 19:13:44 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/18 14:08:53 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,11 @@ void	handle_heredoc_2(char *delimiter, int tmp_fd)
 
 	while (1)
 	{
-		line = readline("> ");
-		if (!line || ft_strcmp(line, delimiter) == 0 || g_global == 130)
+		if (!(g_global == 131))
+			line = readline("> ");
+		if (!line || ft_strcmp(line, delimiter) == 0 || g_global == 131)
 		{
-			if (g_global == 130)
+			if (g_global == 131)
 			{
 				free(line);
 				break ;
@@ -31,11 +32,10 @@ void	handle_heredoc_2(char *delimiter, int tmp_fd)
 		}
 		write(tmp_fd, line, ft_strlen(line));
 		write(tmp_fd, "\n", 1);
-		free(line);
 	}
 }
 
-static void	process_heredocs(t_lexer *command, int tmp_fd)
+static void	process_heredoc(t_lexer *command, int tmp_fd)
 {
 	t_lexer	*current;
 
@@ -59,7 +59,7 @@ int	handle_all_heredocs(t_lexer *command, int *infile)
 		perror("open heredoc_tmp");
 		return (1);
 	}
-	process_heredocs(command, tmp_fd);
+	process_heredoc(command, tmp_fd);
 	close(tmp_fd);
 	*infile = open("heredoc_tmp", O_RDONLY);
 	if (*infile == -1)
@@ -70,4 +70,3 @@ int	handle_all_heredocs(t_lexer *command, int *infile)
 	unlink("heredoc_tmp");
 	return (0);
 }
-

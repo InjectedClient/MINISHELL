@@ -6,7 +6,7 @@
 /*   By: nlambert <nlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 14:38:00 by nlambert          #+#    #+#             */
-/*   Updated: 2025/02/17 18:12:29 by nlambert         ###   ########.fr       */
+/*   Updated: 2025/02/18 14:11:55 by nlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ size_t	ft_strlcat(char *dst, const char *src, size_t size);
 void	free_array(char **array);
 int		ft_white_space(char c);
 char	**ft_split(char const *s, char c);
-void	exit_all(t_data *data);
+void	exit_all(t_data *data, char *tmp);
 void	ft_free_all(t_data *data);
 void	free_tab(char **tab);
 int		ft_write_fd(char *str, int fd);
@@ -170,6 +170,11 @@ size_t	ft_strlen_until(const char *str, const char *stop_chars);
 void	free_env_list(t_env *head);
 void	init_kj(int *k, int *j);
 int		handle_all_heredocs(t_lexer *command, int *infile);
+int		process_heredocs(t_lexer *command, int *infile);
+int		handle_append_out(t_lexer *current, int *outfile);
+int		handle_redirect_out(t_lexer *current, int *outfile);
+int		handle_redirect_in(t_lexer *current, int *infile);
+void	close_fd(int *infile, int *outfile);
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ LEXER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
